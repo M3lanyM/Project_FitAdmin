@@ -1,0 +1,32 @@
+.button-exercise {
+    background-color: #2b8c8c;
+    color: white;
+    padding: 0.5% 3%;
+    font-size: 18px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    margin-left: 75%;
+  }
+
+.search-exercise, .exercise-type {
+    margin-top: 2%;
+    padding: 0.5% 3%;
+    font-size: 15px;
+    font-weight: bold;
+    background-color: white;
+    color: #727272;
+    border: none;
+    border-radius: 20px;
+    border: 2px solid #727272;
+  }
+
+  .search-exercise {
+    margin-left: 4%;
+  }
+
+  .exercise-type{
+    margin-left: 45%;
+  }
