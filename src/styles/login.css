@@ -1,0 +1,190 @@
+.bodyLogin {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Jost', sans-serif;
+    background-color: #F2F2F2;
+    background-image: linear-gradient(315deg, #2b8c8c 0%, #000000 200%);
+}
+
+
+
+.main {
+    width: 350px;
+    height: 500px;
+    overflow: hidden;
+    background: url("https://doc-08-2c-docs.googleusercontent.com/docs/securesc/68c90smiglihng9534mvqmq1946dmis5/fo0picsp1nhiucmc0l25s29respgpr4j/1631524275000/03522360960922298374/03522360960922298374/1Sx0jhdpEpnNIydS4rnN4kHSJtU1EyWka?e=view&#38;authuser=0&#38;nonce=gcrocepgbb17m&#38;user=03522360960922298374&#38;hash=tfhgbs86ka6divo3llbvp93mg4csvb38") no-repeat center/ cover;
+    border-radius: 10px;
+    box-shadow: 5px 20px 50px #000;
+
+}
+
+
+#chk {
+    display: none;
+
+}
+
+
+.signup {
+    position: relative;
+    width: 100%;
+    height: 100%;
+
+}
+
+
+label {
+    color: #fff;
+    font-size: 35px;
+    justify-content: center;
+    display: flex;
+    margin: 60px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: .5s ease-in-out;
+
+}
+
+/*Input*/
+.inpLogin {
+    width: 65%;
+    padding: 5px;
+    border: 2px solid #2b8c8c;
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: #f9f9f9;
+    color: #333;
+    transition: border-color 0.3s ease;
+    outline: none;
+    justify-content: center;
+    display: flex;
+    margin: 20px auto;
+}
+
+.inpLogin:focus {
+    border-color: #727272;
+    box-shadow: 0 0 5px rgba(121, 111, 108, 0.5);
+}
+
+.inpLogin:hover {
+    background-color: #f0f0f0;
+}
+
+.inpSign{
+    width: 65%;
+    padding: 5px;
+    border: 2px solid #737373;
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: #f9f9f9;
+    color: #333;
+    transition: border-color 0.3s ease;
+
+    outline: none;
+    justify-content: center;
+    display: flex;
+    margin: 20px auto;
+}
+
+.inpSign:focus {
+    border-color: #A1A626;
+    box-shadow: 0 0 5px rgba(233, 226, 225, 0.541);
+}
+
+.inpSign:hover {
+    background-color: #f0f0f0;
+}
+
+
+
+
+
+/*Botones*/
+.btnLogin {
+    width: 55%;
+    height: 40px;
+    margin: 10px auto;
+    justify-content: center;
+   margin-left: 22%;
+    color: #fff;
+    font-size: 1em;
+    font-weight: bold;
+    margin-top: 20px;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    transition: .2s ease-in;
+    cursor: pointer;
+    border-radius: 10px;
+    background-color: #A1A626;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+}
+
+button:hover {
+    background: #13312f;
+
+}
+
+.btnSign {
+    width: 55%;
+    height: 40px;
+    margin: 10px auto;
+    justify-content: center;
+   margin-left: 22%;
+    color: #fff;
+    font-size: 1em;
+    font-weight: bold;
+    margin-top: 20px;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    transition: .2s ease-in;
+    cursor: pointer;
+    border-radius: 10px;
+    background-color: #A1A626;
+    box-shadow: 0 0 10px rgba(139, 132, 132, 0.6);
+}
+
+.btnSign:hover {
+    background: #13312f;
+
+}
+
+
+.login {
+    height: 460px;
+    background: #F2F2F2;
+    border-radius: 60% / 10%;
+    transform: translateY(-180px);
+    transition: .8s ease-in-out;
+
+}
+
+
+.login label {
+    color: #A1A626;
+    transform: scale(.6);
+
+}
+
+
+#chk:checked~.login {
+    transform: translateY(-500px);
+
+}
+
+
+#chk:checked~.login label {
+    transform: scale(1);
+
+}
+
+
+#chk:checked~.signup label {
+    transform: scale(.6);
+
+}

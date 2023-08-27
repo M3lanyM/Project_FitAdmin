@@ -1,4 +1,3 @@
-
 import { useContext } from 'react';
 import Image from 'next/image'
 import Link from "next/link"
@@ -9,7 +8,6 @@ import { MdOutlineCardMembership } from "react-icons/md";
 import { HiOutlineClipboardDocumentCheck, HiOutlineDocumentText } from "react-icons/hi2";
 import { RiArrowDropRightLine, RiArrowDropLeftLine } from "react-icons/ri";
 import { SidebarContext } from './SidebarContext';
-
 
 const sidebarItems = [
 
