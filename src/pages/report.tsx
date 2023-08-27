@@ -3,8 +3,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import BaseLayout from "@/components/BaseLayout";
 
-const PageExercise = () => {
-    const [isExerciseModalOpen , setIsExerciseModalOpen] = useState(false);
+const PageReport = () => {
+    const [isExerciseModalOpen, setIsExerciseModalOpen] = useState(false);
     const handlerExercise = () => {
         setIsExerciseModalOpen(true);
     };
@@ -30,61 +30,31 @@ const PageExercise = () => {
     return (
         <BaseLayout>
             <section className="container-routine">
-                <div className="Row">
-                    <div>
-                        <h1 className="service-titles">Ejercicios</h1>
-                        <button className="button-exercise" onClick={handlerExercise}>Agregar Ejercicio</button>
-                    </div>
-                    <div className="line-routine"></div>
-                    <div className="flex">
-                        <div className="search-exercise" >
-                            <h2 > Buscar</h2>
-                            <input type="text" placeholder="Buscar" />
+                <div >
+                    <div className="Row-report">
+                        <h1 className="service-report justify-center items-center">Reportes</h1>
+                       {/*<div className="justify-center items-center">
+                            <h2 className="content-select"> Mostrar</h2>
+                            <select name="select-routine" className="form-select justify-center items-center">
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                            <input className="search-routine m-4" type="text" placeholder="Buscar" />
+                        </div>
+                        <div>
+                            <h1 className=""></h1>
+                            <button className="button-exercise" onClick={handlerExercise}>Agregar Ejercicio</button>
                         </div>
 
-                        <div className="exercise-type">
-                            <h2 > Categoria </h2>
-                            <select name="select-addroutine" className="space-addRoutine justify-center items-center">
-                                <option value="">Lista de Categorias</option>
-                                <option value="">Gluteos</option>
-                                <option value="">Piernas</option>
-                            </select>
-                        </div>
-                    </div>
-                    <section>
-                        <div className="container-table">
-                            <table className="routine-table">
-                                <thead className="routine-th">
-                                    <tr>
-                                        <th>Id</th>
-                                        <th>Nombre</th>
-                                        <th>Categoria</th>
-                                        <th>Descripcion</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="routine-td">
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Comienzo</td>
-                                        <td>Gluteos</td>
-                                        <td>Gluteos para principiantes</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Medio</td>
-                                        <td>Piernas</td>
-                                        <td>Piernas para fortalecer</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </section>
-                    <div className="">
-                        <button className="table-button" onClick={handlerExercise}>Editar</button>
-                        <button className="table-button">Eliminar</button>
+                        <div>
+                            <h1 className="service-titles">Ej</h1>
+                            <button className="button-exercise" onClick={handlerExercise}>Agreg</button>
+    </div>*/}
+
                     </div>
                 </div>
-                {isExerciseModalOpen && (
+               {/* {isExerciseModalOpen && (
                     <div className="modal-addRoutine">
                         <div className="content-addRoutine">
                             <span className="close-addRoutine " onClick={handleCloseRoutineModal}>&times;</span>
@@ -129,11 +99,11 @@ const PageExercise = () => {
 
                         </div>
                     </div>
-                )}
+                )}*/}
             </section >
         </BaseLayout>
 
     )
 }
 
-export default PageExercise;
+export default PageReport;
