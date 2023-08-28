@@ -9,8 +9,10 @@ import TableRow from '@mui/material/TableRow';
 import TablePagination from '@mui/material/TablePagination';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EmailIcon from '@mui/icons-material/Email';
 
-interface TableData {
+
+export interface TableData {
   id: number;
   name: string;
   mail: string;
@@ -21,16 +23,17 @@ interface Props {
   data?: TableData[];
 }
 
-const initialData: TableData[] = [
+export const initialData: TableData[] = [
   { id: 1, name: 'John Doe', mail: 'j@mail', state: 'Activo' },
   { id: 2, name: 'Doe', mail: 'D@mail', state: 'Activo' },
   { id: 3, name: 'Jail', mail: 'j@mail', state: 'Desactivado' },
+  { id: 4, name: 'Arnol', mail: 'A@mail', state: 'Activo' },
   { id: 4, name: 'Arnol', mail: 'A@mail', state: 'Activo' },
   { id: 3, name: 'Jail', mail: 'j@mail', state: 'Desactivado' },
   { id: 4, name: 'Arnol', mail: 'A@mail', state: 'Activo' },
 ];
 
-const TableWithPagination: React.FC<Props> = ({ data }) => {
+const TableClient: React.FC<Props> = ({ data }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
@@ -49,46 +52,52 @@ const TableWithPagination: React.FC<Props> = ({ data }) => {
     <TableContainer component={Paper} className="tableClient-container">
       <Table className="tableClient">
         <TableHead>
-        <TableRow className="tableClient-header-row">
-        <TableCell className="tableClient-header-cell">Cliente</TableCell>
-          <TableCell className="tableClient-header-cell">Correo</TableCell>
-          <TableCell className="tableClient-header-cell">Estado</TableCell>
-          <TableCell className="tableClient-header-cell">Acción</TableCell>
+          <TableRow className="tableClient-header-row">
+            <TableCell className="tableClient-header-cell">Cliente</TableCell>
+            <TableCell className="tableClient-header-cell">Correo</TableCell>
+            <TableCell className="tableClient-header-cell">Estado</TableCell>
+            <TableCell className="tableClient-header-cell">Acción</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {tableData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
-             <TableRow key={row.id} className="tableClient-row">
-              <TableCell>{row.name}</TableCell>
-              <TableCell>{row.mail}</TableCell>
-              <TableCell>{row.state}</TableCell>
-              <TableCell>
+            <TableRow key={row.id} className="tableClient-row">
+              <TableCell className="tableClient-cell">{row.name}</TableCell>
+              <TableCell className="tableClient-cell">{row.mail}</TableCell>
+              <TableCell className="tableClient-cell">{row.state}</TableCell>
+              <TableCell className="tableClient-cell">
+                <IconButton>
+                  <EmailIcon className="email-icon" />
+                </IconButton>
                 <IconButton>
                   <DeleteIcon className="delete-icon" />
                 </IconButton>
+
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
-        component="div"
-        count={tableData.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-        labelRowsPerPage="Mostrar"
-        nextIconButtonProps={{
-          className: 'pagination-button'
-        }}
-        backIconButtonProps={{
-          className: 'pagination-button'
-        }}
-      />
+      <div className="pagination-container">
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={tableData.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          labelRowsPerPage="Mostrar"
+          nextIconButtonProps={{
+            className: 'pagination-button'
+          }}
+          backIconButtonProps={{
+            className: 'pagination-button'
+          }}
+        />
+      </div>
     </TableContainer>
   );
 };
 
-export default TableWithPagination;
+export default TableClient;

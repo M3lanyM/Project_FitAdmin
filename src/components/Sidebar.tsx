@@ -13,7 +13,7 @@ const sidebarItems = [
 
     {
         name: "Clientes",
-        href: "/client",
+        href: "/indexClient",
         icon: HiUsers,
     },
     {
