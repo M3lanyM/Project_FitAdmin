@@ -1,11 +1,11 @@
+import React from 'react';
 import BaseLayout from "@/components/BaseLayout";
-import Sidebar from "@/components/Sidebar";
-import Link from "next/link"
+import TableWithPagination from '@/components/TableClient';
 
 export default function ClientPage() {
     return (
-    <BaseLayout>
-    hola 
-    </BaseLayout>
+      <BaseLayout>
+        <TableWithPagination />
+      </BaseLayout>
     );
-}
+  }

@@ -12,3 +12,41 @@ body {
   background-color:  #F2F2F2;
   font-family: "Roboto", sans-serif;
 }
+
+
+/*Tabla cliente*/
+.tableClient-container {
+  width: 80%;
+  height: 65%;
+  margin: 1% 2%;
+}
+
+.tableClient {
+  width: 100%;
+}
+
+.tableClient-header-row {
+  background-color: #2b8c8c;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.tableClient-header-cell {
+  color: white;
+  font-weight: bold;
+}
+.tableClient-row:hover {
+  background-color: #f2f2f2;
+}
+
+.delete-icon {
+  color: #727272;
+}
+.MuiTablePagination-select {
+  border: 2px solid #A1A626; /* Cambia el color a verde o el color deseado */
+  border-radius: 10px;
+}
+.pagination-button {
+  color: #A1A626;
+}
+/*Tabla cliente*/
