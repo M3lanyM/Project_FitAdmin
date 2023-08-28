@@ -7,6 +7,7 @@ import '@/styles/routine.css'
 import '@/styles/exercise.css'
 import '@/styles/report.css'
 import '@/styles/member.css'
+import '@/styles/client.css'
 
 import type { AppProps } from 'next/app'
 

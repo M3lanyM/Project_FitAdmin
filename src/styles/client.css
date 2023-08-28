@@ -1,0 +1,181 @@
+
+/*Tabla cliente*/
+.tableClient-container {
+    width: 80%;
+    height: 59%;
+    margin: 1% 2%;
+    margin-top: 16%;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 4px 10px 0 rgba(0, 0, 0, 0.1);
+  }
+  
+  .tableClient {
+    width: 100%;
+  }
+  
+  .tableClient-cell {
+    padding: 5px 16px;
+    text-align: center;
+  
+  }
+  
+  .tableClient-header-row {
+    background-color: #2b8c8c;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    color: white;
+  
+  }
+  
+  .tableClient-header-cell {
+    color: white;
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  .tableClient-row {
+    padding: 8px 16px;
+  
+  }
+  
+  .tableClient-row:hover {
+    background-color: #f2f2f2;
+  }
+  
+  .delete-icon {
+    color: #727272;
+  }
+  
+  .MuiTablePagination-select {
+    border: 2px solid #A1A626;
+    border-radius: 10px;
+  }
+  
+  .pagination-button {
+    color: #A1A626;
+  }
+  
+  .pagination-container {
+    position: sticky;
+    bottom: 0;
+    background-color: white;
+    z-index: 1;
+  }
+  
+  /*Tabla cliente*/
+  
+  
+  .Habilitados {
+    margin-left: 42%;
+  }
+  
+  .Desabilitados,
+  .Habilitados {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: absolute;
+    margin-top: 2.5%;
+    width: 16%;
+    height: 25%;
+    background-color: #fff;
+    border-radius: 9px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 4px 10px 0 rgba(0, 0, 0, 0.1);
+  }
+  
+  .Desabilitados {
+    margin-left: 59.4%;
+    font-size: 16px;
+  }
+  
+  .text1 {
+    margin-top: 3%;
+    font-size: 19px;
+  }
+  
+  .text2H,
+  .text2D {
+    font-size: 17px;
+  }
+  
+  .text2H {
+    color: #29F247;
+    font-weight: bold;
+    text-shadow: 0px 0px 10px #5ddd70dc;
+  }
+  
+  .text2D {
+    color: #F25041;
+    font-weight: bold;
+    text-shadow: 0px 0px 10px #f25041ee;
+  }
+  
+  .h {
+    display: flex;
+  }
+  
+  .disabled,
+  .enabled {
+    width: 55px;
+    height: 55px;
+  }
+  
+  .btnClient {
+    width: 50%;
+    height: 40px;
+    margin: 10px auto;
+    justify-content: center;
+    color: #fff;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    border-radius: 10px;
+    background-color: #A1A626;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.6);
+    margin-bottom: 3%;
+  }
+  
+  .h1 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: absolute;
+    margin-top: 2.5%;
+    width: 36%;
+    height: 25%;
+    margin-left: 4.3%;
+    background-color: #FFFFFF;
+    border-radius: 9px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 4px 10px 0 rgba(0, 0, 0, 0.1);
+  }
+  
+  .Descarga {
+    display: flex;
+  }
+  
+  .Descarga>*+* {
+    margin-left: 30px;
+    /* Ajusta el valor según el espacio que desees */
+  }
+  
+  .custom-button {
+    width: 30%;
+    color: #2b8c8c;
+    font-weight: bold;
+    border-color: #2b8c8c;
+    border-width: 2px;
+  }
+  
+  .custom-button:hover {
+    border-color: #2b8c8c;
+    border-width: 2px;
+  }
+  
+  .custom-icon,
+  .SearchIcon {
+    color: #727272;
+  }
