@@ -62,7 +62,7 @@ export default function Sidebar() {
                         src="/img/logo.png"
                         alt="logo"
                     />
-                    <p className="sidebar__logo-name">FitAdmin</p>
+                    <p className="sidebar__logo-name">FITADMIN</p>
                 </div>
                 <ul className="sidebar__list">
                     {sidebarItems.map(({ name, href, icon: Icon }) => (
