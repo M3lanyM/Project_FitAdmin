@@ -40,7 +40,7 @@ const PageMember = () => {
                         <button className="button-exercise" onClick={handlerExercise}>+ Agregar Membresias</button>
                     </div>
                     <div className="line-routine"></div>
-                    <div className="flex mb-5">
+                    <div className="flexs">
                         <div className="search-exercise" >
                             <h2 > Buscar</h2>
                             <input type="text" placeholder="Buscar" />
@@ -48,7 +48,7 @@ const PageMember = () => {
 
                         <div className="exercise-type">
                             <h2 > Tipo </h2>
-                            <select name="select-addroutine" className="space-addRoutine justify-center items-center">
+                            <select name="select-addroutine" className="space-addRoutine center">
                                 <option value="">Estudiantes</option>
                                 <option value="">Normal</option>
                                 <option value="">Personal</option>
@@ -84,7 +84,7 @@ const PageMember = () => {
                                     <input type="text" className="info-addRoutine" placeholder="$" />
                                 </div>
                                 <div className="line-addRoutine"></div>
-                                <div className="button-addRoutine2 flex justify-center items-center" >
+                                <div className="button-addRoutine2 flexs center" >
                                     <button className="colors" onClick={handleTextareaClear}>Agregar </button>
                                     <button className="exit-addRoutine" onClick={handleCloseRoutineModal}>Cancelar</button>
                                 </div>

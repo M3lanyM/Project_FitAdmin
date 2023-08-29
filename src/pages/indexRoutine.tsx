@@ -57,7 +57,7 @@ const PageRoutine = () => {
                         <button className="button-routine" onClick={handlerRoutine}> + Crear Rutinas</button>
                     </div>
                     <div className="line-routine"></div>
-                    <div className=" flex mb-5">
+                    <div className=" flexs">
                         <h2 className="content-select"> Buscar</h2>
                         <TextField
                             InputProps={{
@@ -104,7 +104,7 @@ const PageRoutine = () => {
                                 <div className="line-addRoutine"></div>
                                 <div className="justify-center items-center">
                                     <h2 className="space-addRoutine">Categoria</h2>
-                                    <select name="select-addroutine" className="space-addRoutine justify-center items-center">
+                                    <select name="select-addroutine" className="space-addRoutine center">
                                         <option value="">Lista de Categorias</option>
                                         <option value="">Gluteos</option>
                                         <option value="">Piernas</option>

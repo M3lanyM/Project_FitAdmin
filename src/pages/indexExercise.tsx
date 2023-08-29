@@ -40,14 +40,14 @@ const PageExercise = () => {
                         <button className="button-exercise" onClick={handlerExercise}>Agregar Ejercicio</button>
                     </div>
                     <div className="line-routine"></div>
-                    <div className="flex mb-5">
+                    <div className="flexs">
                         <div className="search-exercise" >
                             <h2 > Buscar</h2>
                             <input type="text" placeholder="Buscar" />
                         </div>
                         <div className="exercise-type">
                             <h2 > Categoria </h2>
-                            <select name="select-addroutine" className="space-addRoutine justify-center items-center">
+                            <select name="select-addroutine" className="space-addRoutine center">
                                 <option value="">Lista de Categorias</option>
                                 <option value="">Gluteos</option>
                                 <option value="">Piernas</option>
@@ -78,16 +78,16 @@ const PageExercise = () => {
                                     <textarea name="descrption" placeholder="Descripcion" className="description-addRoutine"></textarea>
                                 </div>
                                 <div className="line-addRoutine"></div>
-                                <div className="justify-center items-center">
+                                <div className="center">
                                     <h2 className="space-addRoutine">Categoria</h2>
-                                    <select name="select-addroutine" className="space-addRoutine justify-center items-center">
+                                    <select name="select-addroutine" className="space-addRoutine center">
                                         <option value="">Lista de Categorias</option>
                                         <option value="">Gluteos</option>
                                         <option value="">Piernas</option>
                                     </select>
                                 </div>
                                 <div className="line-addRoutine"></div>
-                                <div className="button-addRoutine2 flex justify-center items-center" >
+                                <div className="button-addRoutine2 flexs center" >
                                     <button className="colors" onClick={handleTextareaClear}>Agregar </button>
                                     <button className="exit-addRoutine" onClick={handleCloseRoutineModal}>Cancelar</button>
                                 </div>
