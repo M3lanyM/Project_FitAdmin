@@ -1,77 +1,150 @@
 /*Tabla factura*/
 .tableBill-container {
-    width: 73%;
-    height: 53%;
-    margin: 1% 2%;
-    margin-top: 18%;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 4px 10px 0 rgba(0, 0, 0, 0.1);
-    
-  }
-  
-  .tableBill {
-    width: 100%
-  }
-  
-  
-  .tableBill-header-row {
-    background-color: #2b8c8c;
-    position: sticky;
-    top: 0;
-    z-index: 1;
-  }
-  
-  .tableBill-row {
-    padding: 8px 16px;
-  
-  }
-  
-  .tableBill-row:hover {
-    background-color: #f2f2f2;
-  }
-  
-  .pagination-container {
-    position: sticky;
-    bottom: 0;
-    background-color: white;
-    z-index: 1;
-  }
-  
-  /*Tabla Factura*/
+  width: 73%;
+  height: 53%;
+  margin: 1% 2%;
+  margin-top: 18%;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 4px 10px 0 rgba(0, 0, 0, 0.1);
 
-  .searchBill{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    position: absolute;
-    margin-top: 2.5%;
-    width: 73%;
-    height: 25%;
-    margin-left: 23%;
-    background-color: #fff;
-    border-radius: 9px;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 4px 10px 0 rgba(0, 0, 0, 0.1);
-  }
+}
 
-  .date-bornBill {
-    position: absolute;
-    margin-bottom: -5%;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    font-size: 16px;
-    color: #737373;
-    margin-right:70%;
-  }
-  .dateBill{
-    margin-top:8%;
-  }
-  .starDate{
-    width: 30%;
-    height: 37.5%;
-    margin: 3%;
-    margin-top: 8.5%;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 14px;
-    font-family: 'Franklin Gothic', 'Arial Narrow', Arial, sans-serif;
-    border: 2px solid #2b8c8c;
-  }
+.tableBill {
+  width: 100%
+}
+
+
+.tableBill-header-row {
+  background-color: #2b8c8c;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.tableBill-row {
+  padding: 8px 16px;
+
+}
+
+.tableBill-row:hover {
+  background-color: #f2f2f2;
+}
+
+.pagination-container {
+  position: sticky;
+  bottom: 0;
+  background-color: white;
+  z-index: 1;
+}
+
+/*Tabla Factura*/
+
+
+.hClient {
+  display: flex;
+}
+
+.ContaBill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: absolute;
+  margin-top: 3%;
+  width: 45%;
+  height: 27%;
+  margin-left: 3.4%;
+  background-color: #FFFFFF;
+  border-radius: 9px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 4px 10px 0 rgba(0, 0, 0, 0.1);
+}
+
+.searchBill {
+  display: flex;
+}
+
+.labelBill {
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 16px;
+  color: #737373;
+  font-weight: bold;
+  margin-top: 2%;
+  margin-right: 59%;
+}
+
+.starDate {
+  width: 70%;
+  height: 82%;
+  margin: 3%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: 'Franklin Gothic', 'Arial Narrow', Arial, sans-serif;
+  border: 2px solid #2b8c8c;
+  text-align: center;
+}
+
+/*Label factura*/
+.custom-labelBill {
+  display: block;
+  text-align: center;
+  position: relative;
+  font-size: 18px;
+  margin: 10x;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  color: #2b8c8c;
+  margin-top: -1%;
+}
+
+.custom-labelBill::before,
+.custom-labelBill::after {
+  content: "";
+  position: absolute;
+  top: 47%;
+  width: 180%;
+  border-top: 2px solid #737373;
+}
+
+.custom-labelBill::before {
+  left: -200%;
+}
+
+.custom-labelBill::after {
+  right: -200%;
+}
+
+/*Label factura*/
+
+
+.addBill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: absolute;
+  margin-top: 3%;
+  width: 25%;
+  height: 27%;
+  background-color: #2b8c8c9e;
+  border-radius: 9px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 4px 10px 0 rgba(0, 0, 0, 0.1);
+  margin-left: 51%;
+  font-size: 16px;
+}
+
+.btnaddBill {
+  width: 70%;
+  height: 40px;
+  margin: 10px auto;
+  justify-content: center;
+  color: #2b8c8c;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  border-radius: 10px;
+  background-color: #ffffff;
+  box-shadow: 0 0 3px rgba(131, 130, 130, 0.6);
+  margin-bottom: 3%;
+  font-size: 18px;
+}

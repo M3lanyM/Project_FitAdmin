@@ -15,34 +15,44 @@ export default function BillPage() {
 
     return (
         <BaseLayout>
-            <div className='searchBill'>
-                <label htmlFor="Nombre" className="date-bornBill">
-                    Seleccione la fecha a buscar
-                </label>
+            <div className='hBill'>
+                <div className='ContaBill'>
+                    <label className="custom-labelBill">FACTURACIÓN</label>
+                    <label htmlFor="Nombre" className="labelBill">
+                        Seleccione la fecha a buscar:
+                    </label>
 
-                    <input
-                        className="starDate"
-                        type="date"
-                        name="starDate"
-                        placeholder="Fecha de Nacimiento"
-                    />
-                <TextField
-                    InputProps={{
-                        endAdornment: (
-                            <InputAdornment position="start">
-                                <SearchIcon className="SearchIcon" />
-                            </InputAdornment>
-                        ),
-                    }}
-                    placeholder="Buscar cliente"
-                    sx={{
-                        width: '35%', height: '1%',marginRight:'-19%',
-                        '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                            borderColor: '#2b8c8c',
-                        },
-
-                    }}
-                />
+                    <div className='searchBill'>
+                        <input
+                            className="starDate"
+                            type="date"
+                            name="starDate"
+                            placeholder="Fecha de Nacimiento"
+                        />
+                        <TextField
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="start">
+                                        <SearchIcon className="SearchIcon" />
+                                    </InputAdornment>
+                                ),
+                            }}
+                            placeholder="Buscar cliente"
+                            sx={{
+                                width: '80%', height: '1%',
+                                '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                    borderColor: '#2b8c8c',
+                                },
+                                marginTop: '3%', marginLeft: '20px',
+                            }}
+                        />
+                    </div>
+                </div>
+                <div className="addBill">
+                    <button className='btnaddBill'>
+                        + Agregar Factura
+                    </button>
+                </div>
             </div>
             <TableBill />
         </BaseLayout>
