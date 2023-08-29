@@ -7,6 +7,7 @@ import '@/styles/exercise.css'
 import '@/styles/report.css'
 import '@/styles/member.css'
 import '@/styles/client.css'
+import '@/styles/bill.css'
 import type { AppProps } from 'next/app'
 
 export default function App({ Component, pageProps }: AppProps) {

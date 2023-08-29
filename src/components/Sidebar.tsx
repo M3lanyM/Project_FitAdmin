@@ -34,7 +34,7 @@ const sidebarItems = [
     },
     {
         name: "Facturación",
-        href: "/PRUEBA",
+        href: "/indexBill",
         icon: HiOutlineDocumentText,
     },
     {

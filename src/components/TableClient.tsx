@@ -53,19 +53,61 @@ const TableClient: React.FC<Props> = ({ data }) => {
       <Table className="tableClient">
         <TableHead>
           <TableRow className="tableClient-header-row">
-            <TableCell className="tableClient-header-cell">Cliente</TableCell>
-            <TableCell className="tableClient-header-cell">Correo</TableCell>
-            <TableCell className="tableClient-header-cell">Estado</TableCell>
-            <TableCell className="tableClient-header-cell">Acción</TableCell>
+            <TableCell
+              className="tableClient-header-cell"
+              sx={{
+                color: 'white',   
+                textAlign: 'center',   
+                fontWeight: 'bold',    
+              }}
+            >
+              Cliente
+            </TableCell>
+            <TableCell
+              className="tableClient-header-cell"
+              sx={{
+                color: 'white',   
+                textAlign: 'center',   
+                fontWeight: 'bold',    
+              }}
+            >
+              Correo
+            </TableCell>
+            <TableCell
+              className="tableClient-header-cell"
+              sx={{
+                color: 'white',  
+                textAlign: 'center',   
+                fontWeight: 'bold',   
+              }}
+            >
+              Estado
+            </TableCell>
+            <TableCell
+              className="tableClient-header-cell"
+              sx={{
+                color: 'white',  
+                textAlign: 'center',   
+                fontWeight: 'bold',    
+              }}
+            >
+              Acción
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {tableData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
             <TableRow key={row.id} className="tableClient-row">
-              <TableCell className="tableClient-cell">{row.name}</TableCell>
-              <TableCell className="tableClient-cell">{row.mail}</TableCell>
-              <TableCell className="tableClient-cell">{row.state}</TableCell>
-              <TableCell className="tableClient-cell">
+              <TableCell className="tableClient-cell" sx={{ textAlign: 'center' ,padding: '5px 16px',}}>
+                {row.name}
+              </TableCell>
+              <TableCell className="tableClient-cell" sx={{ textAlign: 'center' ,padding: '5px 16px', }}>
+                {row.mail}
+              </TableCell>
+              <TableCell className="tableClient-cell" sx={{textAlign: 'center' ,padding: '5px 16px',}}>
+                {row.state}
+              </TableCell>
+              <TableCell className="tableClient-cell" sx={{textAlign: 'center' ,padding: '5px 16px',}}>
                 <IconButton>
                   <EmailIcon className="email-icon" />
                 </IconButton>
@@ -79,7 +121,7 @@ const TableClient: React.FC<Props> = ({ data }) => {
         </TableBody>
       </Table>
       <div className="pagination-container">
-        <TablePagination
+      <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
           count={tableData.length}
@@ -89,10 +131,22 @@ const TableClient: React.FC<Props> = ({ data }) => {
           onRowsPerPageChange={handleChangeRowsPerPage}
           labelRowsPerPage="Mostrar"
           nextIconButtonProps={{
-            className: 'pagination-button'
+            className: 'pagination-button',
+            sx: {
+              color: '#A1A626',   // Set button color
+            },
           }}
           backIconButtonProps={{
-            className: 'pagination-button'
+            className: 'pagination-button',
+            sx: {
+              color: '#A1A626',   // Set button color
+            },
+          }}
+          sx={{
+            '.MuiTablePagination-select': {
+              border: '2px solid #A1A626',  // Set border style
+              borderRadius: '10px',         // Set border radius
+            },
           }}
         />
       </div>
