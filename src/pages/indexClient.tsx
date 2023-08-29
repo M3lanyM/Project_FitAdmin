@@ -1,21 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
 import BaseLayout from "@/components/BaseLayout";
 import TableClient, { initialData, TableData } from '@/components/TableClient';
 import { TextField, InputAdornment } from '@mui/material';
 import Button from '@mui/material/Button';
 import { Search as SearchIcon } from '@mui/icons-material';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
+import ModalAddCliend from '@/components/ModalAddCliend';
+
 
 export default function ClientPage() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   const activeClientsCount = calculateActiveClientsCount();
   const deactiveClientsCount = calculateDeactivateClientsCount();
 
   return (
     <BaseLayout>
+      <div className='hClient'>
+        <div className='ContaH'>
+          <button onClick={openModal} className='btnClient'>
+            + Agregar Cliente
+          </button>
 
-      <div className='h'>
-        <div className='h1'>
-          <button className='btnClient'>+ Agregar Cliente</button>
           <div className='Descarga'>
             <TextField
               InputProps={{
@@ -31,11 +45,23 @@ export default function ClientPage() {
                 '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
                   borderColor: '#2b8c8c',
                 },
+                marginRight: '30px',
               }}
             />
-            <Button variant="outlined"
+            <Button
+              variant="outlined"
               startIcon={<CloudDownloadIcon className="custom-icon" />}
-              className="custom-button"
+              sx={{
+                width: '30%',
+                color: '#2b8c8c',
+                fontWeight: 'bold',
+                borderColor: '#2b8c8c',
+                borderWidth: 2,
+                '&:hover': {
+                  borderColor: '#2b8c8c',
+                  borderWidth: 2,
+                },
+              }}
             >
               Excel
             </Button>
@@ -49,14 +75,15 @@ export default function ClientPage() {
           <h1 className='text2H'>Habilitados</h1>
         </div>
 
-        <div className="Desabilitados">
+        <div className="Deshabilitados">
           <img className="disabled" src="/img/disabled.png" />
           <p className='text1'>{`${deactiveClientsCount}`}</p>
-          <h1 className='text2D'>Desabilitados</h1>
+          <h1 className='text2D'>Deshabilitados</h1>
         </div>
       </div>
 
       <TableClient data={initialData} />
+      {isModalOpen && <ModalAddCliend onClose={closeModal} />}
     </BaseLayout>
   );
 }

@@ -69,7 +69,7 @@
     margin-left: 42%;
   }
   
-  .Desabilitados,
+  .Deshabilitados,
   .Habilitados {
     display: flex;
     flex-direction: column;
@@ -85,7 +85,7 @@
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 4px 10px 0 rgba(0, 0, 0, 0.1);
   }
   
-  .Desabilitados {
+  .Deshabilitados {
     margin-left: 59.4%;
     font-size: 16px;
   }
@@ -112,7 +112,7 @@
     text-shadow: 0px 0px 10px #f25041ee;
   }
   
-  .h {
+  .hClient {
     display: flex;
   }
   
@@ -137,7 +137,7 @@
     margin-bottom: 3%;
   }
   
-  .h1 {
+  .ContaH {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -157,25 +157,3 @@
     display: flex;
   }
   
-  .Descarga>*+* {
-    margin-left: 30px;
-    /* Ajusta el valor según el espacio que desees */
-  }
-  
-  .custom-button {
-    width: 30%;
-    color: #2b8c8c;
-    font-weight: bold;
-    border-color: #2b8c8c;
-    border-width: 2px;
-  }
-  
-  .custom-button:hover {
-    border-color: #2b8c8c;
-    border-width: 2px;
-  }
-  
-  .custom-icon,
-  .SearchIcon {
-    color: #727272;
-  }

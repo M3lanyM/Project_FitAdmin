@@ -7,9 +7,9 @@ const inter = Inter({ subsets: ['latin'] })
 export default function IndexMudanca() {
   return (
     <>
-<BaseLayout>
-</BaseLayout>
-</>
+      <BaseLayout>
+      </BaseLayout>
+    </>
 
   )
 }

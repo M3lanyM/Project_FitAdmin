@@ -6,11 +6,23 @@
     align-items: center;
     min-height: 100vh;
     font-family: 'Jost', sans-serif;
-    background-color: #F2F2F2;
-    background-image: linear-gradient(315deg, #2b8c8c 0%, #000000 200%);
+    background-image: url('./fondo.png');
+    background-size: 100% 115%;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
 
 }
-
+.bodyLogin::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(43, 140, 140, 0.397); 
+  backdrop-filter: blur(1px); 
+}
 
 
 .main {
@@ -21,6 +33,7 @@
     background-image: linear-gradient(315deg, #2b8c8c 0%, #000000 200%);
     border-radius: 10px;
     box-shadow: 5px 20px 50px #000;
+    z-index: 1;
 
 }
 
@@ -39,7 +52,7 @@
 }
 
 
-label {
+.labelLogin {
     color: #fff;
     font-size: 35px;
     justify-content: center;
@@ -122,7 +135,7 @@ label {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
 }
 
-button:hover {
+.btnLogin:hover {
     background: #13312f;
 
 }

@@ -15,7 +15,7 @@ const LoginPage: React.FC = () => {
             <input type="checkbox" id="chk" aria-hidden="true" />
             <div className={`signup ${showLogin ? 'hide' : ''}`}>
                 <form>
-                    <label htmlFor="chk" aria-hidden="true">Iniciar Sesión</label>
+                    <label className= "labelLogin" htmlFor="chk" aria-hidden="true">Iniciar Sesión</label>
                     <input className="inpSign" type="email" name="email" placeholder="Usuario" required />
                     <input className="inpSign" type="password" name="pswd" placeholder="Contraseña" required />
 
@@ -27,7 +27,7 @@ const LoginPage: React.FC = () => {
             </div>
             <div className={`login ${showLogin ? '' : 'hide'}`}>
                 <form>
-                    <label htmlFor="chk" aria-hidden="true">Registrarse</label>
+                    <label className= "labelLogin" htmlFor="chk" aria-hidden="true">Registrarse</label>
                     <input className="inpLogin" type="text" name="txt" placeholder="Usuario" required />
                     <input className="inpLogin" type="email" name="email" placeholder="Correo" required />
                     <input className="inpLogin" type="password" name="pswd" placeholder="Contraseña" required />
