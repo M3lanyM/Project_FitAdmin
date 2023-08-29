@@ -4,14 +4,13 @@
 
   position: absolute;
   background-color: #ffffff;
-  width: 70%;
+  width: 75%;
   height: auto;
-  margin-top: 8%;
-  margin-left: 6%;
-  border-radius: 10px;
-  -webkit-box-shadow: 0px 3px 5px 2px rgba(51, 51, 51, 1);
-  -moz-box-shadow: 0px 3px 5px 2px rgba(51, 51, 51, 1);
-  box-shadow: 0px 3px 5px 2px rgba(51, 51, 51, 1);
+  margin-top: 3%;
+  margin-left: 3%;
+  background-color: #FFFFFF;
+    border-radius: 9px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 4px 10px 0 rgba(0, 0, 0, 0.1);
 }
 
 .Raw {
@@ -43,7 +42,7 @@
 }
 
 .button-routine {
-  background-color: #2b8c8c;
+  background-color: #A1A626;
   color: white;
   padding: 0.5% 3%;
   font-size: 18px;
@@ -58,18 +57,17 @@
 .line-routine {
   margin-top: 1%;
   border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 3%;
 }
 
 /*second part*/
 
 .content-select {
-  align-items: center;
-  justify-content: center;
   margin-top: 2%;
   margin-left: 5%;
-  font-size: 20px;
+  color: #284B63;
   font-weight: bold;
-  color: black;
+  font-size: 22px;
 }
 
 .form-select {
@@ -100,31 +98,35 @@
 /*third part*/
 
 .routine-table {
+  justify-content: center;
   margin-top: 4%;
-  width: 100%;
-  border-radius: 3%;
+  width: 96%;
+  margin-left: 2%;
   border: 1px solid #e5e7eb;
   margin-bottom: 2%;
+  align-items: center;
 }
 
 .routine-th,
 .routine-td {
-  padding: 10px;
+  padding: 20%;
   border: 1px;
-  text-align: center;
-  color: #000;
+  text-align: center; 
+   align-items: center;
 }
 
 .routine-th {
-  background-color: #f2f2f2;
+  background-color: #2b8c8c;
   font-weight: bold;
   border-radius: 1%;
   border-bottom: 1px solid #e5e7eb;
-  color: #284B63;
+  color: white;
+
 }
 
 .container-table {
   padding: auto;
+  align-items: center;
 }
 
 .table-button{

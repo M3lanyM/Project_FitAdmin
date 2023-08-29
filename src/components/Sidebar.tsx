@@ -7,6 +7,7 @@ import { MdOutlineCardMembership } from "react-icons/md";
 import { HiOutlineClipboardDocumentCheck, HiOutlineDocumentText } from "react-icons/hi2";
 import { RiArrowDropRightLine, RiArrowDropLeftLine } from "react-icons/ri";
 import { SidebarContext } from './SidebarContext';
+import SportsGymnasticsIcon from '@mui/icons-material/SportsGymnastics';
 
 
 const sidebarItems = [
@@ -18,12 +19,17 @@ const sidebarItems = [
     },
     {
         name: "Rutinas",
-        href: "/routine",
+        href: "/indexRoutine",
         icon: BsCalendarWeek,
     },
     {
+        name: "Ejercicios",
+        href: "/indexExercise",
+        icon: SportsGymnasticsIcon,
+    },
+    {
         name: "Membresias",
-        href: "/member",
+        href: "/indexMember",
         icon: MdOutlineCardMembership,
     },
     {
@@ -33,7 +39,7 @@ const sidebarItems = [
     },
     {
         name: "Reportes",
-        href: "/report",
+        href: "/indexReport",
         icon: HiOutlineClipboardDocumentCheck,
     },
 ];
