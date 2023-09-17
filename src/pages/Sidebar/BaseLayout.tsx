@@ -1,5 +1,6 @@
 import {ReactNode} from 'react';
 import Sidebar from './Sidebar';
+import React from 'react';
 
 interface Props{
     children: ReactNode | ReactNode[];

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import BaseLayout from "@/components/BaseLayout";
+import BaseLayout from "@/pages/Sidebar/BaseLayout";
 import TableMember from '@/components/TableMember';
 import { TextField, InputAdornment } from '@mui/material';
 import Button from '@mui/material/Button';

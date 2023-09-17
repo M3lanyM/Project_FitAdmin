@@ -2,12 +2,8 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import BaseLayout from "@/pages/Sidebar/BaseLayout";
-import TableExercise from '@/components/TableExercise';
-import { TextField, InputAdornment } from '@mui/material';
-import Button from '@mui/material/Button';
-import { Search as SearchIcon } from '@mui/icons-material';
 
-const PageExercise = () => {
+const PageReport = () => {
     const [isExerciseModalOpen, setIsExerciseModalOpen] = useState(false);
     const handlerExercise = () => {
         setIsExerciseModalOpen(true);
@@ -34,31 +30,31 @@ const PageExercise = () => {
     return (
         <BaseLayout>
             <section className="container-routine">
-                <div className="Row">
-                    <div>
-                        <h1 className="service-titles">Ejercicios</h1>
-                        <button className="button-exercise" onClick={handlerExercise}>Agregar Ejercicio</button>
-                    </div>
-                    <div className="line-routine"></div>
-                    <div className="flexs">
-                        <div className="search-exercise" >
-                            <h2 > Buscar</h2>
-                            <input type="text" placeholder="Buscar" />
-                        </div>
-                        <div className="exercise-type">
-                            <h2 > Categoria </h2>
-                            <select name="select-addroutine" className="space-addRoutine center">
-                                <option value="">Lista de Categorias</option>
-                                <option value="">Gluteos</option>
-                                <option value="">Piernas</option>
+                <div >
+                    <div className="Row-report">
+                        <h1 className="service-report justify-center items-center">Reportes</h1>
+                       {/*<div className="justify-center items-center">
+                            <h2 className="content-select"> Mostrar</h2>
+                            <select name="select-routine" className="form-select justify-center items-center">
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
                             </select>
+                            <input className="search-routine m-4" type="text" placeholder="Buscar" />
                         </div>
+                        <div>
+                            <h1 className=""></h1>
+                            <button className="button-exercise" onClick={handlerExercise}>Agregar Ejercicio</button>
+                        </div>
+
+                        <div>
+                            <h1 className="service-titles">Ej</h1>
+                            <button className="button-exercise" onClick={handlerExercise}>Agreg</button>
+    </div>*/}
+
                     </div>
-                    <section>
-                        <TableExercise/>
-                    </section>
                 </div>
-                {isExerciseModalOpen && (
+               {/* {isExerciseModalOpen && (
                     <div className="modal-addRoutine">
                         <div className="content-addRoutine">
                             <span className="close-addRoutine " onClick={handleCloseRoutineModal}>&times;</span>
@@ -78,16 +74,16 @@ const PageExercise = () => {
                                     <textarea name="descrption" placeholder="Descripcion" className="description-addRoutine"></textarea>
                                 </div>
                                 <div className="line-addRoutine"></div>
-                                <div className="center">
+                                <div className="justify-center items-center">
                                     <h2 className="space-addRoutine">Categoria</h2>
-                                    <select name="select-addroutine" className="space-addRoutine center">
+                                    <select name="select-addroutine" className="space-addRoutine justify-center items-center">
                                         <option value="">Lista de Categorias</option>
                                         <option value="">Gluteos</option>
                                         <option value="">Piernas</option>
                                     </select>
                                 </div>
                                 <div className="line-addRoutine"></div>
-                                <div className="button-addRoutine2 flexs center" >
+                                <div className="button-addRoutine2 flex justify-center items-center" >
                                     <button className="colors" onClick={handleTextareaClear}>Agregar </button>
                                     <button className="exit-addRoutine" onClick={handleCloseRoutineModal}>Cancelar</button>
                                 </div>
@@ -103,11 +99,11 @@ const PageExercise = () => {
 
                         </div>
                     </div>
-                )}
+                )}*/}
             </section >
         </BaseLayout>
 
     )
 }
 
-export default PageExercise;
+export default PageReport;

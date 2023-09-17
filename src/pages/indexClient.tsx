@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import BaseLayout from "@/components/BaseLayout";
+import BaseLayout from "@/pages/Sidebar/BaseLayout";
 import TableClient, { initialData, TableData } from '@/components/TableClient';
 import { TextField, InputAdornment } from '@mui/material';
 import Button from '@mui/material/Button';

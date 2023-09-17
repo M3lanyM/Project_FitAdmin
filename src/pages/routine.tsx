@@ -2,12 +2,6 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import BaseLayout from "@/pages/Sidebar/BaseLayout";
-import TableRoutine from '@/components/TableRoutine';
-import { TextField, InputAdornment } from '@mui/material';
-import Button from '@mui/material/Button';
-import { Search as SearchIcon } from '@mui/icons-material';
-import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
-
 
 const PageRoutine = () => {
     const [isRoutineModalOpen, setIsRoutineModalOpen] = useState(false);
@@ -54,33 +48,50 @@ const PageRoutine = () => {
                 <div className="Row">
                     <div>
                         <h1 className="service-titles">Rutinas</h1>
-                        <button className="button-routine" onClick={handlerRoutine}> + Crear Rutinas</button>
+                        <button className="button-routine" onClick={handlerRoutine}>Crear Rutinas</button>
                     </div>
                     <div className="line-routine"></div>
-                    <div className=" flexs">
-                        <h2 className="content-select"> Buscar</h2>
-                        <TextField
-                            InputProps={{
-                                endAdornment: (
-                                    <InputAdornment position="start">
-                                        <SearchIcon className="SearchIcon" />
-                                    </InputAdornment>
-                                ),
-                            }}
-                            placeholder="Buscar rutina"
-                            sx={{
-                                left:'61%',
-                                top: '25%',
-                                width: '25%',
-                                '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                                    borderColor: '#2b8c8c',
-                                },
-                            }}
-                        />
+                    <div className="justify-center items-center">
+                        <h2 className="content-select"> Mostrar</h2>
+                        <select name="select-routine" className="form-select justify-center items-center">
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                        <input className="search-routine m-4" type="text" placeholder="Buscar" />
                     </div>
                     <section>
-                    <TableRoutine />
+                        <div className="container-table">
+                            <table className="routine-table">
+                                <thead className="routine-th">
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Nombre</th>
+                                        <th>Categoria</th>
+                                        <th>Descripcion</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="routine-td">
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Comienzo</td>
+                                        <td>Gluteos</td>
+                                        <td>Gluteos para principiantes</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>Medio</td>
+                                        <td>Piernas</td>
+                                        <td>Piernas para fortalecer</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </section>
+                    <div className="">
+                        <button className="table-button" onClick={handlerRoutine}>Editar</button>
+                        <button className="table-button">Eliminar</button>
+                    </div>
                 </div>
                 {isRoutineModalOpen && (
                     <div className="modal-addRoutine">
@@ -104,7 +115,7 @@ const PageRoutine = () => {
                                 <div className="line-addRoutine"></div>
                                 <div className="justify-center items-center">
                                     <h2 className="space-addRoutine">Categoria</h2>
-                                    <select name="select-addroutine" className="space-addRoutine center">
+                                    <select name="select-addroutine" className="space-addRoutine justify-center items-center">
                                         <option value="">Lista de Categorias</option>
                                         <option value="">Gluteos</option>
                                         <option value="">Piernas</option>

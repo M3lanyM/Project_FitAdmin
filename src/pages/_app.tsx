@@ -1,4 +1,4 @@
-import SidebarProvider from '@/components/SidebarContext'
+import SidebarProvider from '@/pages/Sidebar/SidebarContext'
 import '@/styles/globals.css'
 import '@/styles/sidebar.css'
 import '@/styles/login.css'
