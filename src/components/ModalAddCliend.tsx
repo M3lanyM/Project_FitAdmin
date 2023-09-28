@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 
-interface ModalAddCliendProps {
+interface ModalAddClientProps {
   onClose: () => void;
 }
 
-const ModalAddCliend: React.FC<ModalAddCliendProps> = ({ onClose }) => {
+const ModalAddClient: React.FC<ModalAddClientProps> = ({ onClose }) => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -29,6 +29,7 @@ const ModalAddCliend: React.FC<ModalAddCliendProps> = ({ onClose }) => {
       [name]: value,
     }));
   };
+
   return (
     <div className="modal">
       <div className="modalContent">
@@ -37,7 +38,8 @@ const ModalAddCliend: React.FC<ModalAddCliendProps> = ({ onClose }) => {
           <label htmlFor="Nombre" className="nameClient">
             Nombre:
           </label>
-          <input className="inputformC"
+          <input
+            className="inputformC"
             type="text"
             name="firstName"
             placeholder="Nombre"
@@ -47,7 +49,8 @@ const ModalAddCliend: React.FC<ModalAddCliendProps> = ({ onClose }) => {
           <label htmlFor="Nombre" className="lastnameClient">
             Primer apellido:
           </label>
-          <input className="inputformC"
+          <input
+            className="inputformC"
             type="text"
             name="lastName"
             placeholder="Primer Apellido"
@@ -57,7 +60,8 @@ const ModalAddCliend: React.FC<ModalAddCliendProps> = ({ onClose }) => {
           <label htmlFor="Nombre" className="secondnameClient">
             Segundo apellido:
           </label>
-          <input className="inputformC"
+          <input
+            className="inputformC"
             type="text"
             name="secondLastName"
             placeholder="Segundo Apellido"
@@ -69,7 +73,8 @@ const ModalAddCliend: React.FC<ModalAddCliendProps> = ({ onClose }) => {
           Cedula:
         </label>
         <div className="formRow2">
-          <input className="inputformC"
+          <input
+            className="inputformC"
             type="text"
             name="cedula"
             placeholder="Cédula"
@@ -90,7 +95,8 @@ const ModalAddCliend: React.FC<ModalAddCliendProps> = ({ onClose }) => {
           <label htmlFor="Nombre" className="correoClient">
             Correo:
           </label>
-          <input className="inputformC"
+          <input
+            className="inputformC"
             type="email"
             name="email"
             placeholder="Correo"
@@ -102,7 +108,8 @@ const ModalAddCliend: React.FC<ModalAddCliendProps> = ({ onClose }) => {
           Teléfono:
         </label>
         <div className="formRow3">
-          <input className="inputformC"
+          <input
+            className="inputformC"
             type="tel"
             name="phone"
             placeholder="Teléfono"
@@ -185,4 +192,4 @@ const ModalAddCliend: React.FC<ModalAddCliendProps> = ({ onClose }) => {
   );
 };
 
-export default ModalAddCliend;
+export default ModalAddClient;
