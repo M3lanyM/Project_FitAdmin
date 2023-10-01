@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { getFirestore, collection, addDoc } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
+import { getFirestore, collection, addDoc, getDocs } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 import firebaseConfig from "@/firebase/config";
 
@@ -37,6 +37,19 @@ const ModalAddClient: React.FC<ModalAddClientProps> = ({ onClose }) => {
     }));
   };
 
+   // Obtener las opciones para el select de membresias
+  const [membershipOptions, setMembershipOptions] = useState<string[]>([]);
+      useEffect(() => {
+        const fetchMembershipOptions = async () => {
+          const membershipCollection = collection(db, "membresia");
+          const membershipSnapshot = await getDocs(membershipCollection);
+          const optionsData = membershipSnapshot.docs.map((doc) => doc.data().tipo);
+          setMembershipOptions(optionsData);
+        };
+
+        fetchMembershipOptions();
+      }, [db]);
+
   const handleAddClient = async () => {
     try {
       // Agrega los datos del formulario a la colección "cliente" en Firestore
@@ -51,8 +64,18 @@ const ModalAddClient: React.FC<ModalAddClientProps> = ({ onClose }) => {
         estado: formData.status,
         sexo: formData.gender,
       });
+      
 
       console.log("Documento escrito con ID: ", docRef.id);
+      
+    // Agrega los datos a la colección "clienteMembresia"
+    await addDoc(collection(db, "clienteMembresia"), {
+      clienteId: docRef.id,
+      membershipId: formData.membership,// Se debe de cambiar porque esto solo le asigna el nombre de la membresia
+      fechaIngreso: formData.admDate,
+      proximoPago: formData.nextPay,
+    });
+
 
       // Limpia el formulario después de la presentación exitosa
       setFormData({
@@ -73,7 +96,7 @@ const ModalAddClient: React.FC<ModalAddClientProps> = ({ onClose }) => {
 
       // Cierra el modal o realiza cualquier otra acción necesaria 
       onClose();
-      
+
     } catch (error) {
       console.error("Error al agregar el documento: ", error);
     }
@@ -225,8 +248,11 @@ const ModalAddClient: React.FC<ModalAddClientProps> = ({ onClose }) => {
             value={formData.membership}
             onChange={handleInputChange}
           >
-            <option value="habilitado">Estudiante</option>
-            <option value="deshabilitado">Personalizado</option>
+            {membershipOptions.map((option, index) => (
+              <option key={index} value={option}>
+                {option}
+              </option>
+            ))}
           </select>
 
           <label htmlFor="Precio" className="precioClient">
@@ -243,7 +269,7 @@ const ModalAddClient: React.FC<ModalAddClientProps> = ({ onClose }) => {
         </div>
 
         <div className="addMclient">
-        <button className="addButton" onClick={handleAddClient}>
+          <button className="addButton" onClick={handleAddClient}>
             + Agregar
           </button>
           <button className="closeButton" onClick={onClose}>
