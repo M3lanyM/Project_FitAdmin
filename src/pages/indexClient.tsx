@@ -12,6 +12,7 @@ import firebaseConfig from "@/firebase/config";
 import ModalAddClient from '@/components/ModalAddCliend';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import { ClassNames } from '@emotion/react';
 
 export interface TableData {
   id: string;
@@ -27,6 +28,8 @@ export default function ClientPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [clientIdToDelete, setClientIdToDelete] = useState('');
 
   useEffect(() => {
     const clientCollection = collection(db, 'cliente');
@@ -83,16 +86,26 @@ export default function ClientPage() {
   };
 
   const deleteClient = async (clientId: string) => {
+    setIsDeleteModalOpen(true);
+    setClientIdToDelete(clientId);
+  };
+
+  const confirmDelete = async () => {
     try {
       const db = getFirestore(app);
-      const clientRef = doc(db, 'cliente', clientId);
+      const clientRef = doc(db, 'cliente', clientIdToDelete);
       await deleteDoc(clientRef);
 
-      // Actualizar el estado tableData después de eliminar el cliente
-      setTableData((prevData) => prevData.filter((client) => client.id !== clientId));
+      setTableData((prevData) => prevData.filter((client) => client.id !== clientIdToDelete));
+
+      setIsDeleteModalOpen(false);
     } catch (error) {
       console.error('Error al eliminar el cliente:', error);
     }
+  };
+
+  const cancelDelete = () => {
+    setIsDeleteModalOpen(false);
   };
 
   return (
@@ -176,7 +189,7 @@ export default function ClientPage() {
                     <EmailIcon className="email-icon" />
                     <DeleteIcon
                       className="delete-icon"
-                      onClick={() => deleteClient(client.id)} // Llamar a la función de eliminación al hacer clic en el ícono
+                      onClick={() => deleteClient(client.id)}
                     />
                   </td>
                 </tr>
@@ -213,6 +226,15 @@ export default function ClientPage() {
           </div>
         </div>
       </div>
+      {isDeleteModalOpen && (
+        <div className="modal-delete">
+          <div className="custom-modal-delete">
+            <p className='text-delete'>¿Estás seguro de que deseas eliminar este cliente?</p>
+            <button className="confirmDelete" onClick={confirmDelete}>Sí</button>
+            <button className="cancelDelete" onClick={cancelDelete}>No</button>
+          </div>
+        </div>
+      )}
       {isModalOpen && <ModalAddClient onClose={closeModal} />}
     </BaseLayout>
   );
