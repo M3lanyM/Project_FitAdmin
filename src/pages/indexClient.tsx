@@ -6,13 +6,12 @@ import EmailIcon from '@mui/icons-material/Email';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import { TextField, InputAdornment, Button } from '@mui/material';
 import { Search as SearchIcon } from '@mui/icons-material';
-import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import {getFirestore,collection,query,onSnapshot,} from 'firebase/firestore';
 import { initializeApp } from "firebase/app";
 import firebaseConfig from "@/firebase/config";
 import ModalAddClient from '@/components/ModalAddCliend';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-
 
 export interface TableData {
   id: string;
@@ -29,29 +28,29 @@ export default function ClientPage() {
   const app = initializeApp(firebaseConfig);
 
   useEffect(() => {
-    async function fetchFirebaseData() {
-      const db = getFirestore(app);
-      const clientCollection = collection(db, 'cliente');
+    const db = getFirestore(app);
+    const clientCollection = collection(db, 'cliente');
+    const q = query(clientCollection);
 
-      try {
-        const querySnapshot = await getDocs(clientCollection);
-        const data = querySnapshot.docs.map((doc) => {
-          const { nombre, primerApellido, correo, estado } = doc.data();
-          return {
-            id: doc.id,
-            name: `${nombre} ${primerApellido}`,
-            mail: correo,
-            state: estado,
-          };
-        });
-        setTableData(data);
-      } catch (error) {
-        console.error('Error al obtener datos de Firebase:', error);
-      }
-    }
+// Crea un oyente en tiempo real para la colección de clientes
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const data = querySnapshot.docs.map((doc) => {
+        const { nombre, primerApellido, correo, estado } = doc.data();
+        return {
+          id: doc.id,
+          name: `${nombre} ${primerApellido}`,
+          mail: correo,
+          state: estado,
+        };
+      });
+      setTableData(data);
+    });
 
-    fetchFirebaseData();
-  }, []);
+    // Limpiar el oyente cuando el componente se desmonta   
+    return () => {
+      unsubscribe();
+    };
+  }, [app]);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
