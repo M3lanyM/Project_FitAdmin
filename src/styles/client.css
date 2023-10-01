@@ -1,31 +1,13 @@
 /*Tabla cliente*/
-.tableClient-container {
-  width: 80%;
-  height: 59%;
-  margin: 1% 2%;
-  margin-top: 16%;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 4px 10px 0 rgba(0, 0, 0, 0.1);
-}
-
-.tableClient {
-  width: 100%;
-}
-
-
-.tableClient-header-row {
-  background-color: #2b8c8c;
+.fixed-header-row {
   position: sticky;
   top: 0;
+  background-color: white;
   z-index: 1;
 }
 
-.tableClient-row {
-  padding: 8px 16px;
-
-}
-
-.tableClient-row:hover {
-  background-color: #f2f2f2;
+.show-text {
+  margin-right: 10px;
 }
 
 .pagination-container {
@@ -33,6 +15,78 @@
   bottom: 0;
   background-color: white;
   z-index: 1;
+  text-align: right;
+  padding: 12px;
+  
+}
+
+.select-element {
+  border: 2px solid #A1A626;
+  border-radius: 10px;
+  text-align: center;
+  padding: 6px;
+  margin-right: 10px;
+}
+
+.tableClient-container {
+  width: 71%;
+  height: 58%;
+  margin-left: 3.3%;
+  margin-top: 16%;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 4px 10px 0 rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  background-color: white;
+  border-radius: 10px;
+}
+
+.tableClient {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.th-tableClient {
+  padding: 14px;
+  background-color: #2b8c8c;  
+  color: white;
+}
+
+td {
+  padding: 10px;
+  text-align: center;
+  border-bottom: 1px solid #ccc;
+}
+
+.tableClient-row:hover {
+  background-color: #f2f2f2;
+}
+
+.table-pagination {
+  text-align: right;
+  padding: 10px;
+  background-color: #f2f2f2;
+}
+
+.pagination-controls {
+  display: inline-flex;
+  align-items: center;
+}
+
+.pagination-button {
+  padding: 4px;
+}
+
+.pagination-page {
+  margin: 0 8px;
+}
+
+
+.email-icon {
+  margin-right: 12px;
+}
+
+.email-icon,
+.delete-icon {
+  color: #727272;
 }
 
 /*Tabla cliente*/

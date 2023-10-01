@@ -67,7 +67,7 @@ body {
   outline: none;
 }
 
-.admDate,
+
 .nextPay,
 .inputformC1 {
   width: 27%;
@@ -134,9 +134,8 @@ body {
 }
 
 /* Label */
-.nameClient,
-.precioClient,
-.date-admClient {
+
+.nameClient {
   position: absolute;
   margin-top: -60px;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
@@ -156,8 +155,7 @@ body {
 }
 
 .lastnameClient,
-.date-bornClient,
-.next-payClient {
+.date-bornClient{
   position: absolute;
   margin-top: -60px;
   margin-left: 21%;
@@ -218,5 +216,51 @@ body {
 .custom-label1::after {
   right: 8%;
 }
+
+/*Detalles de pago*/
+.admDate {
+  width: 27%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  margin-left: -0.1%;
+  font-family: 'Franklin Gothic', 'Arial Narrow', Arial, sans-serif;
+  border: 1px solid #A1A626;
+}
+
+.membershipClient{
+  position: absolute;
+  margin-top: -60px;
+  margin-left: 30.2%;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 16px;
+  color: #737373;
+}
+.next-payClient {
+  position: absolute;
+  margin-top: -60px;
+  margin-left: 15.1%;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 16px;
+  color: #737373;
+}
+.date-admClient {
+  position: absolute;
+  margin-top: -60px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 16px;
+  margin-left: -0.1%;
+  color: #737373;
+}
+.precioClient {
+  position: absolute;
+  margin-top: -60px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 16px;
+  margin-left: 45.3%;
+  color: #737373;
+}
+/*Detalles de pago*/
 
 /*MODAL AGREGAR CLIENTE*/

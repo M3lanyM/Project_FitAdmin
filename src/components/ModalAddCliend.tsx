@@ -18,6 +18,7 @@ const ModalAddClient: React.FC<ModalAddClientProps> = ({ onClose }) => {
     admDate: "",
     nextPay: "",
     precio: "",
+    membership: "",
   });
 
   const handleInputChange = (
@@ -46,7 +47,7 @@ const ModalAddClient: React.FC<ModalAddClientProps> = ({ onClose }) => {
             value={formData.firstName}
             onChange={handleInputChange}
           />
-          <label htmlFor="Nombre" className="lastnameClient">
+          <label htmlFor="primerApellido" className="lastnameClient">
             Primer apellido:
           </label>
           <input
@@ -57,7 +58,7 @@ const ModalAddClient: React.FC<ModalAddClientProps> = ({ onClose }) => {
             value={formData.lastName}
             onChange={handleInputChange}
           />
-          <label htmlFor="Nombre" className="secondnameClient">
+          <label htmlFor="segundoApellido" className="secondnameClient">
             Segundo apellido:
           </label>
           <input
@@ -69,7 +70,7 @@ const ModalAddClient: React.FC<ModalAddClientProps> = ({ onClose }) => {
             onChange={handleInputChange}
           />
         </div>
-        <label htmlFor="Nombre" className="cedulaClient">
+        <label htmlFor="cedula" className="cedulaClient">
           Cedula:
         </label>
         <div className="formRow2">
@@ -167,6 +168,19 @@ const ModalAddClient: React.FC<ModalAddClientProps> = ({ onClose }) => {
             onChange={handleInputChange}
           />
 
+          <label htmlFor="membership" className="membershipClient">
+            Tipo de membresia:
+          </label>
+          <select
+            className="inputformC1"
+            name="membership"
+            value={formData.membership}
+            onChange={handleInputChange}
+          >
+            <option value="habilitado">Estudiante</option>
+            <option value="deshabilitado">Personalizado</option>
+          </select>
+
           <label htmlFor="Precio" className="precioClient">
             Precio
           </label>
@@ -179,6 +193,7 @@ const ModalAddClient: React.FC<ModalAddClientProps> = ({ onClose }) => {
             onChange={handleInputChange}
           />
         </div>
+
         <div className="addMclient">
           <button className="addButton" >
             +Agregar

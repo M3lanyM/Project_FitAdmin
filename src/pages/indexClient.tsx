@@ -1,13 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import BaseLayout from "@/pages/Sidebar/BaseLayout";
-import TableContainer from '@mui/material/TableContainer';
-import Paper from '@mui/material/Paper';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import TablePagination from '@mui/material/TablePagination';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EmailIcon from '@mui/icons-material/Email';
@@ -18,6 +10,9 @@ import { getFirestore, collection, getDocs } from 'firebase/firestore';
 import { initializeApp } from "firebase/app";
 import firebaseConfig from "@/firebase/config";
 import ModalAddClient from '@/components/ModalAddCliend';
+import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+
 
 export interface TableData {
   id: string;
@@ -29,10 +24,10 @@ export interface TableData {
 export default function ClientPage() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [tableData, setTableData] = useState<TableData[]>([]); // Usar estado para almacenar los datos de Firebase.
+  const [tableData, setTableData] = useState<TableData[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const app = initializeApp(firebaseConfig);
-  
+
   useEffect(() => {
     async function fetchFirebaseData() {
       const db = getFirestore(app);
@@ -61,22 +56,22 @@ export default function ClientPage() {
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
-
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
 
   const activeClientsCount = calculateActiveClientsCount();
   const deactiveClientsCount = calculateDeactivateClientsCount();
 
   function calculateActiveClientsCount() {
-    const activeClients = tableData.filter(client => client.state === 'Habilitado');
+    const activeClients = tableData.filter(client => client.state === 'Activo');
     return activeClients.length;
   }
 
   function calculateDeactivateClientsCount() {
-    const deactivateClients = tableData.filter(client => client.state === 'Deshabilitado');
+    const deactivateClients = tableData.filter(client => client.state === 'Inactivo');
     return deactivateClients.length;
   }
 
@@ -147,108 +142,63 @@ export default function ClientPage() {
         </div>
       </div>
 
-      <TableContainer component={Paper} className="tableClient-container">
-        <Table className="tableClient">
-          <TableHead>
-            <TableRow className="tableClient-header-row">
-              <TableCell
-                className="tableClient-header-cell"
-                sx={{
-                  color: 'white',
-                  textAlign: 'center',
-                  fontWeight: 'bold',
-                }}
-              >
-                Cliente
-              </TableCell>
-              <TableCell
-                className="tableClient-header-cell"
-                sx={{
-                  color: 'white',
-                  textAlign: 'center',
-                  fontWeight: 'bold',
-                }}
-              >
-                Correo
-              </TableCell>
-              <TableCell
-                className="tableClient-header-cell"
-                sx={{
-                  color: 'white',
-                  textAlign: 'center',
-                  fontWeight: 'bold',
-                }}
-              >
-                Estado
-              </TableCell>
-              <TableCell
-                className="tableClient-header-cell"
-                sx={{
-                  color: 'white',
-                  textAlign: 'center',
-                  fontWeight: 'bold',
-                }}
-              >
-                Acción
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {tableData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
-              <TableRow key={row.id} className="tableClient-row">
-                <TableCell className="tableClient-cell" sx={{ textAlign: 'center', padding: '5px 16px', }}>
-                  {row.name}
-                </TableCell>
-                <TableCell className="tableClient-cell" sx={{ textAlign: 'center', padding: '5px 16px', }}>
-                  {row.mail}
-                </TableCell>
-                <TableCell className="tableClient-cell" sx={{ textAlign: 'center', padding: '5px 16px', }}>
-                  {row.state}
-                </TableCell>
-                <TableCell className="tableClient-cell" sx={{ textAlign: 'center', padding: '5px 16px', }}>
-                  <IconButton>
+      <div className="tableClient-container">
+        <table className="tableClient">
+          <thead>
+            <tr className="fixed-header-row">
+              <th className="th-tableClient">Nombre</th>
+              <th className="th-tableClient">Correo</th>
+              <th className="th-tableClient">Estado</th>
+              <th className="th-tableClient">Acción</th>
+            </tr>
+          </thead>
+          <tbody>
+            {tableData
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((client) => (
+                <tr key={client.id} className="tableClient-row">
+                  <td>{client.name}</td>
+                  <td>{client.mail}</td>
+                  <td>{client.state}</td>
+                  <td>
                     <EmailIcon className="email-icon" />
-                  </IconButton>
-                  <IconButton>
                     <DeleteIcon className="delete-icon" />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
         <div className="pagination-container">
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={tableData.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-            labelRowsPerPage="Mostrar"
-            nextIconButtonProps={{
-              className: 'pagination-button',
-              sx: {
-                color: '#A1A626',
-              },
-            }}
-            backIconButtonProps={{
-              className: 'pagination-button',
-              sx: {
-                color: '#A1A626',
-              },
-            }}
-            sx={{
-              '.MuiTablePagination-select': {
-                border: '2px solid #A1A626',
-                borderRadius: '10px',
-              },
-            }}
-          />
+          <span className="show-text">Mostrar</span>
+          <select value={rowsPerPage} onChange={handleChangeRowsPerPage} className="select-element">
+            {[5, 10, 25].map((option, index) => (
+              <option key={index} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+          <div className="pagination-controls">
+            <IconButton
+              disabled={page === 0}
+              onClick={() => setPage(page - 1)}
+              className="pagination-button"
+              style={{ color: page === 0 ? 'grey' : '#A1A626' }}
+            >
+              <NavigateBeforeIcon />
+            </IconButton>
+            <span className="pagination-page">{page + 1}</span>
+            <IconButton
+              disabled={page >= Math.ceil(tableData.length / rowsPerPage) - 1}
+              onClick={() => setPage(page + 1)}
+              className="pagination-button"
+              style={{ color: page >= Math.ceil(tableData.length / rowsPerPage) - 1 ? 'grey' : '#A1A626' }}
+            >
+              <NavigateNextIcon />
+            </IconButton>
+          </div>
         </div>
-      </TableContainer>
-      
+      </div>
+
       {isModalOpen && <ModalAddClient onClose={closeModal} />}
     </BaseLayout>
   );
