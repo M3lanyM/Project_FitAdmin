@@ -6,7 +6,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import { TextField, InputAdornment, Button } from '@mui/material';
 import { Search as SearchIcon } from '@mui/icons-material';
-import {getFirestore,collection,query,onSnapshot,} from 'firebase/firestore';
+import { getFirestore, collection, query, onSnapshot, deleteDoc, doc } from 'firebase/firestore';
 import { initializeApp } from "firebase/app";
 import firebaseConfig from "@/firebase/config";
 import ModalAddClient from '@/components/ModalAddCliend';
@@ -26,13 +26,13 @@ export default function ClientPage() {
   const [tableData, setTableData] = useState<TableData[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
   useEffect(() => {
-    const db = getFirestore(app);
     const clientCollection = collection(db, 'cliente');
     const q = query(clientCollection);
 
-// Crea un oyente en tiempo real para la colección de clientes
+    // Crea un oyente en tiempo real para la colección de clientes
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const data = querySnapshot.docs.map((doc) => {
         const { nombre, primerApellido, correo, estado } = doc.data();
@@ -80,6 +80,19 @@ export default function ClientPage() {
 
   const closeModal = () => {
     setIsModalOpen(false);
+  };
+
+  const deleteClient = async (clientId: string) => {
+    try {
+      const db = getFirestore(app);
+      const clientRef = doc(db, 'cliente', clientId);
+      await deleteDoc(clientRef);
+
+      // Actualizar el estado tableData después de eliminar el cliente
+      setTableData((prevData) => prevData.filter((client) => client.id !== clientId));
+    } catch (error) {
+      console.error('Error al eliminar el cliente:', error);
+    }
   };
 
   return (
@@ -161,7 +174,10 @@ export default function ClientPage() {
                   <td>{client.state}</td>
                   <td>
                     <EmailIcon className="email-icon" />
-                    <DeleteIcon className="delete-icon" />
+                    <DeleteIcon
+                      className="delete-icon"
+                      onClick={() => deleteClient(client.id)} // Llamar a la función de eliminación al hacer clic en el ícono
+                    />
                   </td>
                 </tr>
               ))}
@@ -197,7 +213,6 @@ export default function ClientPage() {
           </div>
         </div>
       </div>
-
       {isModalOpen && <ModalAddClient onClose={closeModal} />}
     </BaseLayout>
   );

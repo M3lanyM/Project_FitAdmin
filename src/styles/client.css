@@ -87,6 +87,11 @@ td {
 .email-icon,
 .delete-icon {
   color: #727272;
+  transition: color 0.3s; /* Agrega una transición suave para el cambio de color */
+}
+
+.delete-icon:hover {
+  color: red; /* Cambia el color al pasar el cursor por encima (puedes ajustar el color a tu preferencia) */
 }
 
 /*Tabla cliente*/
