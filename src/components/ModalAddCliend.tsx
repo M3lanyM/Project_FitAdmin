@@ -1,6 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { getFirestore, collection, addDoc, getDocs, doc } from "firebase/firestore";
+import React, { useState, useEffect } from "react";
 import { initializeApp } from "firebase/app";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  query,
+  getDocs,
+  doc,
+  where
+} from "firebase/firestore";
 import firebaseConfig from "@/firebase/config";
 
 const app = initializeApp(firebaseConfig);
@@ -19,36 +27,16 @@ const ModalAddClient: React.FC<ModalAddClientProps> = ({ onClose }) => {
     birthDate: "",
     email: "",
     phone: "",
-    status: "",
-    gender: "",
+    status: "habilitado",
+    gender: "Femenino",
     admDate: "",
     nextPay: "",
     precio: "",
     membership: "",
   });
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-   // Obtener las opciones para el select de membresias
-  const [membershipOptions, setMembershipOptions] = useState<string[]>([]);
-      useEffect(() => {
-        const fetchMembershipOptions = async () => {
-          const membershipCollection = collection(db, "membresia");
-          const membershipSnapshot = await getDocs(membershipCollection);
-          const optionsData = membershipSnapshot.docs.map((doc) => doc.data().tipo);
-          setMembershipOptions(optionsData);
-        };
-
-        fetchMembershipOptions();
-      }, [db]);
+  const [membershipPrices, setMembershipPrices] = useState<{ [key: string]: number }>({});
+  const [membershipOptions, setMembershipOptions] = useState<string[]>(["Seleccione una opción"]);
 
   const handleAddClient = async () => {
     try {
@@ -60,22 +48,38 @@ const ModalAddClient: React.FC<ModalAddClientProps> = ({ onClose }) => {
         cedula: formData.cedula,
         fechaNacimiento: formData.birthDate,
         correo: formData.email,
-        thelefono: formData.phone,
+        telefono: formData.phone,
         estado: formData.status,
         sexo: formData.gender,
       });
-      
 
       console.log("Documento escrito con ID: ", docRef.id);
-      
-    // Agrega los datos a la colección "clienteMembresia"
+
+    // Consulta Firestore para obtener la referencia al documento de membresía seleccionado
+    let membershipRef = null;
+    const membershipCollection = collection(db, "membresia");
+    const membershipQuery = query(
+      membershipCollection,
+      where("tipo", "==", formData.membership) // Consulta la membresía con el nombre seleccionado
+    );
+    const membershipSnapshot = await getDocs(membershipQuery);
+
+    if (!membershipSnapshot.empty) {
+      membershipSnapshot.forEach((doc) => {
+        membershipRef = doc.ref; // Obtén la referencia al documento de membresía
+      });
+    } else {
+      console.error("No se encontró la membresía seleccionada.");
+      return;
+    }
+
+    // Agrega los datos a la colección "clienteMembresia" con la referencia a la membresía
     await addDoc(collection(db, "clienteMembresia"), {
-      clienteId: doc(db, "cliente", docRef.id),//se supone que ya esta bien
-      membershipId: doc(db, "membresia", formData.membership),// Se debe de cambiar porque esto solo le asigna el nombre de la membresia
+      clienteId: doc(db, "cliente", docRef.id),
+      membershipId: membershipRef, // Usar la referencia al documento de membresía
       fechaIngreso: formData.admDate,
       proximoPago: formData.nextPay,
     });
-
 
       // Limpia el formulario después de la presentación exitosa
       setFormData({
@@ -99,6 +103,61 @@ const ModalAddClient: React.FC<ModalAddClientProps> = ({ onClose }) => {
 
     } catch (error) {
       console.error("Error al agregar el documento: ", error);
+    }
+  };
+
+  useEffect(() => {
+    //trae los datos de la membrecia y el precio de esa membresia
+    const fetchMembershipTypes = async () => {
+      const membershipCollection = collection(db, "membresia");
+      const membershipQuery = query(membershipCollection);
+      const membershipSnapshot = await getDocs(membershipQuery);
+
+      const membershipTypes: { [key: string]: number } = {};
+      membershipSnapshot.forEach((doc) => {
+        const data = doc.data();
+        if (data.tipo && data.precio) {
+          membershipTypes[data.tipo] = data.precio;
+        }
+      });
+
+      setMembershipOptions(["Seleccione una opción", ...Object.keys(membershipTypes)]);
+      setMembershipPrices(membershipTypes);
+    };
+
+    fetchMembershipTypes();
+
+    // Establece "Seleccione una opción" como el valor inicial en "membership"
+    setFormData((prevData) => ({
+      ...prevData,
+      membership: "Seleccione una opción",
+    }));
+  }, []);
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+
+    if (name === "membership" && value === "Seleccione una opción") {
+      // Si se selecciona "Seleccione una opción", establece el valor en blanco.
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: "",
+        precio: "",
+      }));
+    } else if (name === "membership") {
+      // Si el campo seleccionado no es "Seleccione una opción", actualiza el campo "precio"
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+        precio: membershipPrices[value] ? membershipPrices[value].toString() : "",
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
     }
   };
 
@@ -240,7 +299,7 @@ const ModalAddClient: React.FC<ModalAddClientProps> = ({ onClose }) => {
           />
 
           <label htmlFor="membership" className="membershipClient">
-            Tipo de membresia:
+            Tipo de membresía:
           </label>
           <select
             className="inputformC1"
@@ -248,8 +307,8 @@ const ModalAddClient: React.FC<ModalAddClientProps> = ({ onClose }) => {
             value={formData.membership}
             onChange={handleInputChange}
           >
-            {membershipOptions.map((option, index) => (
-              <option key={index} value={option}>
+            {membershipOptions.map((option) => (
+              <option key={option} value={option}>
                 {option}
               </option>
             ))}
