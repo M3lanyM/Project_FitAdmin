@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getFirestore, collection, addDoc, getDocs } from "firebase/firestore";
+import { getFirestore, collection, addDoc, getDocs, doc } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 import firebaseConfig from "@/firebase/config";
 
@@ -70,8 +70,8 @@ const ModalAddClient: React.FC<ModalAddClientProps> = ({ onClose }) => {
       
     // Agrega los datos a la colección "clienteMembresia"
     await addDoc(collection(db, "clienteMembresia"), {
-      clienteId: docRef.id,
-      membershipId: formData.membership,// Se debe de cambiar porque esto solo le asigna el nombre de la membresia
+      clienteId: doc(db, "cliente", docRef.id),//se supone que ya esta bien
+      membershipId: doc(db, "membresia", formData.membership),// Se debe de cambiar porque esto solo le asigna el nombre de la membresia
       fechaIngreso: formData.admDate,
       proximoPago: formData.nextPay,
     });
