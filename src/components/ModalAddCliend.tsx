@@ -1,4 +1,10 @@
 import React, { useState } from "react";
+import { getFirestore, collection, addDoc } from "firebase/firestore";
+import { initializeApp } from "firebase/app";
+import firebaseConfig from "@/firebase/config";
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 interface ModalAddClientProps {
   onClose: () => void;
@@ -29,6 +35,48 @@ const ModalAddClient: React.FC<ModalAddClientProps> = ({ onClose }) => {
       ...prevData,
       [name]: value,
     }));
+  };
+
+  const handleAddClient = async () => {
+    try {
+      // Agrega los datos del formulario a la colección "cliente" en Firestore
+      const docRef = await addDoc(collection(db, "cliente"), {
+        nombre: formData.firstName,
+        primerApellido: formData.lastName,
+        segundoApellido: formData.secondLastName,
+        cedula: formData.cedula,
+        fechaNacimiento: formData.birthDate,
+        correo: formData.email,
+        thelefono: formData.phone,
+        estado: formData.status,
+        sexo: formData.gender,
+      });
+
+      console.log("Documento escrito con ID: ", docRef.id);
+
+      // Limpia el formulario después de la presentación exitosa
+      setFormData({
+        firstName: "",
+        lastName: "",
+        secondLastName: "",
+        cedula: "",
+        birthDate: "",
+        email: "",
+        phone: "",
+        status: "",
+        gender: "",
+        admDate: "",
+        nextPay: "",
+        precio: "",
+        membership: "",
+      });
+
+      // Cierra el modal o realiza cualquier otra acción necesaria 
+      onClose();
+      
+    } catch (error) {
+      console.error("Error al agregar el documento: ", error);
+    }
   };
 
   return (
@@ -195,8 +243,8 @@ const ModalAddClient: React.FC<ModalAddClientProps> = ({ onClose }) => {
         </div>
 
         <div className="addMclient">
-          <button className="addButton" >
-            +Agregar
+        <button className="addButton" onClick={handleAddClient}>
+            + Agregar
           </button>
           <button className="closeButton" onClick={onClose}>
             Volver
