@@ -95,28 +95,99 @@ td {
 .delete-icon:hover {
   color: red;
 }
+
 /*Tabla cliente*/
 
-/*modal editar cliente.modal {
+/*modal editar cliente.*/
+
+.modalEdit {
   display: flex;
   align-items: center;
   justify-content: center;
   position: fixed;
-  top: 25px;
+  top: 0;
   left: 0;
   width: 100%;
-  background-color: transparent;
+  height: 100%;
+  z-index: 100;
+  background-color: rgba(0, 0, 0, 0.5);
 }
-.modal-content {
-  background-color: #1d2262;
+
+.modalEdit-content {
+  background-color: white;
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 2px 4px rgb(0, 0, 0, 0.2);
-  max-width: 370px;
-  max-height: 90vw;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  max-width: 60%;
+  max-height: 85%;
   width: 100%;
+  overflow-y: auto;
 }
-*/
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 10px;
+  grid-column-gap: 20px;
+  /* grid-row-gap: 10px; Agregar espacio entre las filas */
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+/* Estilo del scroll */
+.modalEdit-content::-webkit-scrollbar {
+  width: 10px;
+  background-color: #f2f2f2;
+  border-radius: 5px;
+
+}
+
+.modalEdit-content::-webkit-scrollbar-thumb {
+  background-color: #a7a5a5;
+  border-radius: 5px;
+}
+
+/* Estilo del scroll */
+
+.form-row label {
+  font-weight: bold;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 16px;
+  color: #737373;
+  margin-bottom: 5px; 
+}
+
+.personalInfo-title {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+  /* Espacio entre el título y el formulario */
+}
+
+.personalInfo {
+  width: 91%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: 'Franklin Gothic', 'Arial Narrow', Arial, sans-serif;
+  border: 1px solid #2b8c8c;
+}
+
+.personalInfo:focus {
+  border-color: #A1A626;
+  outline: none;
+}
+
+.save-button {
+  margin-top: 10px;
+}
+/*modal editar cliente.  proximoPago?: string; // Agregar como opcional si no siempre está presente
+  fechaIngreso?: string;*/
 
 .Habilitados {
   margin-left: 42%;

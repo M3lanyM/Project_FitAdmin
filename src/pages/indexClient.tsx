@@ -6,7 +6,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import { TextField, InputAdornment, Button } from '@mui/material';
 import { Search as SearchIcon } from '@mui/icons-material';
-import { getFirestore, collection, query, onSnapshot, deleteDoc, doc, updateDoc } from 'firebase/firestore';
+import { getFirestore, collection, query, onSnapshot, deleteDoc, doc, updateDoc, where, getDocs } from 'firebase/firestore';
 import { initializeApp } from "firebase/app";
 import firebaseConfig from "@/firebase/config";
 import ModalAddClient from '@/components/ModalAddCliend';
@@ -31,6 +31,8 @@ export interface TableData {
   phone: string;
   estado: string;
   gender: string;
+  fechaIngreso?: string;
+  proximoPago?: string;
 }
 
 
@@ -46,16 +48,12 @@ export default function ClientPage() {
   const [showModalEdit, setShowModalEdit] = useState(false);
   const [selectedClient, setSelectedClient] = useState<TableData | null>(null);
 
-  const editClient = (client: TableData) => {
-    // Crear un nuevo objeto con solo el nombre del cliente
-    const editedClient = {
-      ...client,
-      name: client.name.split(' ')[0], // Tomar solo el primer nombre
-    };
-    setSelectedClient(editedClient);
-    setShowModalEdit(true);
-  };
+  const editClient = async (client: TableData) => {
+    try {
+      const clienteMembresiaCollection = collection(db, 'clienteMembresia');
+      const q = query(clienteMembresiaCollection, where('clienteId', '==', doc(db, 'cliente', client.id)));
 
+<<<<<<< Updated upstream
   const viewClient = (client: TableData) => {
     // Crear un nuevo objeto con solo el nombre del cliente
     const viewClients = {
@@ -63,6 +61,26 @@ export default function ClientPage() {
       name: client.id.split(' ')[0], // Tomar solo el primer nombre
     };
     setSelectedClient(viewClients);
+=======
+      const querySnapshot = await getDocs(q);
+
+      if (querySnapshot.empty) {
+        // Manejar el caso en el que no haya ningún documento coincidente en clienteMembresia
+        console.log('No se encontró ningún documento en clienteMembresia');
+        return;
+      }
+
+      const clienteMembresiaDoc = querySnapshot.docs[0].data();
+      setSelectedClient({
+        ...client,
+        fechaIngreso: clienteMembresiaDoc.fechaIngreso,
+        proximoPago: clienteMembresiaDoc.proximoPago,
+      });
+      setShowModalEdit(true);
+    } catch (error) {
+      console.error('Error al obtener los datos de clienteMembresia:', error);
+    }
+>>>>>>> Stashed changes
   };
 
   useEffect(() => {
@@ -137,7 +155,7 @@ export default function ClientPage() {
 
   //editar cliente (modal)
   const saveChanges = async (e: React.FormEvent) => {
-    e.preventDefault(); // Prevent the default form submission behavior
+    e.preventDefault();
 
     if (!selectedClient) {
       console.error('No se ha seleccionado ningún cliente.');
@@ -159,7 +177,19 @@ export default function ClientPage() {
         sexo: selectedClient.gender,
       });
 
-      // Actualiza el estado de la tabla
+      const clienteMembresiaCollection = collection(db, 'clienteMembresia');
+      const q = query(clienteMembresiaCollection, where('clienteId', '==', doc(db, 'cliente', selectedClient.id)));
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        const clienteMembresiaDoc = querySnapshot.docs[0];
+        const clienteMembresiaRef = doc(db, 'clienteMembresia', clienteMembresiaDoc.id);
+        await updateDoc(clienteMembresiaRef, {
+          fechaIngreso: selectedClient.fechaIngreso,
+          proximoPago: selectedClient.proximoPago,
+        });
+      }
+
       setTableData((prevData) =>
         prevData.map((client) =>
           client.id === selectedClient.id ? selectedClient : client
@@ -168,7 +198,7 @@ export default function ClientPage() {
 
       setShowModalEdit(false);
     } catch (error) {
-      console.error('Error al guardar cambios:', error);
+      console.error('Error al guardar los cambios:', error);
     }
   };
 
@@ -312,112 +342,153 @@ export default function ClientPage() {
       )}
 
       {showModalEdit && selectedClient && (
-        <div className="modal">
-          <div className="modal-content">
-            <form onSubmit={saveChanges}>
-              <label>Nombre:</label>
-              <input
-                type="text"
-                placeholder="Nombre"
-                value={selectedClient.name}
-                onChange={(e) => {
-                  setSelectedClient({ ...selectedClient, name: e.target.value });
-                }}
-              />
-              
-              <label>Primer Apellido:</label>
-              <input
-                type="text"
-                placeholder="Primer Apellido"
-                value={selectedClient.lastName}
-                onChange={(e) => {
-                  setSelectedClient({ ...selectedClient, lastName: e.target.value });
-                }}
-              />
+        <div className="modalEdit">
+          <div className="modalEdit-content">
+            <h2 className="personalInfo-title">DATOS PERSONALES</h2>
+            <form onSubmit={saveChanges} className="form-grid">
+              <div className="form-row">
+                <label >Nombre:</label>
+                <input
+                  className="personalInfo"
+                  type="text"
+                  placeholder="Nombre"
+                  value={selectedClient.name}
+                  onChange={(e) => {
+                    setSelectedClient({ ...selectedClient, name: e.target.value });
+                  }}
+                />
+              </div>
+              <div className="form-row">
+                <label>Primer Apellido:</label>
+                <input
+                  className="personalInfo"
+                  type="text"
+                  placeholder="Primer Apellido"
+                  value={selectedClient.lastName}
+                  onChange={(e) => {
+                    setSelectedClient({ ...selectedClient, lastName: e.target.value });
+                  }}
+                />
+              </div>
+              <div className="form-row">
+                <label>Segundo Apellido:</label>
+                <input
+                  className="personalInfo"
+                  type="text"
+                  placeholder="Segundo Apellido"
+                  value={selectedClient.secondLastName}
+                  onChange={(e) => {
+                    setSelectedClient({ ...selectedClient, secondLastName: e.target.value });
+                  }}
+                />
+              </div>
+              <div className="form-row">
+                <label>Cedula:</label>
+                <input
+                  className="personalInfo"
+                  type="text"
+                  placeholder="Cedula"
+                  value={selectedClient.cedula}
+                  onChange={(e) => {
+                    setSelectedClient({ ...selectedClient, cedula: e.target.value });
+                  }}
+                />
+              </div>
+              <div className="form-row">
+                <label>Fecha de Nacimiento:</label>
+                <input
+                  className="personalInfo"
+                  type="date"
+                  placeholder="Fecha de Nacimiento"
+                  value={selectedClient.birthDate}
+                  onChange={(e) => {
+                    setSelectedClient({ ...selectedClient, birthDate: e.target.value });
+                  }}
+                />
+              </div>
+              <div className="form-row">
+                <label>Correo:</label>
+                <input
+                  className="personalInfo"
+                  type="text"
+                  placeholder="Correo"
+                  value={selectedClient.mail}
+                  onChange={(e) => {
+                    setSelectedClient({ ...selectedClient, mail: e.target.value });
+                  }}
+                />
+              </div>
+              <div className="form-row">
+                <label>Telefono:</label>
+                <input
+                  className="personalInfo"
+                  type="text"
+                  placeholder="Telefono"
+                  value={selectedClient.phone}
+                  onChange={(e) => {
+                    setSelectedClient({ ...selectedClient, phone: e.target.value });
+                  }}
+                />
+              </div>
+              <div className="form-row">
+                <label>Estado:</label>
+                <select
+                  className="personalInfo"
+                  value={selectedClient.estado}
+                  onChange={(e) => {
+                    setSelectedClient({ ...selectedClient, estado: e.target.value });
+                  }}
+                >
+                  <option value="Habilitado">Habilitado</option>
+                  <option value="Deshabilitado">Deshabilitado</option>
+                </select>
+              </div>
+              <div className="form-row">
+                <label>Sexo:</label>
+                <select
+                  className="personalInfo"
+                  value={selectedClient.gender}
+                  onChange={(e) => {
+                    setSelectedClient({ ...selectedClient, gender: e.target.value });
+                  }}
+                >
+                  <option>Femenino</option>
+                  <option>Masculino</option>
+                  <option>Otro</option>
+                </select>
+              </div>
+              <div className="form-row">
 
-              <label>Segundo Apellido:</label>
-              <input
-                type="text"
-                placeholder="Segundo Apellido"
-                value={selectedClient.secondLastName}
-                onChange={(e) => {
-                  setSelectedClient({ ...selectedClient, secondLastName: e.target.value });
-                }}
-              />
-
-              <label>Cedula:</label>
-              <input
-                type="text"
-                placeholder="Cedula"
-                value={selectedClient.cedula}
-                onChange={(e) => {
-                  setSelectedClient({ ...selectedClient, cedula: e.target.value });
-                }}
-              />
-
-              <label>Fecha de Nacimiento:</label>
-              <input
-                type="date"
-                placeholder="Fecha de Nacimiento"
-                value={selectedClient.birthDate}
-                onChange={(e) => {
-                  setSelectedClient({ ...selectedClient, birthDate: e.target.value });
-                }}
-              />
-
-              <label>Correo:</label>
-              <input
-                type="text"
-                placeholder="Correo"
-                value={selectedClient.mail}
-                onChange={(e) => {
-                  setSelectedClient({ ...selectedClient, mail: e.target.value });
-                }}
-              />
-
-              <label>Telefono:</label>
-              <input
-                type="text"
-                placeholder="Telefono"
-                value={selectedClient.phone}
-                onChange={(e) => {
-                  setSelectedClient({ ...selectedClient, phone: e.target.value });
-                }}
-              />
-
-              <label>Estado:</label>
-              <select
-                className="selectoptionE"
-                value={selectedClient.estado}
-                onChange={(e) => {
-                  setSelectedClient({ ...selectedClient, estado: e.target.value });
-                }}
-              >
-                <option value="Habilitado">Habilitado</option>
-                <option value="Deshabilitado">Deshabilitado</option>
-              </select>
-
-              <label>Sexo:</label>
-              <select
-                className="selectoptionE"
-                value={selectedClient.gender}
-                onChange={(e) => {
-                  setSelectedClient({ ...selectedClient, gender: e.target.value });
-                }}
-              >
-                <option>Femenino</option>
-                <option>Masculino</option>
-                <option>Otro</option>
-              </select>
-
+              </div>
+              <div className="form-row">
+                <label>Fecha Ingreso:</label>
+                <input
+                  className="personalInfo"
+                  type="date"
+                  value={selectedClient.fechaIngreso}
+                  onChange={(e) => {
+                    setSelectedClient({ ...selectedClient, fechaIngreso: e.target.value });
+                  }} />
+              </div>
+              <div className="form-row">
+                <label>Proximo pago:</label>
+                <input
+                  className="personalInfo"
+                  type="date"
+                  value={selectedClient.proximoPago}
+                  onChange={(e) => {
+                    setSelectedClient({ ...selectedClient, proximoPago: e.target.value });
+                  }}
+                />
+              </div>
               <button className="save-button" onClick={saveChanges}>
                 Guardar
               </button>
-
             </form>
           </div>
         </div>
       )}
+
       {isModalOpen && <ModalAddClient onClose={closeModal} />}
     </BaseLayout>
   );
