@@ -12,7 +12,13 @@ import firebaseConfig from "@/firebase/config";
 import ModalAddClient from '@/components/ModalAddCliend';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+
 import EditIcon from '@mui/icons-material/Edit';
+
+import { ClassNames } from '@emotion/react';
+import Link from 'next/link';
+
 
 export interface TableData {
   id: string;
@@ -50,6 +56,14 @@ export default function ClientPage() {
     setShowModalEdit(true);
   };
 
+  const viewClient = (client: TableData) => {
+    // Crear un nuevo objeto con solo el nombre del cliente
+    const viewClients = {
+      ...client,
+      name: client.id.split(' ')[0], // Tomar solo el primer nombre
+    };
+    setSelectedClient(viewClients);
+  };
 
   useEffect(() => {
     const clientCollection = collection(db, 'cliente');
@@ -233,16 +247,21 @@ export default function ClientPage() {
             {tableData
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((client) => (
+
                 <tr key={client.id} className="tableClient-row">
                   <td>{client.name}</td>
                   <td>{client.mail}</td>
                   <td>{client.estado}</td>
                   <td>
+
                     <EditIcon className="edit-icon"
                       onClick={() => editClient(client)} />
 
 
                     <EmailIcon className="email-icon" />
+                  <Link key={client.id} href={`/ViewClient`}>
+                    <VisibilityIcon className="email-icon" onClick={() => viewClient(client)}/>
+                    </Link>
                     <DeleteIcon
                       className="delete-icon"
                       onClick={() => deleteClient(client.id)}
