@@ -27,7 +27,7 @@ const ModalAddClient: React.FC<ModalAddClientProps> = ({ onClose }) => {
     birthDate: "",
     email: "",
     phone: "",
-    status: "habilitado",
+    status: "Habilitado",
     gender: "Femenino",
     admDate: "",
     nextPay: "",
@@ -256,8 +256,8 @@ const ModalAddClient: React.FC<ModalAddClientProps> = ({ onClose }) => {
             value={formData.status}
             onChange={handleInputChange}
           >
-            <option value="habilitado">Habilitado</option>
-            <option value="deshabilitado">Deshabilitado</option>
+            <option value="Habilitado">Habilitado</option>
+            <option value="Deshabilitado">Deshabilitado</option>
           </select>
 
           <label htmlFor="Sexo" className="correoClient">
@@ -269,9 +269,9 @@ const ModalAddClient: React.FC<ModalAddClientProps> = ({ onClose }) => {
             value={formData.gender}
             onChange={handleInputChange}
           >
-            <option value="femenino">Femenino</option>
-            <option value="masculino">Masculino</option>
-            <option value="otro">Otro</option>
+            <option value="Femenino">Femenino</option>
+            <option value="Masculino">Masculino</option>
+            <option value="Otro">Otro</option>
           </select>
         </div>
         <label className="custom-label1">DETALLES DE PAGO</label>

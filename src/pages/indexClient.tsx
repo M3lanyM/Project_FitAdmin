@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from "react";
 import BaseLayout from "@/pages/Sidebar/BaseLayout";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -23,7 +23,7 @@ export interface TableData {
   birthDate: string;
   mail: string;
   phone: string;
-  state: string;
+  estado: string;
   gender: string;
 }
 
@@ -63,7 +63,7 @@ export default function ClientPage() {
           id: doc.id,
           name: `${nombre} ${primerApellido}`,
           mail: correo,
-          state: estado,
+          estado: estado,
           lastName: doc.data().primerApellido,
           secondLastName: doc.data().segundoApellido,
           cedula: doc.data().cedula,
@@ -141,7 +141,7 @@ export default function ClientPage() {
         fechaNacimiento: selectedClient.birthDate,
         correo: selectedClient.mail,
         telefono: selectedClient.phone,
-        estado: selectedClient.state,
+        estado: selectedClient.estado,
         sexo: selectedClient.gender,
       });
 
@@ -236,7 +236,7 @@ export default function ClientPage() {
                 <tr key={client.id} className="tableClient-row">
                   <td>{client.name}</td>
                   <td>{client.mail}</td>
-                  <td>{client.state}</td>
+                  <td>{client.estado}</td>
                   <td>
                     <EditIcon className="edit-icon"
                       onClick={() => editClient(client)} />
@@ -369,9 +369,9 @@ export default function ClientPage() {
               <label>Estado:</label>
               <select
                 className="selectoptionE"
-                value={selectedClient.state}
+                value={selectedClient.estado}
                 onChange={(e) => {
-                  setSelectedClient({ ...selectedClient, state: e.target.value });
+                  setSelectedClient({ ...selectedClient, estado: e.target.value });
                 }}
               >
                 <option value="Habilitado">Habilitado</option>

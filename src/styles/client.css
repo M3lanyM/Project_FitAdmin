@@ -97,8 +97,7 @@ td {
 }
 /*Tabla cliente*/
 
-/*modal editar cliente*/
-.modal {
+/*modal editar cliente.modal {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -117,6 +116,7 @@ td {
   max-height: 90vw;
   width: 100%;
 }
+*/
 
 .Habilitados {
   margin-left: 42%;
