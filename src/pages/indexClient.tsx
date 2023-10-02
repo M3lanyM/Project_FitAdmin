@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import BaseLayout from "@/pages/Sidebar/BaseLayout";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import EmailIcon from '@mui/icons-material/Email';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import { TextField, InputAdornment, Button } from '@mui/material';
 import { Search as SearchIcon } from '@mui/icons-material';
@@ -18,7 +17,6 @@ import EditIcon from '@mui/icons-material/Edit';
 
 import { ClassNames } from '@emotion/react';
 import Link from 'next/link';
-
 
 export interface TableData {
   id: string;
@@ -47,41 +45,6 @@ export default function ClientPage() {
   const [clientIdToDelete, setClientIdToDelete] = useState('');
   const [showModalEdit, setShowModalEdit] = useState(false);
   const [selectedClient, setSelectedClient] = useState<TableData | null>(null);
-
-  const editClient = async (client: TableData) => {
-    try {
-      const clienteMembresiaCollection = collection(db, 'clienteMembresia');
-      const q = query(clienteMembresiaCollection, where('clienteId', '==', doc(db, 'cliente', client.id)));
-
-<<<<<<< Updated upstream
-  const viewClient = (client: TableData) => {
-    // Crear un nuevo objeto con solo el nombre del cliente
-    const viewClients = {
-      ...client,
-      name: client.id.split(' ')[0], // Tomar solo el primer nombre
-    };
-    setSelectedClient(viewClients);
-=======
-      const querySnapshot = await getDocs(q);
-
-      if (querySnapshot.empty) {
-        // Manejar el caso en el que no haya ningún documento coincidente en clienteMembresia
-        console.log('No se encontró ningún documento en clienteMembresia');
-        return;
-      }
-
-      const clienteMembresiaDoc = querySnapshot.docs[0].data();
-      setSelectedClient({
-        ...client,
-        fechaIngreso: clienteMembresiaDoc.fechaIngreso,
-        proximoPago: clienteMembresiaDoc.proximoPago,
-      });
-      setShowModalEdit(true);
-    } catch (error) {
-      console.error('Error al obtener los datos de clienteMembresia:', error);
-    }
->>>>>>> Stashed changes
-  };
 
   useEffect(() => {
     const clientCollection = collection(db, 'cliente');
@@ -154,6 +117,31 @@ export default function ClientPage() {
   };
 
   //editar cliente (modal)
+  const editClient = async (client: TableData) => {
+    try {
+      const clienteMembresiaCollection = collection(db, 'clienteMembresia');
+      const q = query(clienteMembresiaCollection, where('clienteId', '==', doc(db, 'cliente', client.id)));
+
+      const querySnapshot = await getDocs(q);
+
+      if (querySnapshot.empty) {
+        // Manejar el caso en el que no haya ningún documento coincidente en clienteMembresia
+        console.log('No se encontró ningún documento en clienteMembresia');
+        return;
+      }
+
+      const clienteMembresiaDoc = querySnapshot.docs[0].data();
+      setSelectedClient({
+        ...client,
+        fechaIngreso: clienteMembresiaDoc.fechaIngreso,
+        proximoPago: clienteMembresiaDoc.proximoPago,
+      });
+      setShowModalEdit(true);
+    } catch (error) {
+      console.error('Error al obtener los datos de clienteMembresia:', error);
+    }
+  };
+
   const saveChanges = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -203,6 +191,14 @@ export default function ClientPage() {
   };
 
 
+  const viewClient = (client: TableData) => {
+    // Crear un nuevo objeto con solo el nombre del cliente
+    const viewClients = {
+      ...client,
+      name: client.id.split(' ')[0], // Tomar solo el primer nombre
+    };
+    setSelectedClient(viewClients);
+  };
 
   return (
     <BaseLayout>
@@ -277,20 +273,17 @@ export default function ClientPage() {
             {tableData
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((client) => (
-
                 <tr key={client.id} className="tableClient-row">
                   <td>{client.name}</td>
                   <td>{client.mail}</td>
                   <td>{client.estado}</td>
                   <td>
-
                     <EditIcon className="edit-icon"
                       onClick={() => editClient(client)} />
 
 
-                    <EmailIcon className="email-icon" />
-                  <Link key={client.id} href={`/ViewClient`}>
-                    <VisibilityIcon className="email-icon" onClick={() => viewClient(client)}/>
+                    <Link key={client.id} href={`/ViewClient`}>
+                      <VisibilityIcon className="email-icon" onClick={() => viewClient(client)} />
                     </Link>
                     <DeleteIcon
                       className="delete-icon"
