@@ -212,7 +212,7 @@ const ModalAddClient: React.FC<ModalAddClientProps> = ({ onClose }) => {
             value={formData.cedula}
             onChange={handleInputChange}
           />
-          <label htmlFor="Nombre" className="date-bornClient">
+          <label htmlFor="Fecha de Nacimiento" className="date-bornClient">
             Fecha de Nacimiento:
           </label>
           <input
@@ -223,7 +223,7 @@ const ModalAddClient: React.FC<ModalAddClientProps> = ({ onClose }) => {
             value={formData.birthDate}
             onChange={handleInputChange}
           />
-          <label htmlFor="Nombre" className="correoClient">
+          <label htmlFor="Correo" className="correoClient">
             Correo:
           </label>
           <input
@@ -235,7 +235,7 @@ const ModalAddClient: React.FC<ModalAddClientProps> = ({ onClose }) => {
             onChange={handleInputChange}
           />
         </div>
-        <label htmlFor="Nombre" className="telephonoClient">
+        <label htmlFor="Teléfono" className="telephonoClient">
           Teléfono:
         </label>
         <div className="formRow3">
@@ -247,7 +247,7 @@ const ModalAddClient: React.FC<ModalAddClientProps> = ({ onClose }) => {
             value={formData.phone}
             onChange={handleInputChange}
           />
-          <label htmlFor="Nombre" className="date-bornClient">
+          <label htmlFor="Estado" className="date-bornClient">
             Estado:
           </label>
           <select
@@ -259,7 +259,8 @@ const ModalAddClient: React.FC<ModalAddClientProps> = ({ onClose }) => {
             <option value="habilitado">Habilitado</option>
             <option value="deshabilitado">Deshabilitado</option>
           </select>
-          <label htmlFor="Nombre" className="correoClient">
+
+          <label htmlFor="Sexo" className="correoClient">
             Sexo:
           </label>
           <select

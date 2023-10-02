@@ -17,7 +17,7 @@
   z-index: 1;
   text-align: right;
   padding: 12px;
-  
+
 }
 
 .select-element {
@@ -46,7 +46,7 @@
 
 .th-tableClient {
   padding: 14px;
-  background-color: #2b8c8c;  
+  background-color: #2b8c8c;
   color: white;
 }
 
@@ -80,22 +80,43 @@ td {
 }
 
 
-.email-icon {
+.email-icon,
+.edit-icon {
   margin-right: 12px;
 }
 
 .email-icon,
-.delete-icon {
+.delete-icon,
+.edit-icon {
   color: #727272;
-  transition: color 0.3s; /* Agrega una transición suave para el cambio de color */
+  transition: color 0.3s;
 }
 
 .delete-icon:hover {
-  color: red; /* Cambia el color al pasar el cursor por encima (puedes ajustar el color a tu preferencia) */
+  color: red;
 }
-
 /*Tabla cliente*/
 
+/*modal editar cliente*/
+.modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 25px;
+  left: 0;
+  width: 100%;
+  background-color: transparent;
+}
+.modal-content {
+  background-color: #1d2262;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgb(0, 0, 0, 0.2);
+  max-width: 370px;
+  max-height: 90vw;
+  width: 100%;
+}
 
 .Habilitados {
   margin-left: 42%;

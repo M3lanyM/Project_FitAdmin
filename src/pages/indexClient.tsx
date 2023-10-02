@@ -6,20 +6,27 @@ import EmailIcon from '@mui/icons-material/Email';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import { TextField, InputAdornment, Button } from '@mui/material';
 import { Search as SearchIcon } from '@mui/icons-material';
-import { getFirestore, collection, query, onSnapshot, deleteDoc, doc } from 'firebase/firestore';
+import { getFirestore, collection, query, onSnapshot, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { initializeApp } from "firebase/app";
 import firebaseConfig from "@/firebase/config";
 import ModalAddClient from '@/components/ModalAddCliend';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import { ClassNames } from '@emotion/react';
+import EditIcon from '@mui/icons-material/Edit';
 
 export interface TableData {
   id: string;
   name: string;
+  lastName: string;
+  secondLastName: string;
+  cedula: string;
+  birthDate: string;
   mail: string;
+  phone: string;
   state: string;
+  gender: string;
 }
+
 
 export default function ClientPage() {
   const [page, setPage] = useState(0);
@@ -30,6 +37,19 @@ export default function ClientPage() {
   const db = getFirestore(app);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [clientIdToDelete, setClientIdToDelete] = useState('');
+  const [showModalEdit, setShowModalEdit] = useState(false);
+  const [selectedClient, setSelectedClient] = useState<TableData | null>(null);
+
+  const editClient = (client: TableData) => {
+    // Crear un nuevo objeto con solo el nombre del cliente
+    const editedClient = {
+      ...client,
+      name: client.name.split(' ')[0], // Tomar solo el primer nombre
+    };
+    setSelectedClient(editedClient);
+    setShowModalEdit(true);
+  };
+
 
   useEffect(() => {
     const clientCollection = collection(db, 'cliente');
@@ -44,6 +64,12 @@ export default function ClientPage() {
           name: `${nombre} ${primerApellido}`,
           mail: correo,
           state: estado,
+          lastName: doc.data().primerApellido,
+          secondLastName: doc.data().segundoApellido,
+          cedula: doc.data().cedula,
+          birthDate: doc.data().fechaNacimiento,
+          phone: doc.data().telefono,
+          gender: doc.data().sexo,
         };
       });
       setTableData(data);
@@ -63,20 +89,6 @@ export default function ClientPage() {
     setPage(0);
   };
 
-
-  const activeClientsCount = calculateActiveClientsCount();
-  const deactiveClientsCount = calculateDeactivateClientsCount();
-
-  function calculateActiveClientsCount() {
-    const activeClients = tableData.filter(client => client.state === 'Activo');
-    return activeClients.length;
-  }
-
-  function calculateDeactivateClientsCount() {
-    const deactivateClients = tableData.filter(client => client.state === 'Inactivo');
-    return deactivateClients.length;
-  }
-
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -85,6 +97,7 @@ export default function ClientPage() {
     setIsModalOpen(false);
   };
 
+  //eliminar cliente
   const deleteClient = async (clientId: string) => {
     setIsDeleteModalOpen(true);
     setClientIdToDelete(clientId);
@@ -107,6 +120,45 @@ export default function ClientPage() {
   const cancelDelete = () => {
     setIsDeleteModalOpen(false);
   };
+
+  //editar cliente (modal)
+  const saveChanges = async (e: React.FormEvent) => {
+    e.preventDefault(); // Prevent the default form submission behavior
+
+    if (!selectedClient) {
+      console.error('No se ha seleccionado ningún cliente.');
+      return;
+    }
+
+    try {
+      const db = getFirestore(app);
+      const clientRef = doc(db, 'cliente', selectedClient.id);
+      await updateDoc(clientRef, {
+        nombre: selectedClient.name,
+        primerApellido: selectedClient.lastName,
+        segundoApellido: selectedClient.secondLastName,
+        cedula: selectedClient.cedula,
+        fechaNacimiento: selectedClient.birthDate,
+        correo: selectedClient.mail,
+        telefono: selectedClient.phone,
+        estado: selectedClient.state,
+        sexo: selectedClient.gender,
+      });
+
+      // Actualiza el estado de la tabla
+      setTableData((prevData) =>
+        prevData.map((client) =>
+          client.id === selectedClient.id ? selectedClient : client
+        )
+      );
+
+      setShowModalEdit(false);
+    } catch (error) {
+      console.error('Error al guardar cambios:', error);
+    }
+  };
+
+
 
   return (
     <BaseLayout>
@@ -156,13 +208,13 @@ export default function ClientPage() {
 
         <div className="Habilitados">
           <img className="enabled" src="/img/enabled.png" />
-          <p className='text1'>{`${activeClientsCount}`}</p>
+          <p className='text1'></p>
           <h1 className='text2H'>Habilitados</h1>
         </div>
 
         <div className="Deshabilitados">
           <img className="disabled" src="/img/disabled.png" />
-          <p className='text1'>{`${deactiveClientsCount}`}</p>
+          <p className='text1'></p>
           <h1 className='text2D'>Deshabilitados</h1>
         </div>
       </div>
@@ -186,6 +238,10 @@ export default function ClientPage() {
                   <td>{client.mail}</td>
                   <td>{client.state}</td>
                   <td>
+                    <EditIcon className="edit-icon"
+                      onClick={() => editClient(client)} />
+
+
                     <EmailIcon className="email-icon" />
                     <DeleteIcon
                       className="delete-icon"
@@ -232,6 +288,114 @@ export default function ClientPage() {
             <p className='text-delete'>¿Estás seguro de que deseas eliminar este cliente?</p>
             <button className="confirmDelete" onClick={confirmDelete}>Sí</button>
             <button className="cancelDelete" onClick={cancelDelete}>No</button>
+          </div>
+        </div>
+      )}
+
+      {showModalEdit && selectedClient && (
+        <div className="modal">
+          <div className="modal-content">
+            <form onSubmit={saveChanges}>
+              <label>Nombre:</label>
+              <input
+                type="text"
+                placeholder="Nombre"
+                value={selectedClient.name}
+                onChange={(e) => {
+                  setSelectedClient({ ...selectedClient, name: e.target.value });
+                }}
+              />
+              
+              <label>Primer Apellido:</label>
+              <input
+                type="text"
+                placeholder="Primer Apellido"
+                value={selectedClient.lastName}
+                onChange={(e) => {
+                  setSelectedClient({ ...selectedClient, lastName: e.target.value });
+                }}
+              />
+
+              <label>Segundo Apellido:</label>
+              <input
+                type="text"
+                placeholder="Segundo Apellido"
+                value={selectedClient.secondLastName}
+                onChange={(e) => {
+                  setSelectedClient({ ...selectedClient, secondLastName: e.target.value });
+                }}
+              />
+
+              <label>Cedula:</label>
+              <input
+                type="text"
+                placeholder="Cedula"
+                value={selectedClient.cedula}
+                onChange={(e) => {
+                  setSelectedClient({ ...selectedClient, cedula: e.target.value });
+                }}
+              />
+
+              <label>Fecha de Nacimiento:</label>
+              <input
+                type="date"
+                placeholder="Fecha de Nacimiento"
+                value={selectedClient.birthDate}
+                onChange={(e) => {
+                  setSelectedClient({ ...selectedClient, birthDate: e.target.value });
+                }}
+              />
+
+              <label>Correo:</label>
+              <input
+                type="text"
+                placeholder="Correo"
+                value={selectedClient.mail}
+                onChange={(e) => {
+                  setSelectedClient({ ...selectedClient, mail: e.target.value });
+                }}
+              />
+
+              <label>Telefono:</label>
+              <input
+                type="text"
+                placeholder="Telefono"
+                value={selectedClient.phone}
+                onChange={(e) => {
+                  setSelectedClient({ ...selectedClient, phone: e.target.value });
+                }}
+              />
+
+              <label>Estado:</label>
+              <select
+                className="selectoptionE"
+                value={selectedClient.state}
+                onChange={(e) => {
+                  setSelectedClient({ ...selectedClient, state: e.target.value });
+                }}
+              >
+                <option value="Habilitado">Habilitado</option>
+                <option value="Deshabilitado">Deshabilitado</option>
+              </select>
+
+              <label>Sexo:</label>
+              <select
+                className="selectoptionE"
+                value={selectedClient.gender}
+                onChange={(e) => {
+                  setSelectedClient({ ...selectedClient, gender: e.target.value });
+                }}
+              >
+                <option>Femenino</option>
+                <option>Masculino</option>
+                <option>Otro</option>
+              </select>
+
+              <button className="save-button" onClick={saveChanges}>
+                Guardar
+              </button>
+
+            </form>
           </div>
         </div>
       )}
