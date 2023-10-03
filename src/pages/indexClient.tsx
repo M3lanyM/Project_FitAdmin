@@ -98,11 +98,26 @@ export default function ClientPage() {
     setClientIdToDelete(clientId);
   };
 
+
+
   const confirmDelete = async () => {
     try {
       const db = getFirestore(app);
       const clientRef = doc(db, 'cliente', clientIdToDelete);
+
+      // Eliminar el cliente de la colección "cliente"
       await deleteDoc(clientRef);
+
+      // Eliminar los datos de "clienteMembresia" asociados al cliente
+      const clienteMembresiaCollection = collection(db, 'clienteMembresia');
+      const q = query(clienteMembresiaCollection, where('clienteId', '==', doc(db, 'cliente', clientIdToDelete)));
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        const clienteMembresiaDoc = querySnapshot.docs[0];
+        const clienteMembresiaRef = doc(db, 'clienteMembresia', clienteMembresiaDoc.id);
+        await deleteDoc(clienteMembresiaRef);
+      }
 
       setTableData((prevData) => prevData.filter((client) => client.id !== clientIdToDelete));
 
@@ -121,26 +136,33 @@ export default function ClientPage() {
     try {
       const clienteMembresiaCollection = collection(db, 'clienteMembresia');
       const q = query(clienteMembresiaCollection, where('clienteId', '==', doc(db, 'cliente', client.id)));
-
+  
       const querySnapshot = await getDocs(q);
-
+  
       if (querySnapshot.empty) {
-        // Manejar el caso en el que no haya ningún documento coincidente en clienteMembresia
-        console.log('No se encontró ningún documento en clienteMembresia');
+        // Manejar el caso en el que no se encuentre ningún documento coincidente en clienteMembresia
+        console.log('No se encontró ningún documento coincidente en clienteMembresia');
         return;
       }
-
+  
       const clienteMembresiaDoc = querySnapshot.docs[0].data();
+  
+      // Divide el nombre en nombre y apellido
+      const [primerNombre] = client.name.split(' ');
+  
       setSelectedClient({
         ...client,
+        name: primerNombre, // Establecer solo el primer nombre
         fechaIngreso: clienteMembresiaDoc.fechaIngreso,
         proximoPago: clienteMembresiaDoc.proximoPago,
       });
+  
       setShowModalEdit(true);
     } catch (error) {
       console.error('Error al obtener los datos de clienteMembresia:', error);
     }
   };
+  
 
   const saveChanges = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -178,11 +200,7 @@ export default function ClientPage() {
         });
       }
 
-      setTableData((prevData) =>
-        prevData.map((client) =>
-          client.id === selectedClient.id ? selectedClient : client
-        )
-      );
+      updateClientInTableData(selectedClient);
 
       setShowModalEdit(false);
     } catch (error) {
@@ -190,7 +208,22 @@ export default function ClientPage() {
     }
   };
 
-
+  const updateClientInTableData = (updatedClient: TableData) => {
+    setTableData((prevData) =>
+      prevData.map((client) => {
+        if (client.id === updatedClient.id) {
+          const fullName = `${updatedClient.name} ${updatedClient.lastName}`;
+          return {
+            ...updatedClient,
+            name: fullName,
+          };
+        } else {
+          return client;
+        }
+      })
+    );
+  };
+  
   const viewClient = (client: TableData) => {
     // Crear un nuevo objeto con solo el nombre del cliente
     const viewClients = {
