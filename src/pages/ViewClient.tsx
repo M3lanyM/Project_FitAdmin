@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import BaseLayout from '@/pages/Sidebar/BaseLayout';
-import { getFirestore, doc, getDoc, DocumentSnapshot } from 'firebase/firestore';
+import { getFirestore, doc, getDoc, DocumentSnapshot, collection, where, getDocs, query } from 'firebase/firestore';
 import { initializeApp, FirebaseApp } from 'firebase/app';
 import firebaseConfig from '@/firebase/config';
+import { differenceInDays, parseISO } from 'date-fns'; // Importa las funciones para cálculos de fechas
 
 interface Client {
   nombre: string;
@@ -23,6 +24,8 @@ export default function ClientInfoPage() {
   const router = useRouter();
   const { id } = router.query; // Obtenemos el ID del cliente de los parámetros de la URL
   const [client, setClient] = useState<Client | null>(null);
+  const [fechaIngreso, setFechaIngreso] = useState<string | null>(null);
+  const [diasRestantesParaPago, setDiasRestantesParaPago] = useState<number | null>(null); // Nuevo estado para los días restantes
 
   useEffect(() => {
     const fetchClientData = async () => {
@@ -36,6 +39,24 @@ export default function ClientInfoPage() {
           if (clientDoc.exists()) {
             const clientData = clientDoc.data() as Client;
             setClient(clientData);
+
+            // Consulta para obtener la fecha de ingreso desde clienteMembresia
+            const clienteMembresiaCollection = collection(db, 'clienteMembresia');
+            const membresiaQuery = query(clienteMembresiaCollection, where('clienteId', '==', clientRef));
+            const membresiaSnapshot = await getDocs(membresiaQuery);
+
+            if (!membresiaSnapshot.empty) {
+              const membresiaDoc = membresiaSnapshot.docs[0];
+              const membresiaData = membresiaDoc.data();
+              setFechaIngreso(membresiaData.fechaIngreso);
+
+              // Calcular los días restantes para el próximo pago
+              const fechaProximoPago = parseISO(membresiaData.proximoPago);
+              const diferenciaDias = differenceInDays(fechaProximoPago, new Date());
+              setDiasRestantesParaPago(diferenciaDias);
+            } else {
+              console.error('El documento de clienteMembresia no existe.');
+            }
           } else {
             console.error('El documento del cliente no existe.');
           }
@@ -47,7 +68,6 @@ export default function ClientInfoPage() {
 
     fetchClientData();
   }, [id]);
-
   const [result, setResult] = useState<number>(1);
   const [part, setPart] = useState(false);
   /*Show the personal data section*/
@@ -100,6 +120,16 @@ export default function ClientInfoPage() {
           )}
         </div>
         <div className="memberC">
+          <h1>Membresía</h1>
+          <p>Fecha de ingreso: {fechaIngreso}</p>
+          <div>
+            {diasRestantesParaPago !== null ? (
+              <p>Próximo pago en: {diasRestantesParaPago} días</p>
+            ) : (
+              <p>Fecha de próximo pago no disponible</p>
+            )}
+            <p>FPrecio: /mensual</p>
+          </div>
         </div>
       </div>
 
