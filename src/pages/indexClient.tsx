@@ -12,6 +12,7 @@ import ModalAddClient from '@/components/ModalAddCliend';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import * as XLSX from 'xlsx';
 
 import EditIcon from '@mui/icons-material/Edit';
 import Link from 'next/link';
@@ -47,6 +48,7 @@ export default function ClientPage() {
   const [selectedClient, setSelectedClient] = useState<TableData | null>(null);
   const [numClientesHabilitados, setNumClientesHabilitados] = useState(0);
   const [numClientesDeshabilitados, setNumClientesDeshabilitados] = useState(0);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const clientCollection = collection(db, 'cliente');
@@ -69,7 +71,12 @@ export default function ClientPage() {
           gender: doc.data().sexo,
         };
       });
-      setTableData(data);
+      const filteredData = data.filter((client) =>
+        client.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        client.cedula.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+
+      setTableData(filteredData);
 
 
       // Contar clientes habilitados y Deshabilitados
@@ -105,7 +112,7 @@ export default function ClientPage() {
     return () => {
       unsubscribe();
     };
-  }, [app]);
+  }, [app, searchQuery]);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -278,6 +285,7 @@ export default function ClientPage() {
       })
     );
   };
+  //editar cliente (modal)
 
   const viewClient = (client: TableData) => {
     // Crear un nuevo objeto con solo el nombre del cliente
@@ -286,6 +294,61 @@ export default function ClientPage() {
       name: client.id.split(' ')[0], // Tomar solo el primer nombre
     };
     setSelectedClient(viewClients);
+  };
+
+  const cancelEdit = () => {
+    setShowModalEdit(false);
+  };
+
+  // Función para convertir un string a un ArrayBuffer
+  function s2ab(s: string) {
+    const buf = new ArrayBuffer(s.length);
+    const view = new Uint8Array(buf);
+    for (let i = 0; i < s.length; i++) {
+      view[i] = s.charCodeAt(i) & 0xff;
+    }
+    return buf;
+  }
+  const exportToExcel = () => {
+    try {
+      // Crear una copia de los datos sin la propiedad 'id'
+      const dataWithoutId = tableData.map(({ id, ...rest }) => rest);
+
+      // Crear una hoja de trabajo
+      const ws = XLSX.utils.json_to_sheet(dataWithoutId);
+
+      // Ajustar el ancho de todas las columnas
+      const columns = Object.keys(dataWithoutId[0]);
+      const wscols = columns.map((column) => ({ wch: 30 })); // Establece el ancho deseado en unidades de caracteres
+
+      ws['!cols'] = wscols;
+
+      // Crear un libro de trabajo
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Clientes'); // Asigna el nombre de la hoja
+
+      // Generar el archivo Excel en formato base64
+      const excelData = XLSX.write(wb, { bookType: 'xlsx', type: 'base64' });
+
+      // Convertir el archivo base64 a un blob
+      const blob = new Blob([s2ab(atob(excelData))], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      });
+
+      // Crear un objeto URL a partir del blob
+      const url = URL.createObjectURL(blob);
+
+      // Crear un enlace de descarga y hacer clic en él
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'InformaciónClientes.xlsx'; // Nombre del archivo Excel
+      a.click();
+
+      // Liberar la URL del objeto
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Error al exportar a Excel:', error);
+    }
   };
 
   return (
@@ -313,6 +376,8 @@ export default function ClientPage() {
                 },
                 marginRight: '30px',
               }}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
             <Button
               variant="outlined"
@@ -328,6 +393,7 @@ export default function ClientPage() {
                   borderWidth: 2,
                 },
               }}
+              onClick={exportToExcel} // Agregar esta línea
             >
               Excel
             </Button>
@@ -539,22 +605,8 @@ export default function ClientPage() {
                   <option>Otro</option>
                 </select>
               </div>
-              <div className="form-row">
-                <label>Membresia:</label>
-                <select
-                  className="inputformC1"
-                  name="membership"
-                  value={selectedClient.member}
-                  onChange={(e) => {
-                    setSelectedClient({ ...selectedClient, member: e.target.value });
-                  }}
-                >
-                  {membershipOptions.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
+              <div className="form-row personalInfoPayment">
+                <h2 className="personalInfoPayment-title">DETALLES DE PAGO</h2>
               </div>
               <div className="form-row">
                 <label>Fecha Ingreso:</label>
@@ -578,9 +630,27 @@ export default function ClientPage() {
                 />
               </div>
               <div className="form-row">
+                <label>Tipo de membresía:</label>
+                <select
+                  className="personalInfo"
+                  name="membership"
+                  value={selectedClient.member}
+                  onChange={(e) => {
+                    setSelectedClient({ ...selectedClient, member: e.target.value });
+                  }}
+                >
+                  {membershipOptions.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
               </div>
               <button className="save-button" onClick={saveChanges}>
-                Guardar
+                Actualizar
+              </button>
+              <button className="Cancel-button" onClick={cancelEdit}>
+                Cancelar
               </button>
             </form>
           </div>

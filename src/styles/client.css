@@ -158,14 +158,33 @@ td {
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   font-size: 16px;
   color: #737373;
-  margin-bottom: 5px; 
+  margin-bottom: 5px;
 }
 
 .personalInfo-title {
   text-align: center;
-  font-size: 24px;
-  margin-bottom: 20px;
-  /* Espacio entre el título y el formulario */
+  font-size: 20px;
+  margin: 20px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  color: #A1A626;
+}
+
+.personalInfoPayment-title {
+  font-size: 20px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  color: #2b8c8c;
+  margin-top: 10px;
+}
+
+
+.personalInfoPayment {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  grid-column: span 3;
+  /* Span todas las columnas disponibles */
+  margin-bottom: 10px;
+  /* Ajusta el valor del margen inferior según tus preferencias */
 }
 
 .personalInfo {
@@ -184,10 +203,43 @@ td {
 }
 
 .save-button {
-  margin-top: 10px;
+  margin-top: 20px;
+  background-color: #2b8c8c;
+  color: white;
+  border: none;
+  padding: 0.7rem 1.2rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 16px;
+  margin-right: 3%;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
+  width: 60%;
+  margin-left: 170%;
 }
-/*modal editar cliente.  proximoPago?: string; // Agregar como opcional si no siempre está presente
-  fechaIngreso?: string;*/
+
+.Cancel-button {
+  margin-left: 138%;
+  margin-top: 20px;
+  background-color: #737373;
+  color: white;
+  border: none;
+  padding: 0.7rem 1.2rem;
+  width: 60%;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 16px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+}
+
+.Cancel-button:hover,
+.save-button:hover {
+  color: #000;
+  background-color: #ccc;
+}
+
+/*modal editar cliente.*/
 
 .Habilitados {
   margin-left: 42%;
