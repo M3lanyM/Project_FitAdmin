@@ -296,8 +296,8 @@ export default function ClientPage() {
         <table className="tableClient">
           <thead>
             <tr className="fixed-header-row">
+              <th className="th-tableClient">Cedula</th>
               <th className="th-tableClient">Nombre</th>
-              <th className="th-tableClient">Correo</th>
               <th className="th-tableClient">Estado</th>
               <th className="th-tableClient">Acción</th>
             </tr>
@@ -307,8 +307,8 @@ export default function ClientPage() {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((client) => (
                 <tr key={client.id} className="tableClient-row">
+                  <td>{client.cedula}</td>
                   <td>{client.name}</td>
-                  <td>{client.mail}</td>
                   <td>{client.estado}</td>
                   <td>
                     <EditIcon className="edit-icon"
