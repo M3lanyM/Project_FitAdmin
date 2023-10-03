@@ -14,8 +14,6 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 
 import EditIcon from '@mui/icons-material/Edit';
-
-import { ClassNames } from '@emotion/react';
 import Link from 'next/link';
 
 export interface TableData {
@@ -45,6 +43,8 @@ export default function ClientPage() {
   const [clientIdToDelete, setClientIdToDelete] = useState('');
   const [showModalEdit, setShowModalEdit] = useState(false);
   const [selectedClient, setSelectedClient] = useState<TableData | null>(null);
+  const [numClientesHabilitados, setNumClientesHabilitados] = useState(0);
+  const [numClientesDeshabilitados, setNumClientesDeshabilitados] = useState(0);
 
   useEffect(() => {
     const clientCollection = collection(db, 'cliente');
@@ -68,6 +68,14 @@ export default function ClientPage() {
         };
       });
       setTableData(data);
+
+      // Contar clientes habilitados y Deshabilitados
+      const numHabilitados = data.filter((client) => client.estado === 'Habilitado').length;
+      setNumClientesHabilitados(numHabilitados);
+      numClientesDeshabilitados
+
+      const numDeshabilitados = data.filter((client) => client.estado === 'Deshabilitado').length;
+      setNumClientesDeshabilitados(numDeshabilitados);
     });
 
     // Limpiar el oyente cuando el componente se desmonta   
@@ -281,13 +289,13 @@ export default function ClientPage() {
 
         <div className="Habilitados">
           <img className="enabled" src="/img/enabled.png" />
-          <p className='text1'></p>
+          <p className='text1'>{numClientesHabilitados}</p>
           <h1 className='text2H'>Habilitados</h1>
         </div>
 
         <div className="Deshabilitados">
           <img className="disabled" src="/img/disabled.png" />
-          <p className='text1'></p>
+          <p className='text1'>{numClientesDeshabilitados}</p>
           <h1 className='text2D'>Deshabilitados</h1>
         </div>
       </div>
