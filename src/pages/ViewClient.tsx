@@ -11,8 +11,13 @@ interface Client {
   primerApellido: string;
   correo: string;
   estado: string;
+  admDate: "",
+  nextPay: "",
+  precio: "",
+  membership: "",
   // Otras propiedades del cliente
 }
+
 
 export default function ClientInfoPage() {
   const router = useRouter();
@@ -50,8 +55,8 @@ export default function ClientInfoPage() {
     if (result === 0) {
       alert('Por favor, realice un calculo de precio');
       return;
-  }
-  setPart(true);
+    }
+    setPart(true);
   }
 
   const [member, setMember] = useState(false);
@@ -60,8 +65,8 @@ export default function ClientInfoPage() {
     if (result === 0) {
       alert('Por favor, realice un calculo de precio');
       return;
-  }
-  setMember(true);
+    }
+    setMember(true);
   }
 
   const [content, setContent] = useState<string>('Este es el contenido que deseas limpiar.');
@@ -71,9 +76,9 @@ export default function ClientInfoPage() {
     if (result === 0) {
       alert('Por favor, realice un calculo de precio');
       return;
-  }
-  setRoutine(true);
-  setContent('');
+    }
+    setRoutine(true);
+    setContent('');
   }
 
 
@@ -91,7 +96,7 @@ export default function ClientInfoPage() {
               {/* ... (mostrar otras propiedades del cliente) */}
             </div>
           ) : (
-            <p>ID:{id}</p>
+            <p></p>
           )}
         </div>
         <div className="memberC">

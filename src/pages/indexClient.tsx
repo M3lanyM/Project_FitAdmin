@@ -15,6 +15,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 
 import EditIcon from '@mui/icons-material/Edit';
 import Link from 'next/link';
+import React from "react";
 
 export interface TableData {
   id: string;
@@ -29,6 +30,7 @@ export interface TableData {
   gender: string;
   fechaIngreso?: string;
   proximoPago?: string;
+  member?: string;
 }
 
 
@@ -69,6 +71,7 @@ export default function ClientPage() {
       });
       setTableData(data);
 
+
       // Contar clientes habilitados y Deshabilitados
       const numHabilitados = data.filter((client) => client.estado === 'Habilitado').length;
       setNumClientesHabilitados(numHabilitados);
@@ -76,7 +79,27 @@ export default function ClientPage() {
 
       const numDeshabilitados = data.filter((client) => client.estado === 'Deshabilitado').length;
       setNumClientesDeshabilitados(numDeshabilitados);
+
     });
+
+    //trae los datos de la membrecia y el precio de esa membresia
+    const fetchMembershipTypes = async () => {
+      const membershipCollection = collection(db, "membresia");
+      const membershipQuery = query(membershipCollection);
+      const membershipSnapshot = await getDocs(membershipQuery);
+
+      const membershipTypes: { [key: string]: number } = {};
+      membershipSnapshot.forEach((doc) => {
+        const data = doc.data();
+        if (data.tipo && data.precio) {
+          membershipTypes[data.tipo] = data.precio;
+        }
+      });
+
+      setMembershipOptions([" ", ...Object.keys(membershipTypes)]);
+    };
+
+    fetchMembershipTypes();
 
     // Limpiar el oyente cuando el componente se desmonta   
     return () => {
@@ -163,13 +186,19 @@ export default function ClientPage() {
         name: primerNombre, // Establecer solo el primer nombre
         fechaIngreso: clienteMembresiaDoc.fechaIngreso,
         proximoPago: clienteMembresiaDoc.proximoPago,
+        member: clienteMembresiaDoc.id,
+
       });
 
       setShowModalEdit(true);
     } catch (error) {
       console.error('Error al obtener los datos de clienteMembresia:', error);
     }
+
   };
+
+
+  const [membershipOptions, setMembershipOptions] = useState<string[]>([]);
 
 
   const saveChanges = async (e: React.FormEvent) => {
@@ -199,12 +228,30 @@ export default function ClientPage() {
       const q = query(clienteMembresiaCollection, where('clienteId', '==', doc(db, 'cliente', selectedClient.id)));
       const querySnapshot = await getDocs(q);
 
+      let membershipRef = null;
+      const membershipCollection = collection(db, "membresia");
+      const membershipQuery = query(
+        membershipCollection,
+        where("tipo", "==", selectedClient.member) // Consulta la membresía con el nombre seleccionado
+      );
+      const membershipSnapshot = await getDocs(membershipQuery);
+
+      if (!membershipSnapshot.empty) {
+        membershipSnapshot.forEach((doc) => {
+          membershipRef = doc.ref; // Obtén la referencia al documento de membresía
+        });
+      } else {
+        console.error("No se encontró la membresía seleccionada.");
+        return;
+      }
+
       if (!querySnapshot.empty) {
         const clienteMembresiaDoc = querySnapshot.docs[0];
         const clienteMembresiaRef = doc(db, 'clienteMembresia', clienteMembresiaDoc.id);
         await updateDoc(clienteMembresiaRef, {
           fechaIngreso: selectedClient.fechaIngreso,
           proximoPago: selectedClient.proximoPago,
+          membershipId: membershipRef,
         });
       }
 
@@ -493,7 +540,21 @@ export default function ClientPage() {
                 </select>
               </div>
               <div className="form-row">
-
+                <label>Membresia:</label>
+                <select
+                  className="inputformC1"
+                  name="membership"
+                  value={selectedClient.member}
+                  onChange={(e) => {
+                    setSelectedClient({ ...selectedClient, member: e.target.value });
+                  }}
+                >
+                  {membershipOptions.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
               </div>
               <div className="form-row">
                 <label>Fecha Ingreso:</label>
@@ -515,6 +576,8 @@ export default function ClientPage() {
                     setSelectedClient({ ...selectedClient, proximoPago: e.target.value });
                   }}
                 />
+              </div>
+              <div className="form-row">
               </div>
               <button className="save-button" onClick={saveChanges}>
                 Guardar
