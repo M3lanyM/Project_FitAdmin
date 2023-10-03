@@ -7,6 +7,7 @@ import firebaseConfig from '@/firebase/config';
 
 interface Client {
   nombre: string;
+  cedula: string;
   primerApellido: string;
   correo: string;
   estado: string;
@@ -24,7 +25,7 @@ export default function ClientInfoPage() {
         if (id) {
           const app: FirebaseApp = initializeApp(firebaseConfig);
           const db = getFirestore(app);
-          const clientRef = doc(db, 'cliente');
+          const clientRef = doc(db, 'cliente', id as string); // Utiliza el ID del cliente de los parámetros de la URL
           const clientDoc: DocumentSnapshot = await getDoc(clientRef);
 
           if (clientDoc.exists()) {
@@ -83,7 +84,7 @@ export default function ClientInfoPage() {
           <h1>Información del Cliente</h1>
           {client ? (
             <div>
-              <p>ID: {id}</p>
+              <p>ID: {client.cedula}</p>
               <p>Nombre: {`${client.nombre} ${client.primerApellido}`}</p>
               <p>Correo: {client.correo}</p>
               <p>Estado: {client.estado}</p>

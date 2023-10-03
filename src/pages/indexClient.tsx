@@ -136,33 +136,33 @@ export default function ClientPage() {
     try {
       const clienteMembresiaCollection = collection(db, 'clienteMembresia');
       const q = query(clienteMembresiaCollection, where('clienteId', '==', doc(db, 'cliente', client.id)));
-  
+
       const querySnapshot = await getDocs(q);
-  
+
       if (querySnapshot.empty) {
         // Manejar el caso en el que no se encuentre ningún documento coincidente en clienteMembresia
         console.log('No se encontró ningún documento coincidente en clienteMembresia');
         return;
       }
-  
+
       const clienteMembresiaDoc = querySnapshot.docs[0].data();
-  
+
       // Divide el nombre en nombre y apellido
       const [primerNombre] = client.name.split(' ');
-  
+
       setSelectedClient({
         ...client,
         name: primerNombre, // Establecer solo el primer nombre
         fechaIngreso: clienteMembresiaDoc.fechaIngreso,
         proximoPago: clienteMembresiaDoc.proximoPago,
       });
-  
+
       setShowModalEdit(true);
     } catch (error) {
       console.error('Error al obtener los datos de clienteMembresia:', error);
     }
   };
-  
+
 
   const saveChanges = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -223,7 +223,7 @@ export default function ClientPage() {
       })
     );
   };
-  
+
   const viewClient = (client: TableData) => {
     // Crear un nuevo objeto con solo el nombre del cliente
     const viewClients = {
@@ -315,9 +315,10 @@ export default function ClientPage() {
                       onClick={() => editClient(client)} />
 
 
-                    <Link key={client.id} href={`/ViewClient`}>
+                    <Link href={`/ViewClient?id=${client.id}`}>
                       <VisibilityIcon className="email-icon" onClick={() => viewClient(client)} />
                     </Link>
+
                     <DeleteIcon
                       className="delete-icon"
                       onClick={() => deleteClient(client.id)}
