@@ -29,7 +29,7 @@ const sidebarItems = [
     },
     {
         name: "Membresias",
-        href: "/indexMember",
+        href: "/indexMembership",
         icon: MdOutlineCardMembership,
     },
     {

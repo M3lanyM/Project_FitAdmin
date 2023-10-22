@@ -129,6 +129,7 @@ export default function ClientInfoPage() {
               <p>Fecha de próximo pago no disponible</p>
             )}
             <p>FPrecio: /mensual</p>
+            
           </div>
         </div>
       </div>

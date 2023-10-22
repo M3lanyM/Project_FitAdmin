@@ -1,0 +1,100 @@
+.ContaMember {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: absolute;
+    margin-top: 2.5%;
+    width: 69%;
+    height: 34%;
+    margin-left: 4.3%;
+    background-color: #FFFFFF;
+    border-radius: 9px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 4px 10px 0 rgba(0, 0, 0, 0.1);
+}
+
+.btnMember {
+    width: 24%;
+    height: 40px;
+    margin: 10px auto;
+    justify-content: center;
+    color: #fff;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    border-radius: 10px;
+    background-color: #A1A626;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.6);
+    margin-bottom: 3%;
+    font-size: 16px;
+}
+
+.title-memberTipe {
+    font-weight: bold;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 16px;
+    color: #737373;
+    margin-bottom: 5px;
+}
+
+.memberTipe {
+    width: 100%;
+    padding: 0.5rem;
+    margin-right: 40%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: 'Franklin Gothic', 'Arial Narrow', Arial, sans-serif;
+    border: 1px solid #2b8c8c;
+}
+
+.memberTipe:focus {
+    border-color: #A1A626;
+    outline: none;
+}
+
+.tableMember-container {
+    width: 69%;
+    height: 54%;
+    margin-left: 3.3%;
+    margin-top: 19.5%;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 4px 10px 0 rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    background-color: white;
+    border-radius: 10px;
+}
+
+
+.tableMember {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+
+.th-tableMember {
+    padding: 14px;
+    background-color: #2b8c8c;
+    color: white;
+}
+
+td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ccc;
+}
+
+.tableMember-row:hover {
+    background-color: #f2f2f2;
+}
+
+.modal-addMember {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 100;
+  }
