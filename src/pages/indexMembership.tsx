@@ -1,29 +1,101 @@
 import BaseLayout from "@/pages/Sidebar/BaseLayout";
 import { IconButton, InputAdornment, TextField } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Search as SearchIcon } from '@mui/icons-material';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import DeleteIcon from '@mui/icons-material/Delete';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
+import { addDoc, collection, getDocs, getFirestore, onSnapshot, query } from "firebase/firestore";
+import firebaseConfig from "@/firebase/config";
+import { initializeApp } from "firebase/app";
+import Link from 'next/link';
 
-interface TableData {
-    id: number;
-    name: string;
-    price: number;
+export interface TableData {
+    id: String;
+    type: string;
+    price: string;
     description: string;
 }
 
-interface Props {
-    data?: TableData[];
-}
 
-const initialData: TableData[] = [
-    { id: 1, name: 'Estudiante', price: 20000, description: 'Ayuda para los que estudian' },
-    { id: 2, name: 'Normal', price: 25000, description: 'Asistencia normal al gimnasio' },
-    { id: 2, name: 'Personal', price: 35000, description: 'Clases especiales' },
-];
-export default function ClientMember({ data }: Props) {
+
+export default function ClientMember() {
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [tableData, setTableData] = useState<TableData[]>([]);
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [membershipOptions, setMembershipOptions] = useState<string[]>([]);
+
+
+    const [formData, setFormData] = useState({
+        type: "",
+        price: "",
+        description: "",
+    });
+
+    const handleAddMember = async () => {
+        try {
+            // Agrega los datos del formulario a la colección "membresia" en Firestore
+            const docRef = await addDoc(collection(db, "membresia"), {
+                tipo: formData.type,
+                precio: formData.price,
+                descripcion: formData.description,
+            });
+
+            console.log("Documento escrito con ID: ", docRef.id);
+
+            // Limpia el formulario después de la presentación exitosa
+            setFormData({
+                type: "",
+                price: "",
+                description: "",
+            });
+
+        } catch (error) {
+            console.error("Error al agregar el documento: ", error);
+        }
+    };
+
+    useEffect(() => {
+        const memberCollection = collection(db, 'membresia');
+        const q = query(memberCollection);
+
+        // Crea un oyente en tiempo real para la colección de membresia
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            const data = querySnapshot.docs.map((doc) => {
+                const { precio, tipo, descripcion } = doc.data();
+                return {
+                    id: doc.id,
+                    type: tipo,
+                    price: precio,
+                    description: descripcion,
+                };
+            });
+
+            const filteredData = data.filter((member) =>
+                member.type.toLowerCase().includes(searchQuery.toLowerCase()) 
+             
+            );
+
+            setTableData(filteredData);
+
+        });
+        
+        // Limpiar el oyente cuando el componente se desmonta   
+        return () => {
+            unsubscribe();
+        };
+    }, [app, searchQuery]);
+
+    const handleInputChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+      )=> {
+        
+      };
 
     //modal
     const [isMembershipModalOpen, setIsMembershipModalOpen] = useState(false);
@@ -41,14 +113,10 @@ export default function ClientMember({ data }: Props) {
     };
 
     const closeModal = () => {
+        handleAddMember();
         setShowModal(false);
         setIsMembershipModalOpen(false);
     };
-
-
-
-    const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(5);
 
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
@@ -57,7 +125,6 @@ export default function ClientMember({ data }: Props) {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
-    const tableData = data || initialData;
 
 
 
@@ -78,7 +145,7 @@ export default function ClientMember({ data }: Props) {
                                     </InputAdornment>
                                 ),
                             }}
-                            placeholder="Buscar cliente"
+                            placeholder="Buscar Membresia"
                             sx={{
                                 width: '85%',
                                 '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
@@ -86,15 +153,9 @@ export default function ClientMember({ data }: Props) {
                                 },
                                 marginRight: '300px',
                             }}
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
                         />
-                        <div className="member-row">
-                            <label className="title-memberTipe" >Tipo de membresia </label>
-                            <select name="select-Member" className="memberTipe">
-                                <option value="">Estudiante</option>
-                                <option value="">Normal</option>
-                                <option value="">Personal</option>
-                            </select>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -103,20 +164,21 @@ export default function ClientMember({ data }: Props) {
                     <thead>
                         <tr className="fixed-header-row">
                             <th className="th-tableMember">Nombre</th>
-                            <th className="th-tableMember">Categoria</th>
+                            <th className="th-tableMember">Precio</th>
                             <th className="th-tableMember">Descripción</th>
                             <th className="th-tableMember">Acción</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {tableData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            .map((row: TableData) => (
-                                <tr key={row.id} className="tableMember-row">
-                                    <td>{row.name}</td>
-                                    <td>{row.price}</td>
-                                    <td>{row.description}</td>
+                        {tableData
+                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                            .map((member, index) => (
+                                <tr key={index} className="tableMember-row">
+                                    <td>{member.type}</td>
+                                    <td>{member.price}</td>
+                                    <td>{member.description}</td>
                                     <td>
-                                        <EditIcon className="edit-icon"></EditIcon>
+                                        <EditIcon className="edit-icon" />
                                         <DeleteIcon className="delete-icon" />
                                     </td>
                                 </tr>
@@ -165,18 +227,21 @@ export default function ClientMember({ data }: Props) {
                                 </div>
                                 <div className="line-addRoutine"></div>
                                 <div className="">
-                                    <h2 className="text-addRoutiner">Tipo de Membresia</h2>
-                                    <input type="text" className="info-addRoutine" placeholder="Tipo" />
+                                    <label htmlFor="Nombre" className="text-addRoutiner">Tipo de Membresia</label>
+                                    <input type="text" className="info-addRoutine" placeholder="Tipo" value={formData.type} 
+                                    onChange={(e) => setFormData({ ...formData, type: e.target.value })}/>
                                 </div>
                             </div>
                             <div className="">
                                 <h2 className="text-addRoutine">Descripcion</h2>
-                                <textarea name="descrption" placeholder="Descripcion" className="description-addRoutine"></textarea>
+                                <textarea name="descrption" placeholder="Descripcion" className="description-addRoutine" value={formData.description} 
+                                onChange={(e) => setFormData({ ...formData, description: e.target.value })}></textarea>
                             </div>
                             <div className="line-addRoutine"></div>
                             <div className="">
                                 <h2 className="text-addRoutiner">Precio</h2>
-                                <input type="text" className="info-addRoutine" placeholder="$" />
+                                <input type="text" className="info-addRoutine" placeholder="$" value={formData.price} 
+                                onChange={(e) => setFormData({ ...formData, price: e.target.value })}/>
                             </div>
                             <div className="line-addRoutine"></div>
                             <div className="button-addRoutine2 flexs center" >
