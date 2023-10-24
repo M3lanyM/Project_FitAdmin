@@ -78,7 +78,7 @@ export default function RoutinePage({ data }: Props) {
         <BaseLayout>
             <div className='hBill'>
                 <div className='ContaRoutine'>
-                    <label className="custom-labelRoutine">RUTINAS</label>
+                    <label className="custom-labelRoutine">Rutinas</label>
                     <div className='searchBill'>
                         <TextField
                             InputProps={{

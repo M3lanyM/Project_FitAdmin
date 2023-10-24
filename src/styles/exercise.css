@@ -1,32 +1,40 @@
-.button-exercise {
-    background-color: #A1A626;
-    color: white;
-    padding: 0.5% 3%;
-    font-size: 18px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: background-color 0.3s;
-    margin-left: 75%;
-  }
+/**/
+.custom-labelExercise {
+  display: block;
+  text-align: center;
+  position: relative;
+  font-size: 25px;
+  margin: 10x;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  color: #2b8c8c;
+  right: -50px;
+  margin-top: -1%;
 
-.search-exercise, .exercise-type {
-    margin-top: 2%;
-    padding: 0.5% 3%;
-    font-size: 15px;
-    font-weight: bold;
-    background-color: white;
-    color: #727272;
-    border: none;
-    border-radius: 20px;
-    border: 2px solid #727272;
-  }
+}
 
-  .search-exercise {
-    margin-left: 4%;
-  }
+.btnExercise {
+  width: 190px;
+  height: 44px;
+  justify-content: center;
+  color: #fff;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  border-radius: 10px;
+  background-color: #A1A626;
+  box-shadow: 0 0 3px rgba(105, 85, 85, 0.6);
+  font-size: 16px;
+  margin-left: 8%;
+  margin-top: -2%;
+  margin-bottom: 27px;
+}
 
-  .exercise-type{
-    margin-left: 45%;
-  }
+.searchBill1 {
+  display: flex;
+  border-bottom: 1px solid #e5e7eb;
+  grid-gap: 500px;
+  /* Espacio entre el label y el input */
+  width: 100%;
+  /* Ancho completo del label */
+
+}

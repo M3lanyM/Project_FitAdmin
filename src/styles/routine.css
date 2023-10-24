@@ -1,97 +1,6 @@
-
-/* container background*/
-.Row {
-
-  position: absolute;
-  background-color: #ffffff;
-  width: 75%;
-  height: auto;
-  margin-top: 3%;
-  margin-left: 3%;
-  background-color: #FFFFFF;
-    border-radius: 9px;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 4px 10px 0 rgba(0, 0, 0, 0.1);
-}
-
-.center{
-  align-items: center;
-  justify-content: center;
-}
-.flexs{
-  display: flex;
-  margin-bottom: 2%;
-}
-
-.container-routine {
-  justify-content: center;
-}
-
-/*first frame*/
-
-.service-titles {
-  margin-bottom: -3%;
-  margin-left: 5%;
-  margin-top: 2%;
-  color: #284B63;
-  font-weight: bold;
-  font-size: 22px;
-
-}
-
-.line-routine {
-  margin-top: 3%;
-  border-bottom: 1px solid #e5e7eb;
-  margin-bottom: 3%;
-}
-
-/*second part*/
-
-
-.form-select {
-  align-items: center;
-  justify-content: center;
-  margin-top: 1%;
-  margin-left: 6%;
-  display: flex;
-  border-radius: 5px;
-  border: 2px solid #727272;
-  margin-bottom: -7%;
-
-}
-
-.search-routine {
-  margin-left: 73%;
-  padding: 0.5% 3%;
-  font-size: 15px;
-  font-weight: bold;
-  background-color: white;
-  color: #727272;
-  border: none;
-  border-radius: 20px;
-  border: 2px solid #727272;
-}
-
-
-.table-button{
-  margin-top: 2%;
-  margin-left: 25%;
-  margin-bottom: 3%;
-  align-items: center;
-  justify-items: center;
-  background-color: #2b8c8c;
-  color: white;
-  padding: 0.5% 3%;
-  font-size: 18px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.3s;
-}
-
 /*Add Routine*/
 .content-addRoutine {
-  position:fixed;
+  position: fixed;
   padding: 3%;
   max-width: 400px;
   background-color: white;
@@ -160,14 +69,14 @@
   border: 2px solid #727272;
 }
 
-.space-addRoutine{
+.space-addRoutine {
   margin-top: 5%;
 }
 
 .button-addRoutine {
   background-color: #8c2b2b;
   color: white;
-  margin-left: 2% ;
+  margin-left: 2%;
   padding: 1% 1%;
   font-size: 12px;
   border: none;
@@ -188,14 +97,18 @@
   font-weight: bold;
   transition: background-color 0.3s;
 }
-.colors{
+
+.colors {
   background-color: #2b8c8c;
   padding: 5% 10%;
 }
-.colors, .exit-addRoutine{
-color: #ffffff;
+
+.colors,
+.exit-addRoutine {
+  color: #ffffff;
 }
-.exit-addRoutine{
+
+.exit-addRoutine {
   margin-left: 6%;
   background-color: #8c2b2b;
   padding: 5% 10%;
@@ -305,7 +218,7 @@ color: #ffffff;
   margin-right: -54%;
 }
 
-.custom-labelRoutine{
+.custom-labelRoutine {
   display: block;
   text-align: center;
   position: relative;
