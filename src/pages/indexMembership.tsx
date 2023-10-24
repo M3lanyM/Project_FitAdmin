@@ -5,12 +5,10 @@ import { Search as SearchIcon } from '@mui/icons-material';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import DeleteIcon from '@mui/icons-material/Delete';
-import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import { addDoc, collection, getDocs, getFirestore, onSnapshot, query } from "firebase/firestore";
 import firebaseConfig from "@/firebase/config";
 import { initializeApp } from "firebase/app";
-import Link from 'next/link';
 
 export interface TableData {
     id: String;
@@ -21,7 +19,7 @@ export interface TableData {
 
 
 
-export default function ClientMember() {
+export default function MembershipPage() {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [tableData, setTableData] = useState<TableData[]>([]);
@@ -135,7 +133,6 @@ export default function ClientMember() {
                     <h1 className="title-member">Membresias</h1>
                     <button onClick={handlerMembership} className="btnMember">
                         + Agregar Membresias</button>
-
                     <div className='hClient'>
                         <TextField
                             InputProps={{

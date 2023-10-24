@@ -1,15 +1,43 @@
-import React, { useState } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
 import BaseLayout from "@/pages/Sidebar/BaseLayout";
-import TableRoutine from '@/components/TableRoutine';
-import { TextField, InputAdornment } from '@mui/material';
-import Button from '@mui/material/Button';
+import { IconButton, InputAdornment, TextField } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import { Search as SearchIcon } from '@mui/icons-material';
-import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
+import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 
 
-const PageRoutine = () => {
+interface TableData {
+    id: number;
+    name: string;
+    type: string;
+    description: string;
+}
+
+interface Props {
+    data?: TableData[];
+}
+
+const initialData: TableData[] = [
+    { id: 1, name: 'Comienzo', type: 'Gluteos', description: 'Gluteos para principiantes' },
+    { id: 2, name: 'Medio', type: 'Piernas', description: 'Piernas para fortalecer' },
+];
+
+export default function RoutinePage({ data }: Props) {
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [showModal, setShowModal] = useState(false);
+
+    const handleChangePage = (event: unknown, newPage: number) => {
+        setPage(newPage);
+    };
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
+    const tableData = data || initialData;
+
     const [isRoutineModalOpen, setIsRoutineModalOpen] = useState(false);
     const handlerRoutine = () => {
         setIsRoutineModalOpen(true);
@@ -18,12 +46,15 @@ const PageRoutine = () => {
     const handleCloseRoutineModal = () => {
         setIsRoutineModalOpen(false);
     };
+    const closeModal = () => {
+        setShowModal(false);
+        setIsRoutineModalOpen(false);
+    };
 
     const options: string[] = ['Plancha', 'Peso Muerto', 'Aperturas con TRX'];
 
     const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
     const [textareaValue, setTextareaValue] = useState<string>('');
-    const [showModal, setShowModal] = useState(false);
 
     const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const selectedOption = event.target.value;
@@ -43,22 +74,12 @@ const PageRoutine = () => {
         setShowModal(true);
     };
 
-    const closeModal = () => {
-        setShowModal(false);
-        setIsRoutineModalOpen(false);
-    };
-
     return (
         <BaseLayout>
-            <section className="container-routine">
-                <div className="Row">
-                    <div>
-                        <h1 className="service-titles">Rutinas</h1>
-                        <button className="button-routine" onClick={handlerRoutine}> + Crear Rutinas</button>
-                    </div>
-                    <div className="line-routine"></div>
-                    <div className=" flexs">
-                        <h2 className="content-select"> Buscar</h2>
+            <div className='hBill'>
+                <div className='ContaRoutine'>
+                    <label className="custom-labelRoutine">RUTINAS</label>
+                    <div className='searchBill'>
                         <TextField
                             InputProps={{
                                 endAdornment: (
@@ -69,20 +90,75 @@ const PageRoutine = () => {
                             }}
                             placeholder="Buscar rutina"
                             sx={{
-                                left:'61%',
-                                top: '25%',
-                                width: '25%',
+                                width: '80%', height: '1%',
                                 '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                                    borderColor: '#2b8c8c',
+                                    borderColor: '#A1A626',
                                 },
+                                bottom: '-24%', right: '53%',
                             }}
                         />
+                        <button className="btnRoutine"onClick={handlerRoutine} > + Crear Rutinas</button>
+
                     </div>
-                    <section>
-                    <TableRoutine />
-                    </section>
                 </div>
-                {isRoutineModalOpen && (
+            </div>
+            <div className="tableRoutine-container">
+                <table className="tableRoutine">
+                    <thead>
+                        <tr className="fixed-header-row">
+                            <th className="th-tableRoutine">Nombre</th>
+                            <th className="th-tableRoutine">Precio</th>
+                            <th className="th-tableRoutine">Descripción</th>
+                            <th className="th-tableRoutine">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {tableData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                            .map((row) => (
+                                <tr key={row.id} className="tableRoutine-row">
+                                    <td>{row.name}</td>
+                                    <td>{row.type}</td>
+                                    <td>{row.description}</td>
+                                    <td>
+                                        <EditIcon className="edit-icon" />
+                                        <DeleteIcon className="delete-icon" />
+                                    </td>
+                                </tr>
+                            ))}
+
+                    </tbody>
+                </table>
+                <div className="pagination-container">
+                    <span className="show-text">Mostrar</span>
+                    <select value={rowsPerPage} onChange={handleChangeRowsPerPage} className="select-element">
+                        {[5, 10, 25].map((option, index) => (
+                            <option key={index} value={option}>
+                                {option}
+                            </option>
+                        ))}
+                    </select>
+                    <div className="pagination-controls">
+                        <IconButton
+                            disabled={page === 0}
+                            onClick={() => setPage(page - 1)}
+                            className="pagination-button"
+                            style={{ color: page === 0 ? 'grey' : '#A1A626' }}
+                        >
+                            <NavigateBeforeIcon />
+                        </IconButton>
+                        <span className="pagination-page">{page + 1}</span>
+                        <IconButton
+                            disabled={page >= Math.ceil(tableData.length / rowsPerPage) - 1}
+                            onClick={() => setPage(page + 1)}
+                            className="pagination-button"
+                            style={{ color: page >= Math.ceil(tableData.length / rowsPerPage) - 1 ? 'grey' : '#A1A626' }}
+                        >
+                            <NavigateNextIcon />
+                        </IconButton>
+                    </div>
+                </div>
+            </div>
+            {isRoutineModalOpen && (
                     <div className="modal-addRoutine">
                         <div className="content-addRoutine">
                             <span className="close-addRoutine " onClick={handleCloseRoutineModal}>&times;</span>
@@ -150,10 +226,6 @@ const PageRoutine = () => {
                         </div>
                     </div>
                 )}
-            </section >
         </BaseLayout>
-
-    )
+    );
 }
-
-export default PageRoutine;

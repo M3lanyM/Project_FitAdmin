@@ -19,7 +19,7 @@ const sidebarItems = [
     },
     {
         name: "Rutinas",
-        href: "/indexRoutine",
+        href: "/indexRoutines",
         icon: BsCalendarWeek,
     },
     {
