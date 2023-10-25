@@ -333,8 +333,12 @@ export default function ExercisePage() {
                                 </div>
                                 <div className="line-addRoutine"></div>
                                 <div className="button-addRoutine2 flexs center" >
-                                    <button className="colors" onClick={handleTextareaClear}>Agregar </button>
-                                    <button className="exit-addRoutine" onClick={handleCloseRoutineModal}>Cancelar</button>
+                                    <button className="colors" onClick={saveChanges}>
+                                        Actualizar
+                                    </button>
+                                    <button className="exit-addRoutine" onClick={cancelEdit}>
+                                        Cancelar
+                                    </button>
                                 </div>
                                 {showModal && (
                                     <div className="modal">
