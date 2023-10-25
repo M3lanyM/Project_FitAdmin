@@ -14,6 +14,17 @@
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 4px 10px 0 rgba(0, 0, 0, 0.1);
 }
 
+.content-addMember {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    max-width: 60%;
+    max-height: 85%;
+    width: 100%;
+    overflow-y: auto;
+}
+
 .btnMember {
     width: 24%;
     height: 40px;
@@ -90,11 +101,54 @@ td {
 
 .modal-addMember {
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
     z-index: 100;
-  }
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+
+.text-addMember {
+    justify-content: center;
+    color: #000;
+    font-size: 17px;
+}
+
+.info-addMember {
+    justify-content: center;
+    width: 40%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: 'Franklin Gothic', 'Arial Narrow', Arial, sans-serif;
+    border: 1px solid #2b8c8c;
+
+    margin-top: 2%;
+    padding: 0.5% 3%;
+
+
+}
+
+.line-addMember {
+    margin-top: 2%;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.description-addMember {
+    justify-content: center;
+    width: 40%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: 'Franklin Gothic', 'Arial Narrow', Arial, sans-serif;
+    border: 1px solid #2b8c8c;
+
+    margin-top: 2%;
+    padding: 7% 3%;
+
+}

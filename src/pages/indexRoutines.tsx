@@ -107,7 +107,7 @@ export default function RoutinePage({ data }: Props) {
                     <thead>
                         <tr className="fixed-header-row">
                             <th className="th-tableRoutine">Nombre</th>
-                            <th className="th-tableRoutine">Precio</th>
+                            <th className="th-tableRoutine">Categoria</th>
                             <th className="th-tableRoutine">Descripción</th>
                             <th className="th-tableRoutine">Acción</th>
                         </tr>

@@ -6,7 +6,7 @@ import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { addDoc, collection, getDocs, getFirestore, onSnapshot, query } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDocs, getFirestore, onSnapshot, query, updateDoc, where } from "firebase/firestore";
 import firebaseConfig from "@/firebase/config";
 import { initializeApp } from "firebase/app";
 
@@ -26,7 +26,10 @@ export default function MembershipPage() {
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     const [searchQuery, setSearchQuery] = useState("");
-    const [membershipOptions, setMembershipOptions] = useState<string[]>([]);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [memberIdToDelete, setMemberIdToDelete] = useState('');
+    const [showModalEdit, setShowModalEdit] = useState(false);
+    const [selectedMember, setSelectedMember] = useState<TableData | null>(null);
 
 
     const [formData, setFormData] = useState({
@@ -75,14 +78,14 @@ export default function MembershipPage() {
             });
 
             const filteredData = data.filter((member) =>
-                member.type.toLowerCase().includes(searchQuery.toLowerCase()) 
-             
+                member.type.toLowerCase().includes(searchQuery.toLowerCase())
+
             );
 
             setTableData(filteredData);
 
         });
-        
+
         // Limpiar el oyente cuando el componente se desmonta   
         return () => {
             unsubscribe();
@@ -91,9 +94,9 @@ export default function MembershipPage() {
 
     const handleInputChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-      )=> {
-        
-      };
+    ) => {
+
+    };
 
     //modal
     const [isMembershipModalOpen, setIsMembershipModalOpen] = useState(false);
@@ -124,6 +127,89 @@ export default function MembershipPage() {
         setPage(0);
     };
 
+    //eliminar membresia
+    // sele debe agregar esto al icono de eliminar onClick={() => deleteMember(member.id.toString())}
+    const deleteMember = async (memberId: string) => {
+        setIsDeleteModalOpen(true);
+        setMemberIdToDelete(memberId);
+    };
+
+    const confirmDelete = async () => {
+        try {
+            const db = getFirestore(app);
+            const memberRef = doc(db, 'membresia', memberIdToDelete);
+
+            // Eliminar la membresia de la colección "membresia"
+            await deleteDoc(memberRef);
+
+            // Eliminar los datos de "clienteMembresia" asociados al membresia
+            const clienteMembresiaCollection = collection(db, 'clienteMembresia');
+            const q = query(clienteMembresiaCollection, where('membershipId', '==', doc(db, 'membresia', memberIdToDelete)));
+            console.error(where);
+            const querySnapshot = await getDocs(q);
+
+            if (!querySnapshot.empty) {
+                const clienteMembresiaDoc = querySnapshot.docs[0];
+                const clienteMembresiaRef = doc(db, 'clienteMembresia', clienteMembresiaDoc.id);
+                await deleteDoc(clienteMembresiaRef);
+            }
+
+            setTableData((prevData) => prevData.filter((member) => member.id !== memberIdToDelete));
+
+            setIsDeleteModalOpen(false);
+        } catch (error) {
+            console.error('Error al eliminar la membresia:', error);
+        }
+    };
+
+    const cancelDelete = () => {
+        setIsDeleteModalOpen(false);
+    };
+
+    const editMember = async (member: TableData) => {
+        try {
+
+
+            setSelectedMember({
+                ...member,
+            });
+
+            setShowModalEdit(true);
+        } catch (error) {
+            console.error('Error al obtener los datos de clienteMembresia:', error);
+        }
+
+    };
+
+    const saveChanges = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        if (!selectedMember) {
+            console.error('No se ha seleccionado ningún membresia.');
+            return;
+        }
+
+        try {
+            const db = getFirestore(app);
+            const memberRef = doc(db, 'membresia', selectedMember.id.toString());
+            await updateDoc(memberRef, {
+                tipo: selectedMember.type,
+                precio: selectedMember.price,
+                descripcion: selectedMember.description,
+            });
+
+           
+            setShowModalEdit(false);
+        } catch (error) {
+            console.error('Error al guardar los cambios:', error);
+        }
+    };
+
+    const cancelEdit = () => {
+        setShowModalEdit(false);
+    };
+
+    
 
 
     return (
@@ -175,7 +261,7 @@ export default function MembershipPage() {
                                     <td>{member.price}</td>
                                     <td>{member.description}</td>
                                     <td>
-                                        <EditIcon className="edit-icon" />
+                                        <EditIcon className="edit-icon" onClick={() => editMember(member)} />
                                         <DeleteIcon className="delete-icon" />
                                     </td>
                                 </tr>
@@ -215,32 +301,32 @@ export default function MembershipPage() {
             </div>
             {isMembershipModalOpen && (
                 <div className="modal-addMember">
-                    <div className="content-addRoutine">
+                    <div className="content-addMember">
                         <span className="close-addRoutine " onClick={handleCloseMembershipModal}>&times;</span>
                         <div className="">
                             <div>
                                 <div>
                                     <h2 className="service-titles">Agregar Membresia </h2>
                                 </div>
-                                <div className="line-addRoutine"></div>
+                                <div className="line-addMember"></div>
                                 <div className="">
-                                    <label htmlFor="Nombre" className="text-addRoutiner">Tipo de Membresia</label>
-                                    <input type="text" className="info-addRoutine" placeholder="Tipo" value={formData.type} 
-                                    onChange={(e) => setFormData({ ...formData, type: e.target.value })}/>
+                                    <label htmlFor="Nombre" className="text-addMember">Tipo de Membresia</label>
+                                    <input type="text" className="info-addMember" placeholder="Tipo" value={formData.type}
+                                        onChange={(e) => setFormData({ ...formData, type: e.target.value })} />
                                 </div>
                             </div>
                             <div className="">
-                                <h2 className="text-addRoutine">Descripcion</h2>
-                                <textarea name="descrption" placeholder="Descripcion" className="description-addRoutine" value={formData.description} 
-                                onChange={(e) => setFormData({ ...formData, description: e.target.value })}></textarea>
+                                <h2 className="text-addMember">Descripcion</h2>
+                                <textarea name="descrption" placeholder="Descripcion" className="description-addMember" value={formData.description}
+                                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}></textarea>
                             </div>
-                            <div className="line-addRoutine"></div>
+                            <div className="line-addMember"></div>
                             <div className="">
-                                <h2 className="text-addRoutiner">Precio</h2>
-                                <input type="text" className="info-addRoutine" placeholder="$" value={formData.price} 
-                                onChange={(e) => setFormData({ ...formData, price: e.target.value })}/>
+                                <h2 className="text-addMember">Precio</h2>
+                                <input type="text" className="info-addMember" placeholder="$" value={formData.price}
+                                    onChange={(e) => setFormData({ ...formData, price: e.target.value })} />
                             </div>
-                            <div className="line-addRoutine"></div>
+                            <div className="line-addMember"></div>
                             <div className="button-addRoutine2 flexs center" >
                                 <button className="colors" onClick={handleTextareaClear}>Agregar </button>
                                 <button className="exit-addRoutine" onClick={handleCloseMembershipModal}>Cancelar</button>
@@ -253,6 +339,74 @@ export default function MembershipPage() {
                                     </div>
                                 </div>
                             )}
+                        </div>
+
+                    </div>
+                </div>
+            )}
+            {isDeleteModalOpen && (
+                <div className="modal-delete">
+                    <div className="custom-modal-delete">
+                        <p className='text-delete'>¿Estás seguro de que deseas eliminar esta membresia?</p>
+                        <button className="confirmDelete" onClick={confirmDelete}>Sí</button>
+                        <button className="cancelDelete" onClick={cancelDelete}>No</button>
+                    </div>
+                </div>
+            )}
+            {showModalEdit && selectedMember && (
+                <div className="modal-addMember">
+                    <div className="content-addMember">
+                        <span className="close-addRoutine " onClick={handleCloseMembershipModal}>&times;</span>
+                        <div className="">
+                            <div>
+                                <h2 className="service-titles">Agregar Membresia </h2>
+                            </div>
+                            <form onSubmit={saveChanges} className="">
+                                <div>
+                                    <div className="line-addMember"></div>
+                                    <div className="">
+
+                                        <label htmlFor="Nombre" className="text-addMember">Tipo de Membresia</label>
+                                        <input type="text" className="info-addMember" placeholder="Tipo"
+                                        value={selectedMember.type}
+                                        onChange={(e) => {
+                                          setSelectedMember({ ...selectedMember, type: e.target.value });
+                                        }}/>
+                                    </div>
+                                </div>
+                                <div className="">
+                                    <h2 className="text-addMember">Descripcion</h2>
+                                    <textarea name="descrption" placeholder="Descripcion" className="description-addMember" value={selectedMember.description}
+                                        onChange={(e) => {
+                                          setSelectedMember({ ...selectedMember, description: e.target.value });
+                                        }}></textarea>
+                                </div>
+                                <div className="line-addMember"></div>
+                                <div className="">
+                                    <h2 className="text-addMember">Precio</h2>
+                                    <input type="text" className="info-addMember" placeholder="$"value={selectedMember.price}
+                                        onChange={(e) => {
+                                          setSelectedMember({ ...selectedMember, price: e.target.value });
+                                        }}/>
+                                </div>
+                                <div className="line-addMember"></div>
+                                <div className="button-addRoutine2 flexs center" >
+                                    <button className="colors" onClick={saveChanges}>
+                                        Actualizar
+                                    </button>
+                                    <button className="exit-addRoutine" onClick={cancelEdit}>
+                                        Cancelar
+                                    </button>
+                                </div>
+                                {showModal && (
+                                    <div className="modal">
+                                        <div className="modal-content">
+                                            <p>Se agrego nueva Membresia</p>
+                                            <button className="button-addRoutine colors" onClick={closeModal}>Listo</button>
+                                        </div>
+                                    </div>
+                                )}
+                            </form>
                         </div>
 
                     </div>
