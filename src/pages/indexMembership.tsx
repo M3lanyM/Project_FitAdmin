@@ -11,7 +11,7 @@ import firebaseConfig from "@/firebase/config";
 import { initializeApp } from "firebase/app";
 
 export interface TableData {
-    id: String;
+    id: string;
     type: string;
     price: string;
     description: string;
@@ -26,11 +26,10 @@ export default function MembershipPage() {
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     const [searchQuery, setSearchQuery] = useState("");
-    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-    const [memberIdToDelete, setMemberIdToDelete] = useState('');
     const [showModalEdit, setShowModalEdit] = useState(false);
     const [selectedMember, setSelectedMember] = useState<TableData | null>(null);
-
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [memberIdToDelete, setMemberIdToDelete] = useState('');
 
     const [formData, setFormData] = useState({
         type: "",
@@ -127,45 +126,6 @@ export default function MembershipPage() {
         setPage(0);
     };
 
-    //eliminar membresia
-    // sele debe agregar esto al icono de eliminar onClick={() => deleteMember(member.id.toString())}
-    const deleteMember = async (memberId: string) => {
-        setIsDeleteModalOpen(true);
-        setMemberIdToDelete(memberId);
-    };
-
-    const confirmDelete = async () => {
-        try {
-            const db = getFirestore(app);
-            const memberRef = doc(db, 'membresia', memberIdToDelete);
-
-            // Eliminar la membresia de la colección "membresia"
-            await deleteDoc(memberRef);
-
-            // Eliminar los datos de "clienteMembresia" asociados al membresia
-            const clienteMembresiaCollection = collection(db, 'clienteMembresia');
-            const q = query(clienteMembresiaCollection, where('membershipId', '==', doc(db, 'membresia', memberIdToDelete)));
-            console.error(where);
-            const querySnapshot = await getDocs(q);
-
-            if (!querySnapshot.empty) {
-                const clienteMembresiaDoc = querySnapshot.docs[0];
-                const clienteMembresiaRef = doc(db, 'clienteMembresia', clienteMembresiaDoc.id);
-                await deleteDoc(clienteMembresiaRef);
-            }
-
-            setTableData((prevData) => prevData.filter((member) => member.id !== memberIdToDelete));
-
-            setIsDeleteModalOpen(false);
-        } catch (error) {
-            console.error('Error al eliminar la membresia:', error);
-        }
-    };
-
-    const cancelDelete = () => {
-        setIsDeleteModalOpen(false);
-    };
-
     const editMember = async (member: TableData) => {
         try {
 
@@ -198,7 +158,7 @@ export default function MembershipPage() {
                 descripcion: selectedMember.description,
             });
 
-           
+
             setShowModalEdit(false);
         } catch (error) {
             console.error('Error al guardar los cambios:', error);
@@ -209,8 +169,29 @@ export default function MembershipPage() {
         setShowModalEdit(false);
     };
 
-    
+    //eliminar membresia
+    const deleteMember = async (memberId: string) => {
+        try {
+            // referencia al documento de membresia
+            const memberRef = doc(db, 'membresia', memberId);
 
+            // Verifica si el ID de la membresía está siendo utilizado en "clienteMembresia"
+            const clientMembershipQuery = query(
+                collection(db, 'clienteMembresia'),
+                where('membershipId', '==', memberRef)
+            );
+
+            const clientMembershipDocs = await getDocs(clientMembershipQuery);
+
+            if (clientMembershipDocs.size > 0) {
+                alert("No se puede eliminar porque está siendo utilizado en la colección clienteMembresia.");
+            } else {
+                await deleteDoc(memberRef);
+            }
+        } catch (error) {
+            console.error('Error al eliminar la membresía:', error);
+        }
+    };
 
     return (
         <BaseLayout>
@@ -262,7 +243,9 @@ export default function MembershipPage() {
                                     <td>{member.description}</td>
                                     <td>
                                         <EditIcon className="edit-icon" onClick={() => editMember(member)} />
-                                        <DeleteIcon className="delete-icon" />
+                                        <DeleteIcon className="delete-icon" onClick={() => deleteMember(member.id)}
+                                        />
+
                                     </td>
                                 </tr>
                             ))}
@@ -299,6 +282,7 @@ export default function MembershipPage() {
                     </div>
                 </div>
             </div>
+
             {isMembershipModalOpen && (
                 <div className="modal-addMember">
                     <div className="content-addMember">
@@ -344,15 +328,7 @@ export default function MembershipPage() {
                     </div>
                 </div>
             )}
-            {isDeleteModalOpen && (
-                <div className="modal-delete">
-                    <div className="custom-modal-delete">
-                        <p className='text-delete'>¿Estás seguro de que deseas eliminar esta membresia?</p>
-                        <button className="confirmDelete" onClick={confirmDelete}>Sí</button>
-                        <button className="cancelDelete" onClick={cancelDelete}>No</button>
-                    </div>
-                </div>
-            )}
+
             {showModalEdit && selectedMember && (
                 <div className="modal-addMember">
                     <div className="content-addMember">
@@ -368,26 +344,26 @@ export default function MembershipPage() {
 
                                         <label htmlFor="Nombre" className="text-addMember">Tipo de Membresia</label>
                                         <input type="text" className="info-addMember" placeholder="Tipo"
-                                        value={selectedMember.type}
-                                        onChange={(e) => {
-                                          setSelectedMember({ ...selectedMember, type: e.target.value });
-                                        }}/>
+                                            value={selectedMember.type}
+                                            onChange={(e) => {
+                                                setSelectedMember({ ...selectedMember, type: e.target.value });
+                                            }} />
                                     </div>
                                 </div>
                                 <div className="">
                                     <h2 className="text-addMember">Descripcion</h2>
                                     <textarea name="descrption" placeholder="Descripcion" className="description-addMember" value={selectedMember.description}
                                         onChange={(e) => {
-                                          setSelectedMember({ ...selectedMember, description: e.target.value });
+                                            setSelectedMember({ ...selectedMember, description: e.target.value });
                                         }}></textarea>
                                 </div>
                                 <div className="line-addMember"></div>
                                 <div className="">
                                     <h2 className="text-addMember">Precio</h2>
-                                    <input type="text" className="info-addMember" placeholder="$"value={selectedMember.price}
+                                    <input type="text" className="info-addMember" placeholder="$" value={selectedMember.price}
                                         onChange={(e) => {
-                                          setSelectedMember({ ...selectedMember, price: e.target.value });
-                                        }}/>
+                                            setSelectedMember({ ...selectedMember, price: e.target.value });
+                                        }} />
                                 </div>
                                 <div className="line-addMember"></div>
                                 <div className="button-addRoutine2 flexs center" >
