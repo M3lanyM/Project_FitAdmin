@@ -6,7 +6,7 @@ import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { getFirestore, collection, query, onSnapshot, deleteDoc, doc, updateDoc, where, getDocs, addDoc } from 'firebase/firestore';
+import { getFirestore, collection, query, onSnapshot, deleteDoc, doc, updateDoc, where, getDocs, addDoc, DocumentData, DocumentReference } from 'firebase/firestore';
 import firebaseConfig from "@/firebase/config";
 import { initializeApp } from "firebase/app";
 
@@ -71,7 +71,7 @@ export default function RoutinePage() {
 
         });
 
-        //trae los datos de la membrecia y el precio de esa membresia
+        //trae los datos del ejercicio al combox 
         const fetchExerciseTypes = async () => {
             const exerciseCollection = collection(db, "ejercicio");
             const exerciseQuery = query(exerciseCollection);
@@ -85,14 +85,15 @@ export default function RoutinePage() {
                 }
             });
 
-            setExerciseOptions([" ", ...Object.keys(exerciseTypes)]);
+            setExerciseOptions(Object.keys(exerciseTypes));
         };
+
 
         fetchExerciseTypes();
         setFormData((prevData) => ({
             ...prevData,
             exercise: "Seleccione una opción",
-          }));
+        }));
 
         // Limpiar el oyente cuando el componente se desmonta   
         return () => {
@@ -100,16 +101,34 @@ export default function RoutinePage() {
         };
     }, [app, searchQuery]);
 
+    // Función para obtener las referencias a los documentos de ejercicios por nombres
+    const getExerciseRefsByNames = async (exerciseNames: string[]) => {
+        const exerciseRefs: DocumentReference<DocumentData, DocumentData>[] = [];
+        for (const name of exerciseNames) {
+            const exerciseCollection = collection(db, "ejercicio");
+            const exerciseQuery = query(exerciseCollection, where("nombre", "==", name));
+            const exerciseSnapshot = await getDocs(exerciseQuery);
+
+            if (!exerciseSnapshot.empty) {
+                exerciseSnapshot.forEach((doc) => {
+                    exerciseRefs.push(doc.ref); // Crea una referencia al documento
+                });
+            }
+        }
+        return exerciseRefs;
+    };
 
     const handleAddRoutine = async () => {
         try {
-            // Agrega los datos del formulario a la colección "cliente" en Firestore
+            const exerciseRefs = await getExerciseRefsByNames(selectedExerciseIds);
+
+            // Agrega los datos del formulario a la colección "rutina" en Firestore
             const docRef = await addDoc(collection(db, "rutina"), {
                 nombre: formData.name,
                 descripcion: formData.description,
                 serie: formData.serie,
                 repeticion: formData.repetitions,
-                ejercicios: selectedExerciseIds,
+                ejercicios: exerciseRefs, // Utiliza referencias a los documentos de ejercicios
             });
 
             console.log("Documento escrito con ID: ", docRef.id);
@@ -190,17 +209,17 @@ export default function RoutinePage() {
             setTextareaValue((prevValue) => prevValue + selectedOption + '\n');
         }
     };
-    
+
 
 
     const handleOptionRemove = (id: string) => {
         const updatedSelectedExerciseIds = selectedExerciseIds.filter((exerciseId) => exerciseId !== id);
         setSelectedExerciseIds(updatedSelectedExerciseIds);
-    
+
         // Actualiza el contenido del textarea
         setTextareaValue(updatedSelectedExerciseIds.join('\n') + '\n');
     };
-    
+
 
     const handleTextareaClear = () => {
         setSelectedOptions([]);
