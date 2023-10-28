@@ -14,7 +14,6 @@ import { initializeApp } from "firebase/app";
 interface TableData {
     id: string;
     name: string;
-    category: string;
     description: string;
 }
 
@@ -35,7 +34,6 @@ export default function ExercisePage() {
 
     const [formData, setFormData] = useState({
         name: "",
-        category: "",
         description: "",
     });
 
@@ -44,7 +42,6 @@ export default function ExercisePage() {
             // Agrega los datos del formulario a la colección "membresia" en Firestore
             const docRef = await addDoc(collection(db, "ejercicio"), {
                 nombre: formData.name,
-                categoria: formData.category,
                 descripcion: formData.description,
             });
 
@@ -53,7 +50,6 @@ export default function ExercisePage() {
             // Limpia el formulario después de la presentación exitosa
             setFormData({
                 name: "",
-                category: "",
                 description: "",
             });
 
@@ -150,7 +146,6 @@ export default function ExercisePage() {
             const memberRef = doc(db, 'ejercicio', selectedExercise.id.toString());
             await updateDoc(memberRef, {
                 nombre: selectedExercise.name,
-                categoria: selectedExercise.category,
                 descripcion: selectedExercise.description,
             });
 
@@ -200,7 +195,6 @@ export default function ExercisePage() {
                     <thead>
                         <tr className="fixed-header-row">
                             <th className="th-tableRoutine">Nombre</th>
-                            <th className="th-tableRoutine">Categoria</th>
                             <th className="th-tableRoutine">Descripción</th>
                             <th className="th-tableRoutine">Acción</th>
                         </tr>
@@ -210,7 +204,6 @@ export default function ExercisePage() {
                             .map((exercise, index) => (
                                 <tr key={index} className="tableMember-row">
                                     <td>{exercise.name}</td>
-                                    <td>{exercise.category}</td>
                                     <td>{exercise.description}</td>
                                     <td>
                                         <EditIcon className="edit-icon" onClick={() => editExercise(exercise)}/>
@@ -273,12 +266,6 @@ export default function ExercisePage() {
                                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}></textarea>
                             </div>
                             <div className="line-addRoutine"></div>
-                            <div className="center">
-                                <h2 className="space-addRoutine">Categoria</h2>
-                                <input type="text" className="info-addRoutine" placeholder="Categoria" value={formData.category}
-                                    onChange={(e) => setFormData({ ...formData, category: e.target.value })} />
-                            </div>
-                            <div className="line-addRoutine"></div>
                             <div className="button-addRoutine2 flexs center" >
                                 <button className="colors" onClick={handleTextareaClear}>Agregar </button>
                                 <button className="exit-addRoutine" onClick={handleCloseRoutineModal}>Cancelar</button>
@@ -322,14 +309,6 @@ export default function ExercisePage() {
                                         onChange={(e) => {
                                           setSelectedExercise({ ...selectedExercise, description: e.target.value });
                                         }}></textarea>
-                                </div>
-                                <div className="line-addRoutine"></div>
-                                <div className="center">
-                                    <h2 className="space-addRoutine">Categoria</h2>
-                                    <input type="text" className="info-addRoutine" placeholder="Categoria" value={selectedExercise.category}
-                                        onChange={(e) => {
-                                          setSelectedExercise({ ...selectedExercise, category: e.target.value });
-                                        }}/>
                                 </div>
                                 <div className="line-addRoutine"></div>
                                 <div className="button-addRoutine2 flexs center" >
