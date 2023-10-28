@@ -194,6 +194,13 @@ export default function RoutinePage() {
     };
     const closeModal = () => {
         handleAddRoutine();
+        setFormData({
+            name: "",
+            description: "",
+            serie: "",
+            repetitions: "",
+            exercise: "",
+        });
         setShowModal(false);
         setIsRoutineModalOpen(false);
     };
@@ -225,6 +232,22 @@ export default function RoutinePage() {
         setSelectedOptions([]);
         setTextareaValue('');
         setShowModal(true);
+    };
+
+    const handleCancelClear = () => {
+        setFormData({
+            name: "",
+            description: "",
+            serie: "",
+            repetitions: "",
+            exercise: "",
+        });
+
+        setSelectedOptions([]);
+        setTextareaValue('');
+        setIsRoutineModalOpen(false);
+
+
     };
 
     return (
@@ -314,7 +337,7 @@ export default function RoutinePage() {
             {isRoutineModalOpen && (
                 <div className="modal-addRoutine">
                     <div className="content-addRoutine">
-                        <span className="close-addRoutine " onClick={handleCloseRoutineModal}>&times;</span>
+                        <span className="close-addRoutine " onClick={closeModal}>&times;</span>
                         <div className="">
                             <div>
                                 <div>
@@ -374,7 +397,7 @@ export default function RoutinePage() {
                             </div>
                             <div className="button-addRoutine2" >
                                 <button className="colors" onClick={handleTextareaClear}>Crear Rutina</button>
-                                <button className="exit-addRoutine" onClick={handleCloseRoutineModal}>Cancelar</button>
+                                <button className="exit-addRoutine" onClick={handleCancelClear}>Cancelar</button>
                             </div>
                             {showModal && (
                                 <div className="modal">
