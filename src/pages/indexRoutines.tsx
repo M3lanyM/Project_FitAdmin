@@ -1,12 +1,12 @@
 import BaseLayout from "@/pages/Sidebar/BaseLayout";
-import { IconButton, InputAdornment, TextField } from "@mui/material";
+import { Button, IconButton, InputAdornment, List, Modal, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Search as SearchIcon } from '@mui/icons-material';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { getFirestore, collection, query, onSnapshot, deleteDoc, doc, updateDoc, where, getDocs, addDoc, DocumentData, DocumentReference } from 'firebase/firestore';
+import { getFirestore, collection, query, onSnapshot, deleteDoc, doc, updateDoc, where, getDocs, addDoc, DocumentData, DocumentReference, getDoc } from 'firebase/firestore';
 import firebaseConfig from "@/firebase/config";
 import { initializeApp } from "firebase/app";
 
@@ -15,9 +15,10 @@ interface TableData {
     id: string;
     name: string;
     description: string;
-    serie: number;
-    repetitions: number;
+    series: string;
+    repetitions: string;
     exercise?: string;
+    exercises?: string;
 }
 
 
@@ -41,7 +42,7 @@ export default function RoutinePage() {
     const [formData, setFormData] = useState({
         name: "",
         description: "",
-        serie: "",
+        series: "",
         repetitions: "",
         exercise: "",
 
@@ -54,13 +55,14 @@ export default function RoutinePage() {
         // Crea un oyente en tiempo real para la colección de clientes
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
             const data = querySnapshot.docs.map((doc) => {
-                const { nombre, descripcion, series, repeticiones } = doc.data();
+                const { nombre, descripcion, serie, repeticion, ejercicios  } = doc.data();
                 return {
                     id: doc.id,
                     name: nombre,
                     description: descripcion,
-                    serie: series,
-                    repetitions: repeticiones,
+                    series: serie,
+                    repetitions: repeticion,
+                    exercise: ejercicios
                 };
             });
             const filteredData = data.filter((routine) =>
@@ -126,7 +128,7 @@ export default function RoutinePage() {
             const docRef = await addDoc(collection(db, "rutina"), {
                 nombre: formData.name,
                 descripcion: formData.description,
-                serie: formData.serie,
+                serie: formData.series,
                 repeticion: formData.repetitions,
                 ejercicios: exerciseRefs, // Utiliza referencias a los documentos de ejercicios
             });
@@ -151,16 +153,15 @@ export default function RoutinePage() {
                 return;
             }
 
-            // Agrega los datos a la colección "clienteMembresia" con la referencia a la membresía
             await addDoc(collection(db, "rutina"), {
-                ejercicioId: exerciseIdRef, // Usar la referencia al documento de membresía
+                ejercicioId: exerciseIdRef,
             });
 
             // Limpia el formulario después de la presentación exitosa
             setFormData({
                 name: "",
                 description: "",
-                serie: "",
+                series: "",
                 repetitions: "",
                 exercise: "",
             });
@@ -197,7 +198,7 @@ export default function RoutinePage() {
         setFormData({
             name: "",
             description: "",
-            serie: "",
+            series: "",
             repetitions: "",
             exercise: "",
         });
@@ -211,6 +212,7 @@ export default function RoutinePage() {
 
     const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const selectedOption = event.target.value;
+        setSelectedOptions([...selectedOptions, selectedOption]);
         if (selectedOption) {
             setSelectedExerciseIds((prevIds) => [...prevIds, selectedOption]);
             setTextareaValue((prevValue) => prevValue + selectedOption + '\n');
@@ -221,6 +223,7 @@ export default function RoutinePage() {
 
     const handleOptionRemove = (id: string) => {
         const updatedSelectedExerciseIds = selectedExerciseIds.filter((exerciseId) => exerciseId !== id);
+        setSelectedOptions(updatedSelectedExerciseIds);
         setSelectedExerciseIds(updatedSelectedExerciseIds);
 
         // Actualiza el contenido del textarea
@@ -238,7 +241,7 @@ export default function RoutinePage() {
         setFormData({
             name: "",
             description: "",
-            serie: "",
+            series: "",
             repetitions: "",
             exercise: "",
         });
@@ -246,9 +249,116 @@ export default function RoutinePage() {
         setSelectedOptions([]);
         setTextareaValue('');
         setIsRoutineModalOpen(false);
-
-
     };
+
+    const handleDeleteRoutine = async (routineId: string) => {
+        try {
+            await deleteDoc(doc(db, 'rutina', routineId));
+        } catch (error) {
+            console.error("Error al eliminar la rutina: ", error);
+        }
+    }
+
+    const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = useState(false);
+    const [routineToDelete, setRoutineToDelete] = useState<TableData | null>(null);
+
+    // ... (otras partes del código)
+
+    // Función para abrir el modal de confirmación de eliminación
+    const openDeleteConfirmation = (routine: TableData) => {
+        setIsDeleteConfirmationOpen(true);
+        setRoutineToDelete(routine);
+    }
+
+    // Función para cerrar el modal de confirmación
+    const closeDeleteConfirmation = () => {
+        setIsDeleteConfirmationOpen(false);
+        setRoutineToDelete(null);
+    }
+
+    // Función para confirmar la eliminación de la rutina
+    const confirmDeleteRoutine = async () => {
+        // Llama a la función para eliminar la rutina
+        if (routineToDelete) {
+            await handleDeleteRoutine(routineToDelete.id);
+        }
+        closeDeleteConfirmation();
+    }
+
+    const getExerciseNamesByIds = async (exerciseRefs: DocumentReference[]) => {
+        const exerciseNames = [];
+    
+        for (const exerciseRef of exerciseRefs) {
+            const exerciseDocSnapshot = await getDoc(exerciseRef);
+    
+            if (exerciseDocSnapshot.exists()) {
+                const exerciseData = exerciseDocSnapshot.data();
+                exerciseNames.push(exerciseData.nombre);
+            }
+        }
+    
+        return exerciseNames;
+    };
+
+    const editRoutine = async (routineId: string) => {
+        const routineDocRef = doc(collection(db, 'rutina'), routineId);
+        const routineDocSnapshot = await getDoc(routineDocRef);
+    
+        if (routineDocSnapshot.exists()) {
+            const routineData = routineDocSnapshot.data();
+            const exerciseRefs = routineData.ejercicios;
+    
+            const exerciseNames = await getExerciseNamesByIds(exerciseRefs);
+    
+            setSelectedRoutine({
+                id: routineId,
+                name: routineData.nombre,
+                description: routineData.descripcion,
+                series: routineData.serie,
+                repetitions: routineData.repeticion,
+                exercise: exerciseNames.join('\n'),
+                exercises: exerciseRefs,
+            });
+    
+            setShowModalEdit(true);
+            console.log('Nombres de ejercicios de la rutina:', exerciseNames);
+
+        } else {
+            console.log('La rutina no existe');
+        }
+    };
+
+    const saveChanges = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        if (!selectedRoutine) {
+            console.error('No se ha seleccionado ninguna rutina.');
+            return;
+        }
+
+        try {
+            const db = getFirestore(app);
+            const routineRef = doc(db, 'rutina', selectedRoutine.id);
+            await updateDoc(routineRef, {
+                nombre: selectedRoutine.name,
+                descripcion: selectedRoutine.description,
+                serie: selectedRoutine.series,
+                repeticion: selectedRoutine.repetitions,
+                ejercicios: selectedRoutine.exercises,
+            });
+
+
+            setShowModalEdit(false);
+        } catch (error) {
+            console.error('Error al guardar los cambios:', error);
+        }
+    };
+
+    const cancelEdit = () => {
+        setShowModalEdit(false);
+    };
+
+
 
     return (
         <BaseLayout>
@@ -294,8 +404,9 @@ export default function RoutinePage() {
                                     <td>{routine.name}</td>
                                     <td>{routine.description}</td>
                                     <td>
-                                        <EditIcon className="edit-icon" />
+                                        <EditIcon className="edit-icon" onClick={() => editRoutine(routine.id)} />
                                         <DeleteIcon className="delete-icon"
+                                            onClick={() => openDeleteConfirmation(routine)}
                                         />
 
                                     </td>
@@ -337,7 +448,7 @@ export default function RoutinePage() {
             {isRoutineModalOpen && (
                 <div className="modal-addRoutine">
                     <div className="content-addRoutine">
-                        <span className="close-addRoutine " onClick={closeModal}>&times;</span>
+                        <span className="close-addRoutine " onClick={handleCancelClear}>&times;</span>
                         <div className="">
                             <div>
                                 <div>
@@ -358,13 +469,13 @@ export default function RoutinePage() {
                             <div className="line-addRoutine"></div>
                             <div className="">
                                 <h2 className="text-addRoutiner">Series Del Ejercicio</h2>
-                                <input type="text" className="info-addRoutine" placeholder="Series" value={formData.serie}
-                                    onChange={(e) => setFormData({ ...formData, serie: e.target.value })} />
+                                <input type="text" className="info-addRoutine" placeholder="Series" value={formData.series}
+                                    onChange={(e) => setFormData({ ...formData, series: e.target.value })} />
                             </div>
                             <div className="line-addRoutine"></div>
                             <div className="">
                                 <h2 className="text-addRoutiner">Repeticiones Del Ejercicio</h2>
-                                <input type="text" className="info-addRoutine" placeholder="Nombre" value={formData.repetitions}
+                                <input type="text" className="info-addRoutine" placeholder="Repeticiones" value={formData.repetitions}
                                     onChange={(e) => setFormData({ ...formData, repetitions: e.target.value })} />
                             </div>
                             <div className="line-addRoutine"></div>
@@ -382,7 +493,7 @@ export default function RoutinePage() {
                                         </option>
                                     ))}
                                 </select>
-                                <textarea className="description-addRoutine space-addRoutine" value={textareaValue} rows={5} readOnly />
+                                {/*<textarea className="description-addRoutine space-addRoutine" value={textareaValue} rows={5} readOnly />*/}
                                 <div className="text-addRoutine space-addRoutine">
                                     Ejercicios seleccionados:
                                     <ul className="space-addRoutine" >
@@ -412,6 +523,115 @@ export default function RoutinePage() {
                     </div>
                 </div>
             )}
+            {isDeleteConfirmationOpen && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <p>Confirmación de eliminación</p>
+                        <p>¿Está seguro de que desea eliminar esta rutina? </p>
+                        <button className="colors" onClick={confirmDeleteRoutine}>Eliminar</button>
+                        <button className="exit-addRoutine" onClick={closeDeleteConfirmation}>Cancelar</button>
+                    </div>
+                </div>
+            )}
+
+            {showModalEdit && selectedRoutine && (
+                <div className="modal-addRoutine">
+                    <div className="content-addRoutine">
+                        <span className="close-addRoutine " onClick={handleCancelClear}>&times;</span>
+                        <div className="">
+                            <div>
+                                <h2 className="service-titles">Crear Rutinas</h2>
+                            </div>
+                            <form onSubmit={saveChanges} className="">
+                                <div>
+
+                                    <div className="line-addRoutine"></div>
+                                    <div className="">
+                                        <h2 className="text-addRoutiner">Nombre De La Rutina</h2>
+                                        <input type="text" className="info-addRoutine" placeholder="Nombre" value={selectedRoutine.name}
+                                            onChange={(e) => {
+                                                setSelectedRoutine({ ...selectedRoutine, name: e.target.value });
+                                            }} />
+                                    </div>
+                                </div>
+                                <div className="">
+                                    <h2 className="text-addRoutine">Descripcion</h2>
+                                    <textarea name="descrption" placeholder="Descripcion" className="description-addRoutine" value={selectedRoutine.description}
+                                        onChange={(e) => {
+                                            setSelectedRoutine({ ...selectedRoutine, description: e.target.value });
+                                        }}></textarea>
+                                </div>
+                                <div className="line-addRoutine"></div>
+                                <div className="">
+                                    <h2 className="text-addRoutiner">Series Del Ejercicio</h2>
+                                    <input type="text" className="info-addRoutine" placeholder="Series" value={selectedRoutine.series}
+                                        onChange={(e) => {
+                                            setSelectedRoutine({ ...selectedRoutine, series: e.target.value });
+                                        }} />
+                                </div>
+                                <div className="line-addRoutine"></div>
+                                <div className="">
+                                    <h2 className="text-addRoutiner">Repeticiones Del Ejercicio</h2>
+                                    <input type="text" className="info-addRoutine" placeholder="Repeticiones" value={selectedRoutine.repetitions}
+                                        onChange={(e) => {
+                                            setSelectedRoutine({ ...selectedRoutine, repetitions: e.target.value });
+                                        }} />
+                                </div>
+                                <div className="line-addRoutine"></div>
+                                <div>
+                                    <select
+                                        className="inputformC1"
+                                        name="exercise"
+                                        value={formData.exercise}
+                                    >
+                                        <option value="">Lista de Ejercicios:</option>
+                                        {exerciseOptions.map((option) => (
+                                            <option key={option} value={option}>
+                                                {option}
+                                            </option>
+                                        ))}
+                                    </select>
+                                     <textarea className="description-addRoutine space-addRoutine" value={selectedRoutine.exercise}
+                                        onChange={(e) => {
+                                            setSelectedRoutine({ ...selectedRoutine, exercise: e.target.value });
+                                        }} rows={5} readOnly /> 
+
+                                    <div className="text-addRoutine space-addRoutine">
+                                        <p> Ejercicios seleccionados:</p>                                       
+                                        <ul id="ListaEditada" className="space-addRoutine" >
+
+                                           
+
+
+                                            {selectedOptions.map((option, index) => (
+                                                <li key={index} >
+                                                    {option}
+                                                    <button className="button-addRoutine" onClick={() => handleOptionRemove(option)}>Eliminar</button>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div className="button-addRoutine2" >
+                                    <button className="colors" onClick={saveChanges}>Actualizar Rutina</button>
+                                    <button className="exit-addRoutine" onClick={cancelEdit}>Cancelar</button>
+                                </div>
+                                {showModal && (
+                                    <div className="modal">
+                                        <div className="modal-content">
+                                            <p>Se guardo la nueva rutina</p>
+                                            <button className="button-addRoutine colors" onClick={closeModal}>Listo</button>
+                                        </div>
+                                    </div>
+                                )}
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            )}
+
+
         </BaseLayout>
     );
 }
