@@ -237,7 +237,6 @@ export default function RoutinePage() {
         }
     }
 
-
     // Función para abrir el modal de confirmación de eliminación
     const openDeleteConfirmation = (routine: TableData) => {
         setIsDeleteConfirmationOpen(true);
@@ -320,24 +319,39 @@ export default function RoutinePage() {
 
     const handleUpdateRoutine = async () => {
         if (editingRoutineData) {
-            try {
-                const { id, name, description, series, repetitions } = editingRoutineData;
-
-                const routineRef = doc(db, 'rutina', id);
-                await updateDoc(routineRef, {
-                    nombre: name,
-                    descripcion: description,
-                    serie: series,
-                    repeticion: repetitions,
-                });
-
-                setIsModalOpen(false); // Cierra el modal después de la actualización exitosa
-            } catch (error) {
-                console.error("Error al actualizar la rutina: ", error);
-            }
+          try {
+            const { id, name, description, series, repetitions } = editingRoutineData;
+      
+            const routineRef = doc(db, "rutina", id);
+            const exerciseRefs = await getExerciseRefsByNames(selectedRoutineExercises);
+      
+            await updateDoc(routineRef, {
+              nombre: name,
+              descripcion: description,
+              serie: series,
+              repeticion: repetitions,
+              ejercicios: exerciseRefs, // Utiliza referencias a los documentos de ejercicios
+            });
+      
+            setIsModalOpen(false); // Cierra el modal después de la actualización exitosa
+          } catch (error) {
+            console.error("Error al actualizar la rutina: ", error);
+          }
         }
-    };
+      };
+      
 
+    const handleAddExerciseToList = () => {
+        if (formData.exercise && formData.exercise !== "Seleccione una opción") {
+          setSelectedRoutineExercises((prevExercises) => [
+            ...prevExercises,
+            formData.exercise,
+          ]);
+      
+          setFormData({ ...formData, exercise: "Seleccione una opción" });
+        }
+      };
+      
     return (
         <BaseLayout>
             <div className='hBill'>
@@ -543,6 +557,20 @@ export default function RoutinePage() {
                             value={editingRoutineData.repetitions}
                             onChange={(e) => setEditingRoutineData({ ...editingRoutineData, repetitions: e.target.value })}
                         />
+<select
+  className="inputformC1"
+  name="exercise"
+  value={formData.exercise}
+  onChange={(e) => setFormData({ ...formData, exercise: e.target.value })}
+>
+  <option value="">Lista de Ejercicios:</option>
+  {exerciseOptions.map((option) => (
+    <option key={option} value={option}>
+      {option}
+    </option>
+  ))}
+</select>
+<button onClick={handleAddExerciseToList}>Agregar Ejercicio</button>
 
                         <h3>Ejercicios asociados:</h3>
                         <ul>
