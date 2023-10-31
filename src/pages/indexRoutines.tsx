@@ -319,39 +319,39 @@ export default function RoutinePage() {
 
     const handleUpdateRoutine = async () => {
         if (editingRoutineData) {
-          try {
-            const { id, name, description, series, repetitions } = editingRoutineData;
-      
-            const routineRef = doc(db, "rutina", id);
-            const exerciseRefs = await getExerciseRefsByNames(selectedRoutineExercises);
-      
-            await updateDoc(routineRef, {
-              nombre: name,
-              descripcion: description,
-              serie: series,
-              repeticion: repetitions,
-              ejercicios: exerciseRefs, // Utiliza referencias a los documentos de ejercicios
-            });
-      
-            setIsModalOpen(false); // Cierra el modal después de la actualización exitosa
-          } catch (error) {
-            console.error("Error al actualizar la rutina: ", error);
-          }
+            try {
+                const { id, name, description, series, repetitions } = editingRoutineData;
+
+                const routineRef = doc(db, "rutina", id);
+                const exerciseRefs = await getExerciseRefsByNames(selectedRoutineExercises);
+
+                await updateDoc(routineRef, {
+                    nombre: name,
+                    descripcion: description,
+                    serie: series,
+                    repeticion: repetitions,
+                    ejercicios: exerciseRefs, // Utiliza referencias a los documentos de ejercicios
+                });
+
+                setIsModalOpen(false); // Cierra el modal después de la actualización exitosa
+            } catch (error) {
+                console.error("Error al actualizar la rutina: ", error);
+            }
         }
-      };
-      
+    };
+
 
     const handleAddExerciseToList = () => {
         if (formData.exercise && formData.exercise !== "Seleccione una opción") {
-          setSelectedRoutineExercises((prevExercises) => [
-            ...prevExercises,
-            formData.exercise,
-          ]);
-      
-          setFormData({ ...formData, exercise: "Seleccione una opción" });
+            setSelectedRoutineExercises((prevExercises) => [
+                ...prevExercises,
+                formData.exercise,
+            ]);
+
+            setFormData({ ...formData, exercise: "Seleccione una opción" });
         }
-      };
-      
+    };
+
     return (
         <BaseLayout>
             <div className='hBill'>
@@ -374,6 +374,8 @@ export default function RoutinePage() {
                                 },
                                 bottom: '-24%', right: '53%',
                             }}
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
                         />
                         <button className="btnRoutine" onClick={handlerRoutine} > + Crear Rutinas</button>
 
@@ -557,20 +559,20 @@ export default function RoutinePage() {
                             value={editingRoutineData.repetitions}
                             onChange={(e) => setEditingRoutineData({ ...editingRoutineData, repetitions: e.target.value })}
                         />
-<select
-  className="inputformC1"
-  name="exercise"
-  value={formData.exercise}
-  onChange={(e) => setFormData({ ...formData, exercise: e.target.value })}
->
-  <option value="">Lista de Ejercicios:</option>
-  {exerciseOptions.map((option) => (
-    <option key={option} value={option}>
-      {option}
-    </option>
-  ))}
-</select>
-<button onClick={handleAddExerciseToList}>Agregar Ejercicio</button>
+                        <select
+                            className="inputformC1"
+                            name="exercise"
+                            value={formData.exercise}
+                            onChange={(e) => setFormData({ ...formData, exercise: e.target.value })}
+                        >
+                            <option value="">Lista de Ejercicios:</option>
+                            {exerciseOptions.map((option) => (
+                                <option key={option} value={option}>
+                                    {option}
+                                </option>
+                            ))}
+                        </select>
+                        <button onClick={handleAddExerciseToList}>Agregar Ejercicio</button>
 
                         <h3>Ejercicios asociados:</h3>
                         <ul>
