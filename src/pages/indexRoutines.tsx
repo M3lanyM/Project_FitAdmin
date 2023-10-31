@@ -37,6 +37,7 @@ export default function RoutinePage() {
     const [searchQuery, setSearchQuery] = useState("");
     const [exerciseOptions, setExerciseOptions] = useState<string[]>(["Seleccione una opción"]);
     const [selectedExerciseIds, setSelectedExerciseIds] = useState<string[]>([]);
+    const [isRoutineModalOpen, setIsRoutineModalOpen] = useState(false);
 
 
     const [formData, setFormData] = useState({
@@ -55,7 +56,7 @@ export default function RoutinePage() {
         // Crea un oyente en tiempo real para la colección de clientes
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
             const data = querySnapshot.docs.map((doc) => {
-                const { nombre, descripcion, serie, repeticion, ejercicios  } = doc.data();
+                const { nombre, descripcion, serie, repeticion, ejercicios } = doc.data();
                 return {
                     id: doc.id,
                     name: nombre,
@@ -119,6 +120,12 @@ export default function RoutinePage() {
         }
         return exerciseRefs;
     };
+    // nuevo
+    useEffect(() => {
+        if (!isRoutineModalOpen) {
+            setSelectedExerciseIds([]);
+        }
+    }, [isRoutineModalOpen]);
 
     const handleAddRoutine = async () => {
         try {
@@ -166,9 +173,6 @@ export default function RoutinePage() {
                 exercise: "",
             });
 
-            setSelectedExerciseIds([]);
-            handleTextareaClear();
-            // Cierra el modal o realiza cualquier otra acción necesaria 
             handleCloseRoutineModal();
 
         } catch (error) {
@@ -184,15 +188,25 @@ export default function RoutinePage() {
         setPage(0);
     };
 
-    const [isRoutineModalOpen, setIsRoutineModalOpen] = useState(false);
     const handlerRoutine = () => {
         setIsRoutineModalOpen(true);
     };
 
+// cambio Limpiar los campos al cerrar el modal
     const handleCloseRoutineModal = () => {
-        handleTextareaClear();
+        
+        setFormData({
+            name: "",
+            description: "",
+            series: "",
+            repetitions: "",
+            exercise: "",
+        });
+
         setIsRoutineModalOpen(false);
     };
+
+
     const closeModal = () => {
         handleAddRoutine();
         setFormData({
@@ -210,25 +224,19 @@ export default function RoutinePage() {
     const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
     const [textareaValue, setTextareaValue] = useState<string>('');
 
+    //cambio
     const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const selectedOption = event.target.value;
-        setSelectedOptions([...selectedOptions, selectedOption]);
         if (selectedOption) {
             setSelectedExerciseIds((prevIds) => [...prevIds, selectedOption]);
-            setTextareaValue((prevValue) => prevValue + selectedOption + '\n');
         }
     };
 
-
-
     const handleOptionRemove = (id: string) => {
         const updatedSelectedExerciseIds = selectedExerciseIds.filter((exerciseId) => exerciseId !== id);
-        setSelectedOptions(updatedSelectedExerciseIds);
         setSelectedExerciseIds(updatedSelectedExerciseIds);
-
-        // Actualiza el contenido del textarea
-        setTextareaValue(updatedSelectedExerciseIds.join('\n') + '\n');
     };
+
 
 
     const handleTextareaClear = () => {
@@ -287,29 +295,29 @@ export default function RoutinePage() {
 
     const getExerciseNamesByIds = async (exerciseRefs: DocumentReference[]) => {
         const exerciseNames = [];
-    
+
         for (const exerciseRef of exerciseRefs) {
             const exerciseDocSnapshot = await getDoc(exerciseRef);
-    
+
             if (exerciseDocSnapshot.exists()) {
                 const exerciseData = exerciseDocSnapshot.data();
                 exerciseNames.push(exerciseData.nombre);
             }
         }
-    
+
         return exerciseNames;
     };
 
     const editRoutine = async (routineId: string) => {
         const routineDocRef = doc(collection(db, 'rutina'), routineId);
         const routineDocSnapshot = await getDoc(routineDocRef);
-    
+
         if (routineDocSnapshot.exists()) {
             const routineData = routineDocSnapshot.data();
             const exerciseRefs = routineData.ejercicios;
-    
+
             const exerciseNames = await getExerciseNamesByIds(exerciseRefs);
-    
+
             setSelectedRoutine({
                 id: routineId,
                 name: routineData.nombre,
@@ -319,7 +327,7 @@ export default function RoutinePage() {
                 exercise: exerciseNames.join('\n'),
                 exercises: exerciseRefs,
             });
-    
+
             setShowModalEdit(true);
             console.log('Nombres de ejercicios de la rutina:', exerciseNames);
 
@@ -495,15 +503,22 @@ export default function RoutinePage() {
                                 </select>
                                 {/*<textarea className="description-addRoutine space-addRoutine" value={textareaValue} rows={5} readOnly />*/}
                                 <div className="text-addRoutine space-addRoutine">
-                                    Ejercicios seleccionados:
-                                    <ul className="space-addRoutine" >
-                                        {selectedOptions.map((option, index) => (
-                                            <li key={index}>
-                                                {option}
-                                                <button className="button-addRoutine" onClick={() => handleOptionRemove(option)}>Eliminar</button>
-                                            </li>
-                                        ))}
-                                    </ul>
+                                    <h2>Ejercicios seleccionados:</h2>
+                                    <div className="exercise-list">
+                                        <ul>
+                                            {selectedExerciseIds.map((exerciseId, index) => {
+                                                const exercise = exerciseOptions.find((option) => option === exerciseId);
+                                                return (
+                                                    <li key={index}>
+                                                        <button className="button-addRoutine" onClick={() => handleOptionRemove(exerciseId)}>
+                                                            Eliminar
+                                                        </button>
+                                                        {exercise}
+                                                    </li>
+                                                );
+                                            })}
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                             <div className="button-addRoutine2" >
@@ -591,18 +606,14 @@ export default function RoutinePage() {
                                             </option>
                                         ))}
                                     </select>
-                                     <textarea className="description-addRoutine space-addRoutine" value={selectedRoutine.exercise}
+                                    <textarea className="description-addRoutine space-addRoutine" value={selectedRoutine.exercise}
                                         onChange={(e) => {
                                             setSelectedRoutine({ ...selectedRoutine, exercise: e.target.value });
-                                        }} rows={5} readOnly /> 
+                                        }} rows={5} readOnly />
 
                                     <div className="text-addRoutine space-addRoutine">
-                                        <p> Ejercicios seleccionados:</p>                                       
+                                        <p> Ejercicios seleccionados:</p>
                                         <ul id="ListaEditada" className="space-addRoutine" >
-
-                                           
-
-
                                             {selectedOptions.map((option, index) => (
                                                 <li key={index} >
                                                     {option}

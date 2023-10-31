@@ -1,3 +1,33 @@
+/* Agrega estos estilos a tu archivo CSS o componente */
+
+.exercise-list {
+  max-height: 200px; /* Altura máxima para el scroll */
+  overflow-y: auto; /* Añade un scroll vertical si hay más de 200px de altura */
+}
+
+.exercise-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.exercise-list li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.button-addRoutine {
+  margin-right: 8px; /* Espacio entre el botón y el nombre del ejercicio */
+  background-color: #ff0000; /* Cambia el color del botón según tus preferencias */
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.text-addRoutine {
+  margin-bottom: 16px;
+}
+
 /*Add Routine*/
 .content-addRoutine {
   position: fixed;

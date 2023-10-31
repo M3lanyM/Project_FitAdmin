@@ -38,7 +38,6 @@
 
 #chk {
     display: none;
-
 }
 
 
@@ -65,28 +64,73 @@
 .inpLogin {
     width: 65%;
     padding: 5px;
-    border: 2px solid #2b8c8c;
-    border-radius: 8px;
+    border: none;
+    border-bottom: 1.9px solid #2b8c8c;
     font-size: 16px;
-    background-color: #f9f9f9;
-    color: #333;
-    transition: border-color 0.3s ease;
+    background-color: transparent;
     outline: none;
     justify-content: center;
+    color: #727272;
     display: flex;
     margin: 20px auto;
 }
 
-.inpLogin:focus {
-    border-color: #727272;
-    box-shadow: 0 0 5px rgba(121, 111, 108, 0.5);
+.inpLogin::placeholder {
+    color: #2b8c8c;
 }
 
 .inpLogin:hover {
-    background-color: #f0f0f0;
+    border-color: #727272;
 }
 
+/*css contraseña*/
+.password {
+    position: relative;
+    left: 60px;
+    width: 65%;
+}
 
+.password-user {
+    border: none;
+    border-bottom: 1.9px solid #2b8c8c;
+    padding-bottom: 5px;
+    padding-left: 5px;
+    outline: none;
+    background: transparent;
+    width: 100%;
+    color: #727272;
+    font-size: 16px;
+    justify-content: center;
+}
+
+.password-user::placeholder {
+    color: #2b8c8c;
+}
+.password-user:hover {
+    border-color: #727272;
+}
+.password-toggle-button {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.user-view svg {
+    font-size: 1.8em;
+}
+
+.user-view {
+    color: #2b8c8c;
+    padding-bottom: 5px;
+
+}
 
 /*Botones*/
 .btnLogin {
@@ -98,19 +142,19 @@
     color: #fff;
     font-size: 1em;
     font-weight: bold;
-    margin-top: 20px;
+    margin-top: 15px;
     outline: none;
     border: none;
     border-radius: 5px;
     transition: .2s ease-in;
     cursor: pointer;
     border-radius: 10px;
-    background-color: #A1A626;
+    background-color: #1d5e5e;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
 }
 
 .btnLogin:hover {
-    background: #13312f;
+    background: #A1A626;
 
 }
 
@@ -191,6 +235,7 @@
     color: #A1A626;
     left: 8px;
 }
+
 .customInputLabel {
     color: white;
 }
