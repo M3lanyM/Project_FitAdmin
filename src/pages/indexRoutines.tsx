@@ -192,9 +192,9 @@ export default function RoutinePage() {
         setIsRoutineModalOpen(true);
     };
 
-// cambio Limpiar los campos al cerrar el modal
+    // cambio Limpiar los campos al cerrar el modal
     const handleCloseRoutineModal = () => {
-        
+
         setFormData({
             name: "",
             description: "",
@@ -308,6 +308,7 @@ export default function RoutinePage() {
         return exerciseNames;
     };
 
+    // En la función editRoutine, actualiza el estado de los ejercicios seleccionados
     const editRoutine = async (routineId: string) => {
         const routineDocRef = doc(collection(db, 'rutina'), routineId);
         const routineDocSnapshot = await getDoc(routineDocRef);
@@ -316,25 +317,25 @@ export default function RoutinePage() {
             const routineData = routineDocSnapshot.data();
             const exerciseRefs = routineData.ejercicios;
 
-            const exerciseNames = await getExerciseNamesByIds(exerciseRefs);
-
             setSelectedRoutine({
                 id: routineId,
                 name: routineData.nombre,
                 description: routineData.descripcion,
                 series: routineData.serie,
                 repetitions: routineData.repeticion,
-                exercise: exerciseNames.join('\n'),
                 exercises: exerciseRefs,
             });
 
+            const exerciseNames = await getExerciseNamesByIds(exerciseRefs);
+            setSelectedExerciseIds(exerciseNames);
+
             setShowModalEdit(true);
             console.log('Nombres de ejercicios de la rutina:', exerciseNames);
-
         } else {
             console.log('La rutina no existe');
         }
     };
+
 
     const saveChanges = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -612,14 +613,19 @@ export default function RoutinePage() {
                                         }} rows={5} readOnly />
 
                                     <div className="text-addRoutine space-addRoutine">
-                                        <p> Ejercicios seleccionados:</p>
-                                        <ul id="ListaEditada" className="space-addRoutine" >
-                                            {selectedOptions.map((option, index) => (
-                                                <li key={index} >
-                                                    {option}
-                                                    <button className="button-addRoutine" onClick={() => handleOptionRemove(option)}>Eliminar</button>
-                                                </li>
-                                            ))}
+                                        <h2>Ejercicios seleccionados:</h2>
+                                        <ul>
+                                            {selectedExerciseIds.map((exerciseId, index) => {
+                                                const exercise = exerciseOptions.find((option) => option === exerciseId);
+                                                return (
+                                                    <li key={index}>
+                                                        <button className="button-addRoutine" onClick={() => handleOptionRemove(exerciseId)}>
+                                                            Eliminar
+                                                        </button>
+                                                        {exercise}
+                                                    </li>
+                                                );
+                                            })}
                                         </ul>
                                     </div>
                                 </div>
