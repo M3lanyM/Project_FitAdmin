@@ -1,5 +1,5 @@
 import BaseLayout from "@/pages/Sidebar/BaseLayout";
-import { Button, IconButton, InputAdornment, List, Modal, TextField } from "@mui/material";
+import { Autocomplete, Button, IconButton, InputAdornment, List, Modal, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Search as SearchIcon } from '@mui/icons-material';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
@@ -352,6 +352,11 @@ export default function RoutinePage() {
         }
     };
 
+    const cancelEdit = () => {
+        setIsModalOpen(false);
+    };
+
+
     return (
         <BaseLayout>
             <div className='hBill'>
@@ -559,20 +564,17 @@ export default function RoutinePage() {
                             value={editingRoutineData.repetitions}
                             onChange={(e) => setEditingRoutineData({ ...editingRoutineData, repetitions: e.target.value })}
                         />
-                        <select
-                            className="inputformC1"
-                            name="exercise"
+                        <Autocomplete
                             value={formData.exercise}
-                            onChange={(e) => setFormData({ ...formData, exercise: e.target.value })}
-                        >
-                            <option value="">Lista de Ejercicios:</option>
-                            {exerciseOptions.map((option) => (
-                                <option key={option} value={option}>
-                                    {option}
-                                </option>
-                            ))}
-                        </select>
-                        <button onClick={handleAddExerciseToList}>Agregar Ejercicio</button>
+                            onChange={(event, newValue) => {
+                                if (typeof newValue === 'string') {
+                                  setFormData({ ...formData, exercise: newValue });
+                                }
+                              }}
+                            options={exerciseOptions}
+                            renderInput={(params) => <TextField {...params} label="Lista de Ejercicios" />}
+                        />
+                        <Button onClick={handleAddExerciseToList}>Agregar Ejercicio</Button>
 
                         <h3>Ejercicios asociados:</h3>
                         <ul>
@@ -586,6 +588,7 @@ export default function RoutinePage() {
                             ))}
                         </ul>
                         <Button onClick={handleUpdateRoutine}>Guardar Cambios</Button>
+                        <Button onClick={cancelEdit}>Cancelar</Button>
                     </div>
                 </div>
             )}
