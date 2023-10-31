@@ -8,13 +8,13 @@
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   color: #2b8c8c;
   right: -50px;
-  margin-top: -1%;
+  margin-top: -0.8px;
 
 }
 
 .btnExercise {
   width: 190px;
-  height: 44px;
+  height: 42px;
   justify-content: center;
   color: #fff;
   font-weight: bold;
@@ -25,7 +25,7 @@
   box-shadow: 0 0 3px rgba(105, 85, 85, 0.6);
   font-size: 16px;
   margin-left: 8%;
-  margin-top: -2%;
+  margin-top: -1%;
   margin-bottom: 27px;
 }
 
@@ -37,4 +37,169 @@
   width: 100%;
   /* Ancho completo del label */
 
+}
+
+/*modal editar cliente.*/
+
+.modalEditExerc {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modalEditExerc-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  max-width: 60%;
+  max-height: 85%;
+  width: 100%;
+  overflow-y: auto;
+}
+
+/* Estilo del scroll */
+.modalEditExerc-content::-webkit-scrollbar {
+  width: 10px;
+  background-color: #f2f2f2;
+  border-radius: 5px;
+
+}
+
+.modalEdit-content::-webkit-scrollbar-thumb {
+  background-color: #a7a5a5;
+  border-radius: 5px;
+}
+
+.personalExerc-title {
+  text-align: center;
+  font-size: 25px;
+  margin: 20px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  color: #A1A626;
+}
+
+.Exercise-title {
+  font-weight: bold;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 19px;
+  color: #737373;
+  margin-bottom: 5px;
+}
+
+.personalExerc {
+  width: 28%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: 'Franklin Gothic', 'Arial Narrow', Arial, sans-serif;
+  border: 1px solid #2b8c8c;
+}
+
+.personalExerc:focus {
+  border-color: #A1A626;
+  outline: none;
+}
+
+.descripcion-data {
+  width: 60%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: 'Franklin Gothic', 'Arial Narrow', Arial, sans-serif;
+  border: 1px solid #2b8c8c;
+}
+
+.descripcion-data:focus {
+  border-color: #A1A626;
+  outline: none;
+}
+
+
+.saveExerc-button {
+  width: 15%;
+  margin-top: 20px;
+  background-color: #2b8c8c;
+  color: white;
+  border: none;
+  padding: 0.7rem 1.2rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 16px;
+  margin-right: 3%;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
+  margin-left: 60%;
+}
+
+.cancelExerc-button {
+  width: 15%;
+  margin-left: 2%;
+  margin-top: 20px;
+  background-color: #737373;
+  color: white;
+  border: none;
+  padding: 0.7rem 1.2rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 16px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+}
+
+.cancelExerc-button:hover,
+.saveExerc-button:hover {
+  color: #000;
+  background-color: #ccc;
+}
+
+.modal-ready{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+
+}
+.custom-modal-ready{
+  width: 20%;
+  height: 20%;
+  background-color: white;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+.confirmReady{
+  background-color: #2b8c8c;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  margin-right: 10px;
+  cursor: pointer;
+  border-radius: 6px;
+  margin-top: 10%;
+  margin-left: 34%;
+}
+
+.text-ready{
+  font-size: 16px;
+  margin-top: 3%;
+  font-weight: bold;
+  margin-left: 1%;
+  text-align: center;
 }

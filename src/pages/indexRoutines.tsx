@@ -531,64 +531,72 @@ export default function RoutinePage() {
                 </div>
             )}
             {isDeleteConfirmationOpen && (
-                <div className="modal">
-                    <div className="modal-content">
-                        <p>Confirmación de eliminación</p>
-                        <p>¿Está seguro de que desea eliminar esta rutina? </p>
-                        <button className="colors" onClick={confirmDeleteRoutine}>Eliminar</button>
-                        <button className="exit-addRoutine" onClick={closeDeleteConfirmation}>Cancelar</button>
+                <div className="modal-delete">
+                    <div className="custom-modal-delete">
+                        <p className='text-delete'>¿Estás seguro de que deseas eliminar esta rutina?</p>
+                        <button className="confirmDelete" onClick={confirmDeleteRoutine}>Si</button>
+                        <button className="cancelDelete" onClick={closeDeleteConfirmation}>No</button>
                     </div>
                 </div>
             )}
             {isModalOpen && editingRoutineData && (
-                <div className="modal">
-                    <div className="modal-content">
-                        <h3>Editar Rutina</h3>
-                        <TextField
-                            label="Nombre"
-                            value={editingRoutineData.name}
-                            onChange={(e) => setEditingRoutineData({ ...editingRoutineData, name: e.target.value })}
-                        />
-                        <TextField
-                            label="Descripción"
-                            value={editingRoutineData.description}
-                            onChange={(e) => setEditingRoutineData({ ...editingRoutineData, description: e.target.value })}
-                        />
-                        <TextField
-                            label="Series"
-                            value={editingRoutineData.series}
-                            onChange={(e) => setEditingRoutineData({ ...editingRoutineData, series: e.target.value })}
-                        />
-                        <TextField
-                            label="Repeticiones"
-                            value={editingRoutineData.repetitions}
-                            onChange={(e) => setEditingRoutineData({ ...editingRoutineData, repetitions: e.target.value })}
-                        />
-                        <Autocomplete
-                            value={formData.exercise}
-                            onChange={(event, newValue) => {
-                                if (typeof newValue === 'string') {
-                                  setFormData({ ...formData, exercise: newValue });
-                                }
-                              }}
-                            options={exerciseOptions}
-                            renderInput={(params) => <TextField {...params} label="Lista de Ejercicios" />}
-                        />
-                        <Button onClick={handleAddExerciseToList}>Agregar Ejercicio</Button>
+                <div className="modalEdit">
+                    <div className="modalEdit-content">
+                        <h2 className="personalInfo-title">Editar Rutina</h2>
+                        <div className="input-group ">
+                            <TextField
+                                label="Nombre"
+                                value={editingRoutineData.name}
+                                onChange={(e) => setEditingRoutineData({ ...editingRoutineData, name: e.target.value })}
+                            />
+                            <TextField
+                                label="Descripción"
+                                value={editingRoutineData.description}
+                                onChange={(e) => setEditingRoutineData({ ...editingRoutineData, description: e.target.value })}
+                            />
 
-                        <h3>Ejercicios asociados:</h3>
-                        <ul>
-                            {selectedRoutineExercises.map((exercise, index) => (
-                                <li key={index}>
-                                    {exercise}
-                                    <IconButton onClick={() => handleExerciseRemove(exercise)}>
-                                        <DeleteIcon />
-                                    </IconButton>
-                                </li>
-                            ))}
-                        </ul>
-                        <Button onClick={handleUpdateRoutine}>Guardar Cambios</Button>
-                        <Button onClick={cancelEdit}>Cancelar</Button>
+                        </div>
+                        <div className="input-group ">
+                            <TextField
+                                label="Series"
+                                value={editingRoutineData.series}
+                                onChange={(e) => setEditingRoutineData({ ...editingRoutineData, series: e.target.value })}
+                            />
+                            <TextField
+                                label="Repeticiones"
+                                value={editingRoutineData.repetitions}
+                                onChange={(e) => setEditingRoutineData({ ...editingRoutineData, repetitions: e.target.value })}
+                            />
+                        </div>
+                        <div className="input-group2 ">
+                            <Autocomplete
+                                className="Autocomplete-Exerc"
+                                value={formData.exercise}
+                                onChange={(event, newValue) => {
+                                    if (typeof newValue === 'string') {
+                                        setFormData({ ...formData, exercise: newValue });
+                                    }
+                                }}
+                                options={exerciseOptions}
+                                renderInput={(params) => <TextField {...params} label="Lista de Ejercicios" />}
+                            />
+                            <button className="add-buttonRutine" onClick={handleAddExerciseToList}>Agregar Ejercicio</button>
+                        </div>
+
+                        <h2 className="Rutine-title">Ejercicios asociados:</h2>
+                        <div className="exercise-list-container">
+                            <ul className="ul-Routine">
+                                {selectedRoutineExercises.map((exercise, index) => (
+                                    <li className="li-Routine" key={index}>
+                                        {exercise}
+                                        <IconButton onClick={() => handleExerciseRemove(exercise)}>
+                                            <DeleteIcon />
+                                        </IconButton>
+                                    </li>
+                                ))}
+                            </ul></div>
+                        <button className="saveRutin-button" onClick={handleUpdateRoutine}>Guardar Cambios</button>
+                        <button className="cancelRutin-button" onClick={cancelEdit}>Cancelar</button>
                     </div>
                 </div>
             )}

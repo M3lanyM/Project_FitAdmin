@@ -1,5 +1,5 @@
 import BaseLayout from "@/pages/Sidebar/BaseLayout";
-import { IconButton, InputAdornment, TextField } from "@mui/material";
+import { IconButton, InputAdornment, TextField, TextareaAutosize } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Search as SearchIcon } from '@mui/icons-material';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
@@ -75,9 +75,7 @@ export default function ExercisePage() {
             });
 
             const filteredData = data.filter((exercise) =>
-                exercise.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                exercise.category.toLowerCase().includes(searchQuery.toLowerCase())
-
+                exercise.name.toLowerCase().includes(searchQuery.toLowerCase())
             );
 
             setTableData(filteredData);
@@ -167,7 +165,8 @@ export default function ExercisePage() {
                     <div className='searchBill1'>
                         <label className="custom-labelExercise">Ejercicios</label>
                         <button className="btnExercise" onClick={handlerExercise}>+ Agregar Ejercicio</button>
-                    </div>    <div className='searchBill'>
+                    </div>
+                    <div className='searchBill'>
                         <TextField
                             InputProps={{
                                 endAdornment: (
@@ -178,11 +177,11 @@ export default function ExercisePage() {
                             }}
                             placeholder="Buscar ejercicio"
                             sx={{
-                                width: '120%', height: '1%',
+                                width: '129%', height: '1%',
                                 '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
                                     borderColor: '#A1A626',
                                 },
-                                bottom: '-39%', right: '114%',
+                                bottom: '-33%', right: '115%',
                             }}
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
@@ -206,7 +205,7 @@ export default function ExercisePage() {
                                     <td>{exercise.name}</td>
                                     <td>{exercise.description}</td>
                                     <td>
-                                        <EditIcon className="edit-icon" onClick={() => editExercise(exercise)}/>
+                                        <EditIcon className="edit-icon" onClick={() => editExercise(exercise)} />
                                         <DeleteIcon className="delete-icon" />
                                     </td>
                                 </tr>
@@ -245,94 +244,90 @@ export default function ExercisePage() {
                 </div>
             </div>
             {isExerciseModalOpen && (
-                <div className="modal-addRoutine">
-                    <div className="content-addRoutine">
-                        <span className="close-addRoutine " onClick={handleCloseRoutineModal}>&times;</span>
-                        <div className="">
-                            <div>
-                                <div>
-                                    <h2 className="service-titles">Agregar Ejercicio </h2>
-                                </div>
-                                <div className="line-addRoutine"></div>
-                                <div className="">
-                                    <h2 className="text-addRoutiner">Nombre Del Ejercicio</h2>
-                                    <input type="text" className="info-addRoutine" placeholder="Nombre" value={formData.name}
-                                        onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
-                                </div>
-                            </div>
-                            <div className="">
-                                <h2 className="text-addRoutine">Descripcion</h2>
-                                <textarea name="descrption" placeholder="Descripcion" className="description-addRoutine" value={formData.description}
-                                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}></textarea>
-                            </div>
-                            <div className="line-addRoutine"></div>
-                            <div className="button-addRoutine2 flexs center" >
-                                <button className="colors" onClick={handleTextareaClear}>Agregar </button>
-                                <button className="exit-addRoutine" onClick={handleCloseRoutineModal}>Cancelar</button>
-                            </div>
-                            {showModal && (
-                                <div className="modal">
-                                    <div className="modal-content">
-                                        <p>Se agrego el nuevo ejercicio</p>
-                                        <button className="button-addRoutine colors" onClick={closeModal}>Listo</button>
-                                    </div>
-                                </div>
-                            )}
+                <div className="modalEditExerc">
+                    <div className="modalEditExerc-content">
+                        <h2 className="personalExerc-title">Agregar Ejercicio</h2>
+                        <div className="form-row">
+                            <h2 className="Exercise-title" >Nombre del Ejercicio:</h2>
+                            <input
+                                type="text"
+                                className="personalExerc"
+                                placeholder="Nombre"
+                                value={formData.name}
+                                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                            />
                         </div>
+                        <div className="form-row">
+                            <h2 className="Exercise-title">Descripción</h2>
+                            <textarea
+                                name="description"
+                                placeholder="Descripcion"
+                                className="descripcion-data"
+                                value={formData.description}
+                                onChange={(e) => setFormData({ ...formData, description: e.target.value })}></textarea>
+                        </div>
+                        <button className="saveExerc-button"
+                            onClick={handleTextareaClear}>
+                            Agregar
+                        </button>
+                        <button className="cancelExerc-button"
+                            onClick={handleCloseRoutineModal}>
+                            Cancelar
+                        </button>
 
+                        {showModal && (
+                            <div className="modal-ready">
+                                <div className="custom-modal-ready">
+                                    <p className='text-ready'>Se agrego el nuevo ejercicio</p>
+                                    <button className="confirmReady" onClick={closeModal}>Listo</button>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             )}
             {showModalEdit && selectedExercise && (
-                <div className="modal-addRoutine">
-                    <div className="content-addRoutine">
-                        <span className="close-addRoutine " onClick={handleCloseRoutineModal}>&times;</span>
-                        <div className="">
-                            <div>
-                                <h2 className="service-titles">Agregar Ejercicio </h2>
+                <div className="modalEditExerc">
+                    <div className="modalEditExerc-content">
+                        <h2 className="personalExerc-title">Editar Ejercicio </h2>
+
+                        <form onSubmit={saveChanges} className="">
+                            <div className="line-addRoutine"></div>
+                            <div className="form-row">
+                                <h2 className="Exercise-title" >Nombre Del Ejercicio</h2>
+                                <input
+                                    type="text"
+                                    className="personalExerc"
+                                    placeholder="Nombre"
+                                    value={selectedExercise.name}
+                                    onChange={(e) => {
+                                        setSelectedExercise({ ...selectedExercise, name: e.target.value });
+                                    }} />
                             </div>
-                            <form onSubmit={saveChanges} className="">
-                                <div>
+                            <div className="form-row">
+                                <h2 className="Exercise-title">Descripcion</h2>
+                                <textarea
+                                    name="descrption"
+                                    placeholder="Descripcion"
+                                    className="descripcion-data"
+                                    value={selectedExercise.description}
+                                    onChange={(e) => {
+                                        setSelectedExercise({ ...selectedExercise, description: e.target.value });
+                                    }}>
 
-                                    <div className="line-addRoutine"></div>
-                                    <div className="">
-                                        <h2 className="text-addRoutiner">Nombre Del Ejercicio</h2>
-                                        <input type="text" className="info-addRoutine" placeholder="Nombre" value={selectedExercise.name}
-                                        onChange={(e) => {
-                                          setSelectedExercise({ ...selectedExercise, name: e.target.value });
-                                        }}/>
-                                    </div>
-                                </div>
-                                <div className="">
-                                    <h2 className="text-addRoutine">Descripcion</h2>
-                                    <textarea name="descrption" placeholder="Descripcion" className="description-addRoutine" value={selectedExercise.description}
-                                        onChange={(e) => {
-                                          setSelectedExercise({ ...selectedExercise, description: e.target.value });
-                                        }}></textarea>
-                                </div>
-                                <div className="line-addRoutine"></div>
-                                <div className="button-addRoutine2 flexs center" >
-                                    <button className="colors" onClick={saveChanges}>
-                                        Actualizar
-                                    </button>
-                                    <button className="exit-addRoutine" onClick={cancelEdit}>
-                                        Cancelar
-                                    </button>
-                                </div>
-                                {showModal && (
-                                    <div className="modal">
-                                        <div className="modal-content">
-                                            <p>Se agrego el nuevo ejercicio</p>
-                                            <button className="button-addRoutine colors" onClick={closeModal}>Listo</button>
-                                        </div>
-                                    </div>
-                                )}
-                            </form>
-                        </div>
-
+                                </textarea>
+                            </div>
+                            <div className="line-addRoutine"></div>
+                            <button className="saveExerc-button" onClick={saveChanges}>
+                                Actualizar
+                            </button>
+                            <button className="cancelExerc-button" onClick={cancelEdit}>
+                                Cancelar
+                            </button>
+                        </form>
                     </div>
                 </div>
             )}
-        </BaseLayout>
+        </BaseLayout >
     );
 }

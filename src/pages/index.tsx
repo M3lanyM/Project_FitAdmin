@@ -29,6 +29,7 @@ export default function Home() {
   const [apellido, setApellido] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showSuccessModal, setShowSuccessModal] = useState(false); // Estado para el modal
 
   const handleToggle = () => {
     setShowLogin(!showLogin);
@@ -54,8 +55,16 @@ export default function Home() {
         nombre,
         apellido,
       };
+
       await createUserWithEmailAndPassword(auth, correo, contrasena);
       await addDoc(collection(db, "usuario"), registrousario);
+      // Limpiar los campos después del registro exitoso
+      setCorreo("");
+      setContrasena("");
+      setNombre("");
+      setApellido("");
+
+      setShowSuccessModal(true);
     } catch (error) {
       console.error(error);
     }
@@ -67,13 +76,13 @@ export default function Home() {
         // Mostrar un mensaje de error o hacer lo que necesites cuando falta el correo o la contraseña.
         return;
       }
-  
+
       // Autenticar al usuario con Firebase usando correo y contraseña
       await signInWithEmailAndPassword(auth, correo, contrasena);
-  
+
       // Obtener el usuario actual después de la autenticación
       const user = auth.currentUser;
-  
+
       if (user) {
         // El usuario está autenticado
         // Ahora puedes realizar acciones adicionales si es necesario
@@ -90,7 +99,7 @@ export default function Home() {
       //setIsModalOpenError(true);
     }
   };
-  
+
   return (
     <>
       <div className="bodyLogin">
@@ -196,6 +205,14 @@ export default function Home() {
 
             </form>
           </div>
+          {showSuccessModal && (
+            <div className="modal-successful">
+              <div className="custom-modal-successful">
+                <span className="close" onClick={() => setShowSuccessModal(false)}>&times;</span>
+                <p className='text-delete'>¡Registro exitoso!</p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
