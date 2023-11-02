@@ -197,10 +197,15 @@ export default function MembershipPage() {
         <BaseLayout>
             <div className="hClient">
                 <div className="ContaMember">
-                    <h1 className="title-member">Membresias</h1>
-                    <button onClick={handlerMembership} className="btnMember">
-                        + Agregar Membresias</button>
-                    <div className='hClient'>
+                    <div className='searchBill1'>
+                        <h1 className="custom-labelExercise">Membresias</h1>
+                        <button
+                            onClick={handlerMembership}
+                            className="btnMember">
+                            + Agregar Membresias
+                        </button>
+                    </div>
+                    <div className='searchBill'>
                         <TextField
                             InputProps={{
                                 endAdornment: (
@@ -211,11 +216,11 @@ export default function MembershipPage() {
                             }}
                             placeholder="Buscar Membresia"
                             sx={{
-                                width: '85%',
+                                width: '129%', height: '1%',
                                 '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                                    borderColor: '#2b8c8c',
+                                    borderColor: '#A1A626',
                                 },
-                                marginRight: '300px',
+                                bottom: '-33%', right: '115%',
                             }}
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
@@ -311,10 +316,9 @@ export default function MembershipPage() {
                                     onChange={(e) => setFormData({ ...formData, price: e.target.value })} />
                             </div>
                             <div className="line-addMember"></div>
-                            <div className="button-addRoutine2 flexs center" >
-                                <button className="colors" onClick={handleTextareaClear}>Agregar </button>
-                                <button className="exit-addRoutine" onClick={handleCloseMembershipModal}>Cancelar</button>
-                            </div>
+                            <button className="saveExerc-button" onClick={handleTextareaClear}>Agregar </button>
+                            <button className="cancelExerc-button" onClick={handleCloseMembershipModal}>Cancelar</button>
+
                             {showModal && (
                                 <div className="modal">
                                     <div className="modal-content">
@@ -366,14 +370,13 @@ export default function MembershipPage() {
                                         }} />
                                 </div>
                                 <div className="line-addMember"></div>
-                                <div className="button-addRoutine2 flexs center" >
-                                    <button className="colors" onClick={saveChanges}>
-                                        Actualizar
-                                    </button>
-                                    <button className="exit-addRoutine" onClick={cancelEdit}>
-                                        Cancelar
-                                    </button>
-                                </div>
+                                <button className="saveExerc-button" onClick={saveChanges}>
+                                    Actualizar
+                                </button>
+                                <button className="cancelExerc-button" onClick={cancelEdit}>
+                                    Cancelar
+                                </button>
+
                                 {showModal && (
                                     <div className="modal">
                                         <div className="modal-content">

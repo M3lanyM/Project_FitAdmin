@@ -449,84 +449,91 @@ export default function RoutinePage() {
                 <div className="modal-addRoutine">
                     <div className="content-addRoutine">
                         <span className="close-addRoutine " onClick={handleCancelClear}>&times;</span>
-                        <div className="">
-                            <div>
-                                <div>
-                                    <h2 className="service-titles">Crear Rutinas</h2>
-                                </div>
-                                <div className="line-addRoutine"></div>
-                                <div className="">
-                                    <h2 className="text-addRoutiner">Nombre De La Rutina</h2>
-                                    <input type="text" className="info-addRoutine" placeholder="Nombre" value={formData.name}
-                                        onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
-                                </div>
-                            </div>
-                            <div className="">
-                                <h2 className="text-addRoutine">Descripcion</h2>
-                                <textarea name="descrption" placeholder="Descripcion" className="description-addRoutine" value={formData.description}
-                                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}></textarea>
-                            </div>
-                            <div className="line-addRoutine"></div>
-                            <div className="">
-                                <h2 className="text-addRoutiner">Series Del Ejercicio</h2>
-                                <input type="text" className="info-addRoutine" placeholder="Series" value={formData.series}
+                        <div>
+                            <h2 className="personalExerc-title">Crear Rutinas</h2>
+                        </div>
+                        <div className="line-addRoutine"></div>
+                        <div className="form-row">
+                            <h2 className="Exercise-title">Nombre De La Rutina</h2>
+                            <input
+                                type="text"
+                                className="personalRoutine"
+                                placeholder="Nombre"
+                                value={formData.name}
+                                onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
+                        </div>
+                        <div className="form-row">
+                            <h2 className="Exercise-title">Descripcion</h2>
+                            <textarea
+                                name="descrption"
+                                placeholder="Descripcion"
+                                className="descripcion-data"
+                                value={formData.description}
+                                onChange={(e) => setFormData({ ...formData, description: e.target.value })}></textarea>
+                        </div>
+                        <div className="input-groupRout">
+                            <div className="form-row">
+                                <h2 className="Exercise-title">Series del Ejercicio</h2>
+                                <input
+                                    type="number"
+                                    className="personalRoutine1"
+                                    placeholder="Series"
+                                    value={formData.series}
                                     onChange={(e) => setFormData({ ...formData, series: e.target.value })} />
                             </div>
-                            <div className="line-addRoutine"></div>
-                            <div className="">
-                                <h2 className="text-addRoutiner">Repeticiones Del Ejercicio</h2>
-                                <input type="text" className="info-addRoutine" placeholder="Repeticiones" value={formData.repetitions}
+                            <div className="form-row">
+                                <h2 className="Exercise-title">Repeticiones del Ejercicio</h2>
+                                <input
+                                    type="number"
+                                    className="personalRoutine1"
+                                    placeholder="Repeticiones"
+                                    value={formData.repetitions}
                                     onChange={(e) => setFormData({ ...formData, repetitions: e.target.value })} />
                             </div>
-                            <div className="line-addRoutine"></div>
-                            <div>
-                                <select
-                                    className="inputformC1"
-                                    name="exercise"
-                                    value={formData.exercise}
-                                    onChange={handleSelectChange}
-                                >
-                                    <option value="">Lista de Ejercicios:</option>
-                                    {exerciseOptions.map((option) => (
-                                        <option key={option} value={option}>
-                                            {option}
-                                        </option>
-                                    ))}
-                                </select>
-                                {/*<textarea className="description-addRoutine space-addRoutine" value={textareaValue} rows={5} readOnly />*/}
-                                <div className="text-addRoutine space-addRoutine">
-                                    <h2>Ejercicios seleccionados:</h2>
-                                    <div className="exercise-list">
-                                        <ul>
-                                            {selectedExerciseIds.map((exerciseId, index) => {
-                                                const exercise = exerciseOptions.find((option) => option === exerciseId);
-                                                return (
-                                                    <li key={index}>
-                                                        <button className="button-addRoutine" onClick={() => handleOptionRemove(exerciseId)}>
-                                                            Eliminar
-                                                        </button>
-                                                        {exercise}
-                                                    </li>
-                                                );
-                                            })}
-                                        </ul>
-                                    </div>
-                                </div>
+                        </div>
+                        <select
+                            className="selectRoutine"
+                            name="exercise"
+                            value={formData.exercise}
+                            onChange={handleSelectChange}
+                        >
+                            <option value="">Lista de Ejercicios:</option>
+                            {exerciseOptions.map((option) => (
+                                <option key={option} value={option}>
+                                    {option}
+                                </option>
+                            ))}
+                        </select>
+                        <div className="form-row">
+                            <h2 className="title-selectExercise">Ejercicios seleccionados:</h2>
+                            <div className="exercise-list">
+                                <ul>
+                                    {selectedExerciseIds.map((exerciseId, index) => {
+                                        const exercise = exerciseOptions.find((option) => option === exerciseId);
+                                        return (
+                                            <li key={index}>
+                                                <IconButton onClick={() => handleOptionRemove(exerciseId)}>
+                                                    <DeleteIcon />
+                                                </IconButton>
+                                                {exercise}
+                                            </li>
+
+                                        );
+                                    })}
+                                </ul>
                             </div>
-                            <div className="button-addRoutine2" >
-                                <button className="colors" onClick={handleTextareaClear}>Crear Rutina</button>
-                                <button className="exit-addRoutine" onClick={handleCancelClear}>Cancelar</button>
-                            </div>
-                            {showModal && (
-                                <div className="modal">
-                                    <div className="modal-content">
-                                        <p>Se guardo la nueva rutina</p>
-                                        <button className="button-addRoutine colors" onClick={closeModal}>Listo</button>
-                                    </div>
-                                </div>
-                            )}
                         </div>
 
+                        <button className="saveRutin-button" onClick={handleTextareaClear}>Crear Rutina</button>
+                        <button className="cancelRutin-button" onClick={handleCancelClear}>Cancelar</button>
+                        {showModal && (
+                            <div className="modal-ready">
+                                <div className="custom-modal-ready">
+                                    <p className='text-ready'>Se agrego una nueva rutina</p>
+                                    <button className="confirmReady" onClick={closeModal}>Listo</button>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             )}

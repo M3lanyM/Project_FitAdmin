@@ -164,7 +164,11 @@ export default function ExercisePage() {
                 <div className='ContaRoutine'>
                     <div className='searchBill1'>
                         <label className="custom-labelExercise">Ejercicios</label>
-                        <button className="btnExercise" onClick={handlerExercise}>+ Agregar Ejercicio</button>
+                        <button
+                            className="btnExercise"
+                            onClick={handlerExercise}>
+                            + Agregar Ejercicio
+                        </button>
                     </div>
                     <div className='searchBill'>
                         <TextField
@@ -278,7 +282,7 @@ export default function ExercisePage() {
                         {showModal && (
                             <div className="modal-ready">
                                 <div className="custom-modal-ready">
-                                    <p className='text-ready'>Se agrego el nuevo ejercicio</p>
+                                    <p className='text-ready'>Se agrego un nuevo ejercicio</p>
                                     <button className="confirmReady" onClick={closeModal}>Listo</button>
                                 </div>
                             </div>

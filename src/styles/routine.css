@@ -49,14 +49,13 @@
 
 /*Add Routine*/
 .content-addRoutine {
-  position: fixed;
-  padding: 3%;
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
   max-width: 60%;
   max-height: 85%;
-  background-color: white;
-  border-radius: 8px;
-  text-align: center;
-  width: 50%;
+  width: 100%;
   overflow-y: auto;
 }
 
@@ -71,7 +70,6 @@
   height: 100%;
   z-index: 100;
   background-color: rgba(0, 0, 0, 0.5);
-
 }
 
 .close-addRoutine {
@@ -83,45 +81,17 @@
   color: black;
   cursor: pointer;
 }
-
+/*Add Routine*/
 .text-addRoutine {
   justify-content: center;
   color: #000;
   font-size: 17px;
 }
 
-.info-addRoutine {
-  align-items: center;
-  margin-top: 2%;
-  padding: 0.5% 3%;
-  font-size: 15px;
-  font-weight: bold;
-  background-color: white;
-  color: #727272;
-  border: none;
-  border-radius: 20px;
-  border: 2px solid #727272;
-}
-
 .line-addRoutine {
   margin-top: 2%;
   border-bottom: 1px solid #e5e7eb;
 }
-
-.description-addRoutine {
-  justify-content: center;
-  align-items: center;
-  margin-top: 2%;
-  padding: 7% 3%;
-  font-size: 15px;
-  font-weight: bold;
-  background-color: white;
-  color: #727272;
-  border: none;
-  border-radius: 20px;
-  border: 2px solid #727272;
-}
-
 .space-addRoutine {
   margin-top: 5%;
 }
@@ -322,9 +292,9 @@
 
 .tableRoutine-container {
   width: 69%;
-  height: 54%;
+  height: 55%;
   margin-left: 3.3%;
-  margin-top: 19.5%;
+  margin-top: 18.6%;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 4px 10px 0 rgba(0, 0, 0, 0.1);
   overflow-y: auto;
   background-color: white;
@@ -432,4 +402,61 @@ td {
 .saveRutin-button:hover {
   color: #000;
   background-color: #ccc;
+}
+
+
+/*si*/
+.personalRoutine {
+  width: 28%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: 'Franklin Gothic', 'Arial Narrow', Arial, sans-serif;
+  border: 1px solid #2b8c8c;
+}
+
+.Routine:focus {
+  border-color: #A1A626;
+  outline: none;
+}
+.input-groupRout{
+  display: flex;
+  gap: 100px;
+  margin-top: 2%;
+}
+.personalRoutine1 {
+  width: 96%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: 'Franklin Gothic', 'Arial Narrow', Arial, sans-serif;
+  border: 1px solid #2b8c8c;
+}
+.personalRoutine1:focus {
+  border-color: #A1A626;
+  outline: none;
+}
+.selectRoutine{
+  width: 27%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  font-family: 'Franklin Gothic', 'Arial Narrow', Arial, sans-serif;
+  border: 1px solid #2b8c8c;
+  margin-top: 1%;
+
+}
+.selectRoutine:focus {
+  border-color: #A1A626;
+  outline: none;
+}
+.title-selectExercise{
+  text-align: left;
+  font-size: 20px;
+  margin: 15px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  color: #A1A626;
 }
