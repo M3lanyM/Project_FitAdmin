@@ -14,6 +14,7 @@ import { initializeApp } from "firebase/app";
 interface TableData {
     id: string;
     name: string;
+    category: string;
     description: string;
 }
 
@@ -34,6 +35,7 @@ export default function ExercisePage() {
 
     const [formData, setFormData] = useState({
         name: "",
+        category: "",
         description: "",
     });
 
@@ -43,6 +45,7 @@ export default function ExercisePage() {
             const docRef = await addDoc(collection(db, "ejercicio"), {
                 nombre: formData.name,
                 descripcion: formData.description,
+                categoria: formData.category,
             });
 
             console.log("Documento escrito con ID: ", docRef.id);
@@ -50,6 +53,7 @@ export default function ExercisePage() {
             // Limpia el formulario después de la presentación exitosa
             setFormData({
                 name: "",
+                category: "",
                 description: "",
             });
 
@@ -62,7 +66,7 @@ export default function ExercisePage() {
         const exerciseCollection = collection(db, 'ejercicio');
         const q = query(exerciseCollection);
 
-        // Crea un oyente en tiempo real para la colección de membresia
+        // Crea un oyente en tiempo real para la colección de ejercicio
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
             const data = querySnapshot.docs.map((doc) => {
                 const { nombre, categoria, descripcion } = doc.data();
@@ -75,7 +79,8 @@ export default function ExercisePage() {
             });
 
             const filteredData = data.filter((exercise) =>
-                exercise.name.toLowerCase().includes(searchQuery.toLowerCase())
+                exercise.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                exercise.category.toLowerCase().includes(searchQuery.toLowerCase())
             );
 
             setTableData(filteredData);
@@ -144,6 +149,7 @@ export default function ExercisePage() {
             const memberRef = doc(db, 'ejercicio', selectedExercise.id.toString());
             await updateDoc(memberRef, {
                 nombre: selectedExercise.name,
+                categoria: selectedExercise.category,
                 descripcion: selectedExercise.description,
             });
 
@@ -198,7 +204,7 @@ export default function ExercisePage() {
                     <thead>
                         <tr className="fixed-header-row">
                             <th className="th-tableRoutine">Nombre</th>
-                            <th className="th-tableRoutine">Descripción</th>
+                            <th className="th-tableRoutine">Categoria</th>
                             <th className="th-tableRoutine">Acción</th>
                         </tr>
                     </thead>
@@ -207,7 +213,7 @@ export default function ExercisePage() {
                             .map((exercise, index) => (
                                 <tr key={index} className="tableMember-row">
                                     <td>{exercise.name}</td>
-                                    <td>{exercise.description}</td>
+                                    <td>{exercise.category}</td>
                                     <td>
                                         <EditIcon className="edit-icon" onClick={() => editExercise(exercise)} />
                                         <DeleteIcon className="delete-icon" />
@@ -262,6 +268,16 @@ export default function ExercisePage() {
                             />
                         </div>
                         <div className="form-row">
+                            <h2 className="Exercise-title" >Categoria del Ejercicio:</h2>
+                            <input
+                                type="text"
+                                className="personalExerc"
+                                placeholder="Categoria"
+                                value={formData.category}
+                                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                            />
+                        </div>
+                        <div className="form-row">
                             <h2 className="Exercise-title">Descripción</h2>
                             <textarea
                                 name="description"
@@ -306,6 +322,17 @@ export default function ExercisePage() {
                                     value={selectedExercise.name}
                                     onChange={(e) => {
                                         setSelectedExercise({ ...selectedExercise, name: e.target.value });
+                                    }} />
+                            </div>
+                            <div className="form-row">
+                                <h2 className="Exercise-title" >Categoria Del Ejercicio</h2>
+                                <input
+                                    type="text"
+                                    className="personalExerc"
+                                    placeholder="Categoria"
+                                    value={selectedExercise.category}
+                                    onChange={(e) => {
+                                        setSelectedExercise({ ...selectedExercise, category: e.target.value });
                                     }} />
                             </div>
                             <div className="form-row">
