@@ -8,7 +8,7 @@ import FormControl from '@mui/material/FormControl';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import React from 'react';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { IconButton, TextField } from '@mui/material';
+import { IconButton, TextField, Tooltip } from '@mui/material';
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import firebaseConfig from "../firebase/config";
 import { addDoc, collection, getDocs, getFirestore, query, where } from 'firebase/firestore';
@@ -29,7 +29,10 @@ export default function Home() {
   const [apellido, setApellido] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showSuccessModal, setShowSuccessModal] = useState(false); // Estado para el modal
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [showEmailModal, setShowEmailModal] = useState(false);
+  const [showEmptyFieldModal, setShowEmptyFieldModal] = useState(false);
 
   const handleToggle = () => {
     setShowLogin(!showLogin);
@@ -49,6 +52,16 @@ export default function Home() {
   const Registration = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
+      if (correo.trim() === "" || contrasena.trim() === "" || nombre.trim() === "" || apellido.trim() === "") {
+        setShowEmptyFieldModal(true);
+        return;
+      }
+      const querySnapshot = await getDocs(query(collection(db, 'usuario'), where('correo', '==', correo)));
+      if (!querySnapshot.empty) {
+        // El correo ya está registrado
+        setShowEmailModal(true);
+        return;
+      }
       const registrousario = {
         correo,
         contrasena,
@@ -73,7 +86,7 @@ export default function Home() {
     event.preventDefault();
     try {
       if (correo.trim() === "" || contrasena.trim() === "") {
-        // Mostrar un mensaje de error o hacer lo que necesites cuando falta el correo o la contraseña.
+        setShowEmptyFieldModal(true);
         return;
       }
 
@@ -91,12 +104,12 @@ export default function Home() {
       } else {
         // El usuario no está autenticado correctamente
         // Puedes mostrar un mensaje de error o realizar otras acciones aquí
+        setShowErrorModal(true); // Mostrar el modal de error
+
       }
     } catch (error) {
       console.error(error);
-      // Manejar errores, por ejemplo, mostrar un mensaje de error
-      //setErrorMessage("Correo/Contraseña incorrectos.");
-      //setIsModalOpenError(true);
+      setShowErrorModal(true);
     }
   };
 
@@ -121,7 +134,7 @@ export default function Home() {
                     onChange={(e) => setCorreo(e.target.value)}
                     endAdornment={
                       <InputAdornment position="end">
-                        <AccountCircle className="iconForm" />
+                        <AccountCircle className="iconForm1" />
                       </InputAdornment>
                     }
                     classes={{ underline: 'inputUnderline' }} // Asigna la clase personalizada al borde inferior
@@ -173,23 +186,25 @@ export default function Home() {
                 value={correo}
                 onChange={(e) => setCorreo(e.target.value)} required />
 
-              <div className="password">
-                <input
-                  className="password-user"
-                  type={showPassword ? "text" : "password"}
-                  name="passwordUser"
-                  placeholder="Contraseña"
-                  value={contrasena}
-                  onChange={(e) => setContrasena(e.target.value)}
-                />
-                <button
-                  type="button"
-                  onClick={togglePasswordVisibility}
-                  className="user-view  password-toggle-button"
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </button>
-              </div>
+              <Tooltip title="Contraseña (mínimo 6 caracteres)" arrow placement="top">
+                <div className="password">
+                  <input
+                    className="password-user"
+                    type={showPassword ? "text" : "password"}
+                    name="passwordUser"
+                    placeholder="Contraseña"
+                    value={contrasena}
+                    onChange={(e) => setContrasena(e.target.value)}
+                  />
+                  <button
+                    type="button"
+                    onClick={togglePasswordVisibility}
+                    className="user-view  password-toggle-button"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </button>
+                </div>
+              </Tooltip>
 
               <input
                 className="inpLogin"
@@ -212,18 +227,50 @@ export default function Home() {
             </form>
           </div>
           {showSuccessModal && (
-            <div className="modal-successful">
-              <div className="custom-modal-successful">
-                <span className="close" onClick={() => setShowSuccessModal(false)}>&times;</span>
-                <p className='text-delete'>¡Registro exitoso!</p>
+            <div className="modalLogin">
+              <div className="modal-contentLogin">
+                <span className="closeLogin" onClick={() => setShowSuccessModal(false)}>&times;</span>
+                <p className='text-modalLogin'>¡Registro exitoso!</p>
               </div>
             </div>
           )}
         </div>
       </div>
-
+      {showEmptyFieldModal && (
+        <div className="modalLogin">
+          <div className="modal-contentLogin">
+            <span className="closeLogin" onClick={() => setShowEmptyFieldModal(false)}>
+              &times;
+            </span>
+            <p className='text-modalLogin'>Por favor, ingresa todos los datos.</p>
+          </div>
+        </div>
+      )}
+      {showErrorModal && (
+        <div className="modalLogin">
+          <div className="modal-contentLogin">
+            <span className="closeLogin" onClick={() => setShowErrorModal(false)}>
+              &times;
+            </span>
+            <p className='text-modalLogin'>Correo/Contraseña incorrectos.<br />
+              Inténtalo de nuevo.
+            </p>
+          </div>
+        </div>
+      )}
+      {showEmailModal && (
+        <div className="modalLogin">
+          <div className="modal-contentLogin">
+            <span className="closeLogin" onClick={() => setShowEmailModal(false)}>
+              &times;
+            </span>
+            <p className='text-modalLogin'>Este correo electrónico ya está registrado.<br />
+              Por favor, intenta utilizando otro correo.
+            </p>
+          </div>
+        </div>
+      )}
     </>
-
   )
 }
 
