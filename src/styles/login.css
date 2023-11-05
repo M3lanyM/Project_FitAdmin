@@ -318,12 +318,12 @@
     color: white;
 }
 
-.customInput.MuiInput-underline:after {
+.customInput1.MuiInput-underline:after {
     border-bottom: 1px solid white;
     /* Cambia borderBottomColor a border-bottom */
 }
 
-.customInput.MuiInput-underline:before {
+.customInput1.MuiInput-underline:before {
     border-bottom: 1px solid white;
     /* Cambia borderBottomColor a border-bottom */
 }

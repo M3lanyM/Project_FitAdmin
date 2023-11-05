@@ -124,7 +124,8 @@ export default function Home() {
             </InputAdornment>
           }
           classes={{ underline: 'inputUnderline' }} // Asigna la clase personalizada al borde inferior
-          className="customInput"
+          inputProps={{ style: { color: 'white' } }} // Cambia el color del texto dentro del Input
+          className="customInput1"
         />
       </FormControl>
     </div>
