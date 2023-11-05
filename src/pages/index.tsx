@@ -111,11 +111,9 @@ export default function Home() {
             <form>
               <label className="labelLogin" htmlFor="chk" aria-hidden="true">Iniciar Sesión</label>
 
-             
-              
               <div className='prueba'>
                 <FormControl className="usernameForm"
-                 variant="standard">
+                  variant="standard">
                   <InputLabel htmlFor="username" style={{ color: 'white' }}>
                     Correo
                   </InputLabel>
@@ -128,32 +126,35 @@ export default function Home() {
                     }
                     classes={{ underline: 'inputUnderline' }} // Asigna la clase personalizada al borde inferior
                     inputProps={{ style: { color: 'white' } }} // Cambia el color del texto dentro del Input
-                    className="customInput1"                  />
+                    className="customInput1" />
                 </FormControl>
               </div>
-              
-              <FormControl className='passwordForm' sx={{
-                m: 1, width: '23ch',
-                '& label.Mui-focused': { color: 'white' }
-              }} variant="standard">
-                <InputLabel htmlFor="password" className="customInputLabel">
-                  Contraseña
-                </InputLabel>
-                <Input className="customInput"
-                  onChange={(e) => setContrasena(e.target.value)}
-                  type={showPassword ? 'text' : 'password'}
-                  endAdornment={
-                    <InputAdornment position="end">
-                      <IconButton className="iconForm"
-                        aria-label="toggle password visibility"
-                        onClick={togglePasswordVisibility}
-                      >
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  }
-                />
-              </FormControl>
+
+              <div className='prueba1'>
+                <FormControl className='passwordForm' sx={{
+                  width: '25.5ch',
+                }} variant="standard">
+                  <InputLabel htmlFor="password" style={{ color: 'white' }}>
+                    Contraseña
+                  </InputLabel>
+                  <Input
+                    onChange={(e) => setContrasena(e.target.value)}
+                    type={showPassword ? 'text' : 'password'}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={togglePasswordVisibility}
+                        >
+                          {showPassword ? <VisibilityOff className="iconForm" /> : <Visibility className="iconForm" />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                    classes={{ underline: 'inputUnderline' }} // Asigna la clase personalizada al borde inferior
+                    inputProps={{ style: { color: 'white' } }} // Cambia el color del texto dentro del Input
+                    className="customInput1" />
+                </FormControl>
+              </div>
 
               <button className="btnSign" onClick={handleLogin}>
                 Iniciar
