@@ -28,7 +28,7 @@ export default function MembershipPage() {
     const [searchQuery, setSearchQuery] = useState("");
     const [showModalEdit, setShowModalEdit] = useState(false);
     const [selectedMember, setSelectedMember] = useState<TableData | null>(null);
-    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = useState(false);
     const [memberIdToDelete, setMemberIdToDelete] = useState('');
 
     const [formData, setFormData] = useState({
@@ -169,6 +169,25 @@ export default function MembershipPage() {
         setShowModalEdit(false);
     };
 
+    const handleDeleteConfirmation = (memberId: string) => {
+        setIsDeleteConfirmationOpen(true);
+        setMemberIdToDelete(memberId);
+    };
+
+    const confirmDeleteMember = async (memberId: string) => {
+        try {
+            await deleteMember(memberId); // Llama a la función para eliminar la membresía
+            setIsDeleteConfirmationOpen(false); // Cierra el modal de confirmación
+        } catch (error) {
+            console.error('Error al eliminar la membresía:', error);
+        }
+    };
+
+    const cancelDeleteMember = () => {
+        setIsDeleteConfirmationOpen(false); // Cierra el modal de confirmación
+    };
+
+
     //eliminar membresia
     const deleteMember = async (memberId: string) => {
         try {
@@ -248,7 +267,7 @@ export default function MembershipPage() {
                                     <td>{member.description}</td>
                                     <td>
                                         <EditIcon className="edit-icon" onClick={() => editMember(member)} />
-                                        <DeleteIcon className="delete-icon" onClick={() => deleteMember(member.id)}
+                                        <DeleteIcon className="delete-icon" onClick={() => handleDeleteConfirmation(member.id)}
                                         />
 
                                     </td>
@@ -391,6 +410,16 @@ export default function MembershipPage() {
                     </div>
                 </div>
             )}
+            {isDeleteConfirmationOpen && (
+                <div className="modal-delete">
+                <div className="custom-modal-delete">
+                    <p className='text-delete'>¿Está seguro de que desea eliminar esta membresía?</p>
+                    <button className="confirmDelete" onClick={() => confirmDeleteMember(memberIdToDelete)}>Si</button>
+                    <button className="cancelDelete" onClick={() => cancelDeleteMember()}>No</button>
+                </div>
+                </div>
+            )}
+
         </BaseLayout>
     );
 }

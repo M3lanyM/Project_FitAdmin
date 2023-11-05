@@ -1,5 +1,5 @@
 import BaseLayout from "@/pages/Sidebar/BaseLayout";
-import { IconButton, InputAdornment, TextField, TextareaAutosize } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, TextareaAutosize } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Search as SearchIcon } from '@mui/icons-material';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
@@ -27,6 +27,8 @@ export default function ExercisePage() {
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     const [searchQuery, setSearchQuery] = useState("");
+    const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = useState(false);
+
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [exerciseIdToDelete, setExerciseIdToDelete] = useState('');
     const [showModalEdit, setShowModalEdit] = useState(false);
@@ -41,7 +43,7 @@ export default function ExercisePage() {
 
     const handleAddAExercise = async () => {
         try {
-            // Agrega los datos del formulario a la colección "membresia" en Firestore
+            // Agrega los datos del formulario a la colección "ejercicio" en Firestore
             const docRef = await addDoc(collection(db, "ejercicio"), {
                 nombre: formData.name,
                 descripcion: formData.description,
@@ -131,7 +133,7 @@ export default function ExercisePage() {
 
             setShowModalEdit(true);
         } catch (error) {
-            console.error('Error al obtener los datos de clienteMembresia:', error);
+            console.error('Error al obtener los datos de ejercicios:', error);
         }
 
     };
@@ -140,7 +142,7 @@ export default function ExercisePage() {
         e.preventDefault();
 
         if (!selectedExercise) {
-            console.error('No se ha seleccionado ningún membresia.');
+            console.error('No se ha seleccionado ningún ejercicio.');
             return;
         }
 
@@ -163,6 +165,47 @@ export default function ExercisePage() {
     const cancelEdit = () => {
         setShowModalEdit(false);
     };
+
+    const openDeleteConfirmation = () => {
+        setIsDeleteConfirmationOpen(true);
+    };
+
+    const handleDeleteExercise = (exerciseId: string) => {
+        openDeleteConfirmation(); // Abre el modal de confirmación
+        // Guarda el ejercicio a eliminar en algún estado temporal si es necesario
+        setExerciseIdToDelete(exerciseId);
+    };
+
+    const closeDeleteConfirmation = () => {
+        setIsDeleteConfirmationOpen(false);
+    };
+
+
+    //eliminar Ejercicio
+    const deleteExercise = async (exerciseId: string) => {
+        try {
+            // Verifica si la referencia al ejercicio está siendo utilizada en alguna rutina
+            const routinesQuery = query(
+                collection(db, 'rutina'),
+                where('ejercicios', 'array-contains', doc(db, 'ejercicio', exerciseId))
+            );
+
+            const routineDocs = await getDocs(routinesQuery);
+
+            if (routineDocs.size > 0) {
+                alert("No se puede eliminar porque está siendo utilizado en la colección Rutina.");
+            } else {
+                // Si la referencia al ejercicio no se utiliza en ninguna rutina, elimínalo
+                const exerciseRef = doc(db, 'ejercicio', exerciseId);
+                await deleteDoc(exerciseRef);
+            }
+        } catch (error) {
+            console.error('Error al eliminar el ejercicio:', error);
+        }
+    };
+
+
+
 
     return (
         <BaseLayout>
@@ -216,7 +259,7 @@ export default function ExercisePage() {
                                     <td>{exercise.category}</td>
                                     <td>
                                         <EditIcon className="edit-icon" onClick={() => editExercise(exercise)} />
-                                        <DeleteIcon className="delete-icon" />
+                                        <DeleteIcon className="delete-icon" onClick={() => handleDeleteExercise(exercise.id)} />
                                     </td>
                                 </tr>
                             ))}
@@ -359,6 +402,27 @@ export default function ExercisePage() {
                     </div>
                 </div>
             )}
+            <Dialog open={isDeleteConfirmationOpen} onClose={closeDeleteConfirmation}>
+                <DialogTitle>Confirmar Eliminación</DialogTitle>
+                <DialogContent>
+                    ¿Está seguro de que desea eliminar este ejercicio?
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={closeDeleteConfirmation} color="primary">
+                        Cancelar
+                    </Button>
+                    <Button
+                        onClick={() => {
+                            closeDeleteConfirmation();
+                            deleteExercise(exerciseIdToDelete); // Llama a la función de eliminación después de confirmar
+                        }}
+                        color="primary"
+                    >
+                        Eliminar
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
         </BaseLayout >
     );
 }
