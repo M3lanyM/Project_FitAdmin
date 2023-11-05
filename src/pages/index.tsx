@@ -110,6 +110,21 @@ export default function Home() {
           <div className={`signup ${showLogin ? 'hide' : ''}`}>
             <form>
               <label className="labelLogin" htmlFor="chk" aria-hidden="true">Iniciar Sesión</label>
+              <div className='formControlContainer'>
+              <FormControl variant="standard">
+        <InputLabel htmlFor="input-with-icon-adornment">
+          With a start adornment
+        </InputLabel>
+        <Input
+          id="input-with-icon-adornment"
+          startAdornment={
+            <InputAdornment position="start">
+              <AccountCircle />
+            </InputAdornment>
+          }
+        />
+        </FormControl>
+              </div>
               <div className="icons">
               <input
                 className="user-name"
