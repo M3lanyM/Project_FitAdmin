@@ -110,7 +110,7 @@ export default function Home() {
           <div className={`signup ${showLogin ? 'hide' : ''}`}>
             <form>
               <label className="labelLogin" htmlFor="chk" aria-hidden="true">Iniciar Sesión</label>
-
+              <input className="inp" type="text" name="txt" placeholder="Usuario" required />
               <FormControl className="usernameForm" sx={{
                 m: 1, width: '23ch',
                 '& label.Mui-focused': { color: 'white' }
