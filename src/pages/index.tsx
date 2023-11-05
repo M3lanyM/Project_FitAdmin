@@ -111,42 +111,12 @@ export default function Home() {
             <form>
               <label className="labelLogin" htmlFor="chk" aria-hidden="true">Iniciar Sesión</label>
 
-              <div className='formControlContainer'>
-      <FormControl variant="standard">
-      <InputLabel htmlFor="input-with-icon-adornment" style={{ color: 'white' }}>
-      Digite su correo
-    </InputLabel>
-        <Input
-          id="input-with-icon-adornment"
-          startAdornment={
-            <InputAdornment position="start">
-              <AccountCircle className="icon" />
-            </InputAdornment>
-          }
-          classes={{ underline: 'inputUnderline' }} // Asigna la clase personalizada al borde inferior
-          inputProps={{ style: { color: 'white' } }} // Cambia el color del texto dentro del Input
-          className="customInput1"
-        />
-      </FormControl>
-    </div>
+             
               
-              <div className="icons">
-                <input
-                  className="user-name"
-                  type="email"
-                  name="email"
-                  placeholder="Correo"
-                  onChange={(e) => setCorreo(e.target.value)} required
-                />
-                <AccountCircle className='user-icon' />
-              </div>
-
               <div className='prueba'>
-                <FormControl className="usernameForm" sx={{
-                  m: 1, width: '23ch',
-                  '& label.Mui-focused': { color: 'white' }
-                }} variant="standard">
-                  <InputLabel htmlFor="username" className="customInputLabel">
+                <FormControl className="usernameForm"
+                 variant="standard">
+                  <InputLabel htmlFor="username" style={{ color: 'white' }}>
                     Correo
                   </InputLabel>
                   <Input
@@ -156,8 +126,9 @@ export default function Home() {
                         <AccountCircle className="iconForm" />
                       </InputAdornment>
                     }
-                    className="customInput"
-                  />
+                    classes={{ underline: 'inputUnderline' }} // Asigna la clase personalizada al borde inferior
+                    inputProps={{ style: { color: 'white' } }} // Cambia el color del texto dentro del Input
+                    className="customInput1"                  />
                 </FormControl>
               </div>
               
