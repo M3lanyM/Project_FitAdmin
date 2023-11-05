@@ -110,25 +110,18 @@ export default function Home() {
           <div className={`signup ${showLogin ? 'hide' : ''}`}>
             <form>
               <label className="labelLogin" htmlFor="chk" aria-hidden="true">Iniciar Sesión</label>
-              <input className="inp" type="text" name="txt" placeholder="Usuario" required />
-              <FormControl className="inp" 
-              variant="standard">
-                <InputLabel htmlFor="username" 
-                className="customInputLabel">
-                  Correo
-                </InputLabel>
-                <Input
-                  onChange={(e) => setCorreo(e.target.value)}
-                  endAdornment={
-                    <InputAdornment position="end">
-                      <AccountCircle className="iconForm" />
-                    </InputAdornment>
-                  }
-                  className="customInput"
+              <div className="icons">
+              <input
+                className="user-name"
+                type="email"
+                name="email"
+                placeholder="Correo"
+                onChange={(e) => setCorreo(e.target.value)} required
                 />
-              </FormControl>
+                  <AccountCircle className='user-icon' />
+              </div>
 
-              <FormControl className="usernameForm" sx={{
+<FormControl className="usernameForm" sx={{
                 m: 1, width: '23ch',
                 '& label.Mui-focused': { color: 'white' }
               }} variant="standard">
@@ -185,6 +178,7 @@ export default function Home() {
                 placeholder="Correo"
                 value={correo}
                 onChange={(e) => setCorreo(e.target.value)} required />
+
               <div className="password">
                 <input
                   className="password-user"
@@ -202,6 +196,7 @@ export default function Home() {
                   {showPassword ? <VisibilityOff /> : <Visibility />}
                 </button>
               </div>
+
               <input
                 className="inpLogin"
                 type="name"
