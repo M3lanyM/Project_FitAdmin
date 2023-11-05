@@ -111,6 +111,23 @@ export default function Home() {
             <form>
               <label className="labelLogin" htmlFor="chk" aria-hidden="true">Iniciar Sesión</label>
               <input className="inp" type="text" name="txt" placeholder="Usuario" required />
+              <FormControl className="inp" 
+              variant="standard">
+                <InputLabel htmlFor="username" 
+                className="customInputLabel">
+                  Correo
+                </InputLabel>
+                <Input
+                  onChange={(e) => setCorreo(e.target.value)}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <AccountCircle className="iconForm" />
+                    </InputAdornment>
+                  }
+                  className="customInput"
+                />
+              </FormControl>
+
               <FormControl className="usernameForm" sx={{
                 m: 1, width: '23ch',
                 '& label.Mui-focused': { color: 'white' }
