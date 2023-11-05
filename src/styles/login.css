@@ -85,6 +85,12 @@
     cursor: pointer;
     transition: .5s ease-in-out;
 }
+
+/*borar*/
+
+.icon{
+    color: #A1A626;
+}
 .formControlContainer {
     margin-left: 18%;
   }
@@ -283,7 +289,7 @@
 
 
 /* styles.css */
-.usernameForm {
+.prueba {
     margin-left: 70px;
     bottom: 22px;
 }
