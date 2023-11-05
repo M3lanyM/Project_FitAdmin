@@ -299,6 +299,11 @@
     top: 1px;
 }
 
+
+  .inputUnderline::before {
+    border-color: white !important; /* Cambia el color del borde inferior */
+  }
+  
 .iconForm {
     color: #A1A626;
     left: 8px;
