@@ -14,6 +14,9 @@ import firebaseConfig from "../firebase/config";
 import { addDoc, collection, getDocs, getFirestore, query, where } from 'firebase/firestore';
 import { initializeApp } from 'firebase/app';
 import router from 'next/router';
+import { restPassword } from "../firebase/config";
+import MarkEmailReadIcon from '@mui/icons-material/MarkEmailRead';
+import LockResetIcon from '@mui/icons-material/LockReset';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -32,14 +35,17 @@ export default function Home() {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [showEmailModal, setShowEmailModal] = useState(false);
+  const [showPasswordReset, setPasswordReset] = useState(false);
   const [showEmptyFieldModal, setShowEmptyFieldModal] = useState(false);
+  const [showPassword, setShowPassword] = React.useState(false);
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleToggle = () => {
     setShowLogin(!showLogin);
   }
-  const [showPassword, setShowPassword] = React.useState(false);
-
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const openPasswordReset = () => {
+    setPasswordReset(true);
+  };
 
   const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -113,12 +119,33 @@ export default function Home() {
     }
   };
 
+  //Método olvido su contraseña
+  const handlePasswordReset = async () => {
+    if (!correo) {
+      alert("Por favor ingrese un correo valido.");
+      return;
+    }
+    // Validar el formato del correo electrónico
+    const emailRegex = /^\S+@\S+\.\S+$/; // Expresión regular para validar el correo electrónico
+    if (!emailRegex.test(correo)) {
+      alert("El formato del correo electrónico no es válido");
+      return;
+    }
+    try {
+      await restPassword(correo);
+      alert("Se envió un correo para restablecer tu contraseña. Por favor, verifica tu bandeja de entrada.");
+      setPasswordReset(false);
+
+    } catch (error) {
+      console.error("Error al enviar el correo de restablecimiento de contraseña", error);
+      alert("Error al enviar el correo de restablecimiento de contraseña" + error);
+    }
+  };
+
   return (
     <>
       <div className="bodyLogin">
         <div className="main">
-
-
           <input type="checkbox" id="chk" aria-hidden="true" />
           <div className={`signup ${showLogin ? 'hide' : ''}`}>
             <form>
@@ -137,8 +164,8 @@ export default function Home() {
                         <AccountCircle className="iconForm1" />
                       </InputAdornment>
                     }
-                    classes={{ underline: 'inputUnderline' }} // Asigna la clase personalizada al borde inferior
-                    inputProps={{ style: { color: 'white' } }} // Cambia el color del texto dentro del Input
+                    classes={{ underline: 'inputUnderline' }}
+                    inputProps={{ style: { color: 'white' } }}
                     className="customInput1" />
                 </FormControl>
               </div>
@@ -168,7 +195,11 @@ export default function Home() {
                     className="customInput1" />
                 </FormControl>
               </div>
-
+              <div className='margin-pass'>
+                <a className="forgot-pass" href="#" onClick={openPasswordReset}>
+                  Olvidé la contraseña
+                </a>
+              </div>
               <button className="btnSign" onClick={handleLogin}>
                 Iniciar
               </button>
@@ -178,6 +209,23 @@ export default function Home() {
           <div className={`login ${showLogin ? '' : 'hide'}`}>
             <form>
               <label className="labelLogin" htmlFor="chk" aria-hidden="true">Registrarse</label>
+
+              <input
+                className="inpLogin"
+                type="name"
+                name="name"
+                placeholder="Nombre"
+                value={nombre}
+                onChange={(e) => setNombre(e.target.value)}
+                required />
+              <input
+                className="inpLogin"
+                type="lastmane"
+                name="lastmane"
+                placeholder="Apellido"
+                value={apellido}
+                onChange={(e) => setApellido(e.target.value)}
+                required />
               <input
                 className="inpLogin"
                 type="email"
@@ -206,22 +254,6 @@ export default function Home() {
                 </div>
               </Tooltip>
 
-              <input
-                className="inpLogin"
-                type="name"
-                name="name"
-                placeholder="Nombre"
-                value={nombre}
-                onChange={(e) => setNombre(e.target.value)}
-                required />
-              <input
-                className="inpLogin"
-                type="lastmane"
-                name="lastmane"
-                placeholder="Apellido"
-                value={apellido}
-                onChange={(e) => setApellido(e.target.value)}
-                required />
               <button className="btnLogin" onClick={Registration}>Registrar</button>
 
             </form>
@@ -267,6 +299,30 @@ export default function Home() {
             <p className='text-modalLogin'>Este correo electrónico ya está registrado.<br />
               Por favor, intenta utilizando otro correo.
             </p>
+          </div>
+        </div>
+      )}
+      {showPasswordReset && (
+        <div className="modalLogin">
+          <div className="modal-contentLogin">
+            <span className="closeLogin" onClick={() => setPasswordReset(false)}>
+              &times;
+            </span>
+            <LockResetIcon className='Password-icon' />
+            <h1 className="texPassword">Recuperar contraseña</h1>
+            <div className="icons-PasswordReset">
+              <MarkEmailReadIcon className='PasswordReset-icon' />
+              <input
+                className="user-name"
+                type="text"
+                name="correo"
+                placeholder="Ingrese su correo"
+                onChange={(e) => setCorreo(e.target.value)}
+              />
+            </div>
+            <button onClick={handlePasswordReset} className="BtnPasswordReset">
+              Aceptar
+            </button>
           </div>
         </div>
       )}
