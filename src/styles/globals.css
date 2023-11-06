@@ -323,3 +323,16 @@ body {
   opacity: 0.8;
 }
 /*MODAL VALIDACION ELIMINAR*/
+
+/* Estilos para la barra de progreso */
+.custom-progress-bar {
+  height: 2.3px; /* Altura de la barra de progreso */
+}
+
+/*
+.custom-progress-bar .MuiLinearProgress-bar {
+  background-color: #2b8c8c; Color de la barra de progreso 
+}
+*/
+
+
