@@ -1,39 +1,24 @@
 /*Tabla factura*/
-.tableBill-container {
-  width: 73%;
-  height: 53%;
-  margin: 1% 2%;
-  margin-top: 18%;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 4px 10px 0 rgba(0, 0, 0, 0.1);
 
+.tableBill-container  {
+  width: 71%;
+  height: 58%;
+  margin-left: 3.3%;
+  margin-top: 16%;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 4px 10px 0 rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  background-color: white;
+  border-radius: 10px;
 }
 
 .tableBill {
-  width: 100%
+  width: 100%;
+  border-collapse: collapse;
 }
-
-
-.tableBill-header-row {
+.th-tableBill {
+  padding: 14px;
   background-color: #2b8c8c;
-  position: sticky;
-  top: 0;
-  z-index: 1;
-}
-
-.tableBill-row {
-  padding: 8px 16px;
-
-}
-
-.tableBill-row:hover {
-  background-color: #f2f2f2;
-}
-
-.pagination-container {
-  position: sticky;
-  bottom: 0;
-  background-color: white;
-  z-index: 1;
+  color: white;
 }
 
 /*Tabla Factura*/

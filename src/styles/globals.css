@@ -8,8 +8,11 @@ body {
   background-color: #F2F2F2;
   font-family: "Roboto", sans-serif;
 }
-
-
+td {
+  padding: 10px;
+  text-align: center;
+  border-bottom: 1px solid #ccc;
+}
 /*MODAL AGREGAR CLIENTE*/
 .modal {
   position: fixed;

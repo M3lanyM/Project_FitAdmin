@@ -531,7 +531,7 @@ export default function ClientPage() {
                 />
               </div>
               <div className="form-row">
-                <label>Cedula:</label>
+                <label>Cédula:</label>
                 <input
                   className="personalInfo"
                   type="text"

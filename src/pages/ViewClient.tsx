@@ -5,6 +5,18 @@ import { getFirestore, doc, getDoc, DocumentSnapshot, collection, where, getDocs
 import { initializeApp, FirebaseApp } from 'firebase/app';
 import firebaseConfig from '@/firebase/config';
 import { differenceInDays, parseISO } from 'date-fns'; // Importa las funciones para cálculos de fechas
+import React from 'react';
+import Box from '@mui/material/Box';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import { Typography } from '@mui/material';
+import { FaPencilRuler} from "react-icons/fa";
+import TodayIcon from '@mui/icons-material/Today';
+import ContentPasteIcon from '@mui/icons-material/ContentPaste';
+
+import TabMembership from './client-settings/TabMembership';
+import TabRoutine from './client-settings/TabRoutine';
+import TabMeasure from './client-settings/TabMeasure';
 
 interface Client {
   nombre: string;
@@ -16,16 +28,50 @@ interface Client {
   nextPay: "",
   precio: "",
   membership: "",
-  // Otras propiedades del cliente
 }
 
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
 
+function CustomTabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+function a11yProps(index: number) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
+}
 export default function ClientInfoPage() {
   const router = useRouter();
   const { id } = router.query; // Obtenemos el ID del cliente de los parámetros de la URL
   const [client, setClient] = useState<Client | null>(null);
   const [fechaIngreso, setFechaIngreso] = useState<string | null>(null);
   const [diasRestantesParaPago, setDiasRestantesParaPago] = useState<number | null>(null); // Nuevo estado para los días restantes
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
 
   useEffect(() => {
     const fetchClientData = async () => {
@@ -129,41 +175,31 @@ export default function ClientInfoPage() {
               <p>Fecha de próximo pago no disponible</p>
             )}
             <p>FPrecio: /mensual</p>
-            
+
           </div>
         </div>
       </div>
 
-      <div className="tableClient-container">
-        <div className='Descarga'>
-          <button className="button-client" onClick={handlerPart} > Historial </button>
-          <button className="button-client" onClick={handlerMember}> Membresia </button>
-          <button className="button-client" onClick={handlerRoutine}> Rutinas </button>
-          <button className="button-client" > Medidas </button>
-        </div>
-        <div className="line-addRoutine"></div>
-        {part && (
-          <section className="container-personal grid grid-cols-1 gap-4">
-            <div>
-              <label className="label1-price" form="email">Historial del Cliente</label>
-            </div>
-          </section>
-        )}
-        {member && (
-          <section className="container-personal grid grid-cols-1 gap-4">
-            <div>
-              <label className="label1-price" form="email">Membresia</label>
-            </div>
-          </section>
-        )}
-        {routine && (
-          <section className="container-personal grid grid-cols-1 gap-4">
-            <div>
-              <label className="label1-price" form="email">Rutinas</label>
-            </div>
-          </section>
-        )}
-      </div>
+      <Box className='tableClient-container' sx={{ width: '100%' }}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+            <Tab icon={<ContentPasteIcon style={{ fontSize: 22 }}/>} iconPosition="start" label="Membresía" {...a11yProps(0)} />
+            <Tab icon={<TodayIcon style={{ fontSize: 22 }}/>} iconPosition="start" label="Rutina"{...a11yProps(1)} />
+            <Tab icon={<FaPencilRuler style={{ fontSize: 16 }} />} iconPosition="start" label="Medidas" {...a11yProps(2)} />
+          </Tabs>
+        </Box>
+        <CustomTabPanel value={value} index={0}>
+          <TabMembership />
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={1}>
+          <TabRoutine />
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={2}>
+          <TabMeasure />
+        </CustomTabPanel>
+      </Box>
+
+
     </BaseLayout>
   );
 }

@@ -325,8 +325,12 @@ export default function MembershipPage() {
                             </div>
                             <div className="">
                                 <h2 className="text-addMember">Descripcion</h2>
-                                <textarea name="descrption" placeholder="Descripcion" className="description-addMember" value={formData.description}
-                                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}></textarea>
+                                <textarea name="descrption"
+                                    placeholder="Descripcion"
+                                    className="description-addMember"
+                                    value={formData.description}
+                                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}>
+                                </textarea>
                             </div>
                             <div className="line-addMember"></div>
                             <div className="">
@@ -412,11 +416,11 @@ export default function MembershipPage() {
             )}
             {isDeleteConfirmationOpen && (
                 <div className="modal-delete">
-                <div className="custom-modal-delete">
-                    <p className='text-delete'>¿Está seguro de que desea eliminar esta membresía?</p>
-                    <button className="confirmDelete" onClick={() => confirmDeleteMember(memberIdToDelete)}>Si</button>
-                    <button className="cancelDelete" onClick={() => cancelDeleteMember()}>No</button>
-                </div>
+                    <div className="custom-modal-delete">
+                        <p className='text-delete'>¿Está seguro de que desea eliminar esta membresía?</p>
+                        <button className="confirmDelete" onClick={() => confirmDeleteMember(memberIdToDelete)}>Si</button>
+                        <button className="cancelDelete" onClick={() => cancelDeleteMember()}>No</button>
+                    </div>
                 </div>
             )}
 

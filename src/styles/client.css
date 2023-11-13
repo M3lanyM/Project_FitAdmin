@@ -50,12 +50,6 @@
   color: white;
 }
 
-td {
-  padding: 10px;
-  text-align: center;
-  border-bottom: 1px solid #ccc;
-}
-
 .tableClient-row:hover {
   background-color: #f2f2f2;
 }
