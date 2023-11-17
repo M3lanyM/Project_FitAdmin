@@ -206,15 +206,20 @@ export default function ReportPage() {
   };
 
   const filterData = (data: TableData[]) => {
-    if (selectedEstado === 'todos') {
-     // Filtrar por nombre o cédula si se proporciona una cadena de búsqueda
-    return data.filter((client) =>
-    (client.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    client.cedula.toLowerCase().includes(searchQuery.toLowerCase()))
-  );
-    } else {
+    if (searchQuery) {
+      return data.filter((client) =>
+        (client.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        client.cedula.toLowerCase().includes(searchQuery.toLowerCase()))
+      );
+    }
+  
+    // Filtrar por estado si se selecciona un estado específico
+    if (selectedEstado !== 'todos') {
       return data.filter((client) => client.estado.toLowerCase() === selectedEstado);
     }
+  
+    // Devolver todos los datos si no hay cadena de búsqueda ni estado seleccionado
+    return data;
   };
 
 
