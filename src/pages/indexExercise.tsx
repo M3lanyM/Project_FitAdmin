@@ -1,4 +1,3 @@
-import BaseLayout from "@/pages/Sidebar/BaseLayout";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, TextareaAutosize } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Search as SearchIcon } from '@mui/icons-material';
@@ -9,6 +8,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { addDoc, collection, deleteDoc, doc, getDocs, getFirestore, onSnapshot, query, updateDoc, where } from "firebase/firestore";
 import firebaseConfig from "@/firebase/config";
 import { initializeApp } from "firebase/app";
+import AdminLayout from "./AdminLayout/AdminLayout";
 
 
 interface TableData {
@@ -208,7 +208,7 @@ export default function ExercisePage() {
 
 
     return (
-        <BaseLayout>
+        <AdminLayout>
             <div className='hBill'>
                 <div className='ContaRoutine'>
                     <div className='searchBill1'>
@@ -402,27 +402,19 @@ export default function ExercisePage() {
                     </div>
                 </div>
             )}
-            <Dialog open={isDeleteConfirmationOpen} onClose={closeDeleteConfirmation}>
-                <DialogTitle>Confirmar Eliminación</DialogTitle>
-                <DialogContent>
-                    ¿Está seguro de que desea eliminar este ejercicio?
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={closeDeleteConfirmation} color="primary">
-                        Cancelar
-                    </Button>
-                    <Button
-                        onClick={() => {
+
+            {isDeleteConfirmationOpen && (
+                <div className="modal-delete">
+                    <div className="custom-modal-delete">
+                        <p className='text-delete'>¿Está seguro de que desea eliminar este ejercicio?</p>
+                        <button className="confirmDelete" onClick={() => {
                             closeDeleteConfirmation();
                             deleteExercise(exerciseIdToDelete); // Llama a la función de eliminación después de confirmar
-                        }}
-                        color="primary"
-                    >
-                        Eliminar
-                    </Button>
-                </DialogActions>
-            </Dialog>
-
-        </BaseLayout >
+                        }}>Si</button>
+                        <button className="cancelDelete" onClick={() => closeDeleteConfirmation()}>No</button>
+                    </div>
+                </div>
+            )}
+        </AdminLayout >
     );
 }

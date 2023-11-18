@@ -1,8 +1,6 @@
 /*Primera parte*/
 /* styles.css */
-.container-report {
-  display: block;
-}
+
 
 .container-repot-ganancia {
   display: flex;
@@ -43,16 +41,15 @@
 }
 
 .buscador {
-  margin-left: 3.3%;
-  margin-top: 46%;
-  margin-bottom: 15%;
+  margin-top: 62.3%;
   display: flex;
+  margin-left: 4.4%;
   align-items: center;
   justify-content: center;
   text-align: center;
   position: absolute;
-  width: 72.4%;
-  height: 10%;
+  width: 69%;
+  height: 15.5%;
   background-color: #fff;
   border-radius: 9px;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 4px 10px 0 rgba(0, 0, 0, 0.1);
@@ -76,15 +73,15 @@
 .Ganancias,
 .Cancelar,
 .Clientes {
-  margin-top: 33%;
+  margin-top: 49%;
+  font-size: 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
   position: absolute;
-  font-size: 16px;
-  width: 16%;
+  width: 15%;
   height: 25%;
   background-color: #fff;
   border-radius: 9px;
@@ -92,26 +89,41 @@
 }
 
 .Ganancias {
-  margin-left: 3.3%;
+  margin-left: 4.6%;
 }
 
 .Ingresos {
-  margin-left: 22.2%;
+  margin-left: 22.4%;
 }
 
 .Cancelar {
-  margin-left: 59.4%;
+  margin-left: 58.3%;
 }
 
 .Clientes {
-  margin-left: 40.3%;
+  margin-left: 40.5%;
 }
 
-.graph,
+.graph {
+  top: 10%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: absolute;
+  width: 69%;
+  height: 50%;
+  margin-left: 4.4%;
+  background-color: #FFFFFF;
+  border-radius: 9px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 4px 10px 0 rgba(0, 0, 0, 0.1);
+}
 .graph2 {
-  width: 72%;
-  height: 30%;
-  margin-left: 3.3%;
+  top: 30.5%;
+  width: 69%;
+  height: 50%;
+  margin-left: 4.4%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -122,7 +134,6 @@
   border-radius: 9px;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 4px 10px 0 rgba(0, 0, 0, 0.1);
 }
-
 .graph-controler {
   display: block;
   background-color: #fff;
@@ -140,16 +151,17 @@
 
 
 /*Tabla Reportes*/
-.container-table-report {
-  width: 72.4%;
+.tableReport-container {
+  width: 87.5%;
   height: 54%;
-  margin-left: 2.3%;
-  margin-top: 51.6%;
+  margin-left: 5.7%;
+  margin-top: 90.6%;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 4px 10px 0 rgba(0, 0, 0, 0.1);
   overflow-y: auto;
   background-color: white;
   border-radius: 10px;
 }
+
 
 
 .report-table {

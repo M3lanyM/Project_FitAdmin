@@ -1,4 +1,3 @@
-import BaseLayout from "@/pages/Sidebar/BaseLayout";
 import { Autocomplete, Button, IconButton, InputAdornment, List, Modal, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Search as SearchIcon } from '@mui/icons-material';
@@ -9,6 +8,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { getFirestore, collection, query, onSnapshot, deleteDoc, doc, updateDoc, where, getDocs, addDoc, DocumentData, DocumentReference, getDoc } from 'firebase/firestore';
 import firebaseConfig from "@/firebase/config";
 import { initializeApp } from "firebase/app";
+import AdminLayout from "./AdminLayout/AdminLayout";
 
 
 interface TableData {
@@ -358,7 +358,7 @@ export default function RoutinePage() {
 
 
     return (
-        <BaseLayout>
+        <AdminLayout>
             <div className='hBill'>
                 <div className='ContaRoutine'>
                     <label className="custom-labelRoutine">Rutinas</label>
@@ -610,6 +610,6 @@ export default function RoutinePage() {
 
 
 
-        </BaseLayout>
+        </AdminLayout>
     );
 }

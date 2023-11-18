@@ -1,0 +1,208 @@
+.btnColap {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-right: -2rem;
+}
+
+.btnColap2 {
+  display: none;
+  /* Ocultar por defecto en pantallas pequeñas */
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-right: 3rem;
+}
+
+.btnColap1:hover {
+  background-color: #f8f9fa;
+  /* Cambiar el color de fondo al pasar el ratón si es necesario */
+}
+
+@media (min-width: 768px) {
+  .btnColap2 {
+    display: inline-block;
+    /* Mostrar en pantallas medianas y más grandes */
+  }
+}
+
+
+
+/* header */
+:root {
+  --header-background: #fff;
+  --header-link-color: rgba(44, 56, 74, 0.681);
+  --header-link-color-hover: rgba(44, 56, 74, 0.95);
+  --header-brand-color: #4f5d73;
+}
+
+/* Apply styles using the variables */
+.header {
+  background: var(--header-background);
+}
+
+.header-navbar {
+  min-height: 3rem;
+  display: flex;
+  align-items: center;
+}
+
+.header-toggler {
+  color: var(--header-link-color);
+}
+
+.header-nav .nav-link {
+  color: var(--header-link-color);
+}
+
+.header-nav .nav-link:hover {
+  color: var(--header-link-color-hover);
+}
+.alturaH {
+  height: 64px;
+}
+.altura {
+  height: 60px;
+}
+.espacio{
+  margin-bottom: 10px;
+}
+.espacioS {
+  padding-left: 1.3rem !important;
+  padding-right: 1.3rem !important;
+}
+/* Agrega esta regla en tu archivo de estilos CSS */
+.margenS {
+  margin-right: -1.3rem !important;
+}
+
+/*sidebar*/
+:root {
+  --sidebar-width: 14rem;
+}
+
+.sidebar {
+  flex: 0 0 var(--sidebar-width);
+  width: var(--sidebar-width);
+  background: #fff;
+  color: rgba(0, 0, 0, 0.6);
+  transition: margin-left 0.15s, margin-right 0.15s, box-shadow 0.075s, transform 0.15s, width 0.15s, z-index 0s ease 0.15s;
+  z-index: var(--zindex-fixed);
+}
+
+.wrapper {
+  transition: padding 0.15s;
+}
+
+.sidebar+.wrapper {
+  padding-left: var(--sidebar-width);
+}
+
+.sidebar .sidebar-brand {
+  flex: 0 0 4rem;
+  background: #f2f2f2;
+}
+
+.sidebar .sidebar-nav {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.sidebar .sidebar-nav .nav-title {
+  font-size: 80%;
+}
+
+.sidebar .sidebar-nav .nav-link {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.sidebar .sidebar-nav .nav-icon {
+  flex: 0 0 4rem;
+}
+
+.sidebar .sidebar-nav .nav-link:hover {
+  color: rgba(0, 0, 0, 0.87);
+  text-decoration: none;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.sidebar .sidebar-nav .nav-group.show {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.sidebar .sidebar-nav .nav-group .nav-link:focus {
+  box-shadow: none;
+}
+
+.sidebar .sidebar-nav .nav-group .nav-link .nav-chevron {
+  transition: transform 0.15s;
+}
+
+.sidebar .sidebar-nav .nav-group .nav-link.collapsed .nav-chevron {
+  transform: rotate(180deg);
+}
+
+.sidebar .sidebar-toggler {
+  flex: 0 0 3rem;
+  background: #2b8c8cd7;
+  color: rgb(255, 255, 255);
+  border: none;
+}
+
+.sidebar .sidebar-toggler:hover {
+  background-color: rgba(38, 122, 122, 0.904);
+  color: #000000;
+}
+
+.sidebar .sidebar-toggler-chevron {
+  transition: transform 0.15s;
+}
+
+@media (max-width: 767.98px) {
+  .sidebar:not(.show) {
+    margin-left: calc(-1 * var(--sidebar-width));
+  }
+  
+  .sidebar+.wrapper {
+    padding-left: calc(-1 * var(--sidebar-width));
+  }
+}
+
+@media (min-width: 768px) {
+  .sidebar.sidebar-narrow .sidebar-toggler .sidebar-toggler-chevron {
+    transform: rotate(180deg);
+  }
+
+  .sidebar.sidebar-narrow:not(:hover) {
+    --sidebar-width: 4rem;
+  }
+
+  .sidebar.sidebar-narrow:not(:hover) .sidebar-brand .sidebar-brand-full {
+    display: none !important;
+  }
+
+  .sidebar.sidebar-narrow:not(:hover) .sidebar-brand .sidebar-brand-narrow {
+    display: flex !important;
+  }
+
+  .sidebar.sidebar-narrow:not(:hover) .nav-title,
+  .sidebar.sidebar-narrow:not(:hover) .nav-group-items {
+    display: none;
+  }
+
+  .sidebar.sidebar-narrow:not(:hover)+.wrapper {
+    --sidebar-width: 4rem;
+  }
+
+  .sidebar.md-hide {
+    margin-left: calc(-1 * var(--sidebar-width));
+  }
+
+  .sidebar.md-hide+.wrapper {
+    padding-left: calc(-1 * var(--sidebar-width));
+  }
+}
+
+.sidebar-overlay {
+  z-index: 1025;
+}

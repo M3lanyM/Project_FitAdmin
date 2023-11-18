@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import BaseLayout from "@/pages/Sidebar/BaseLayout";
 import IconButton from '@mui/material/IconButton';
 import { TextField, InputAdornment, MenuItem } from '@mui/material';
 import { Search as SearchIcon } from '@mui/icons-material';
@@ -11,6 +10,7 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import Link from 'next/link';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, CartesianGrid, ResponsiveContainer } from 'recharts';
+import AdminLayout from './AdminLayout/AdminLayout';
 
 const MONTHS: string[] = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
@@ -208,64 +208,65 @@ export default function ReportPage() {
   const filterData = (data: TableData[]) => {
     if (searchQuery) {
       return data.filter((client) =>
-        (client.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (client.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         client.cedula.toLowerCase().includes(searchQuery.toLowerCase()))
       );
     }
-  
+
     // Filtrar por estado si se selecciona un estado específico
     if (selectedEstado !== 'todos') {
       return data.filter((client) => client.estado.toLowerCase() === selectedEstado);
     }
-  
+
     // Devolver todos los datos si no hay cadena de búsqueda ni estado seleccionado
     return data;
   };
 
 
   return (
-    <BaseLayout>
-      <div className='container-report'>
-        <div className='container-repot-ganancia'>
-          <div className="graph">
-            <h1 className='textGanancia'>Ganancias</h1>
-            <ResponsiveContainer width="100%" height={190}>
-              <BarChart data={gananciaUltimoAnio} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="month" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="ganancia" fill="#2b8c8c" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-          <div className="Ganancias">
-            <img className="enabled" src="/img/money.png" />
-            <p className='text1'>{gananciaUltimoMes}</p>
-            <h1 className='text2H'>Ganancias Del Mes</h1>
-          </div>
+    <AdminLayout>
+      <div className='container-repot-ganancia'>
+        <div className="graph">
+          <h1 className='textGanancia'>Ganancias</h1>
+          <ResponsiveContainer width="100%" height={220}>
+            <BarChart data={gananciaUltimoAnio} margin={{ right: 30, left: 20 }}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="month" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="ganancia" fill="#2b8c8c" />
+            </BarChart>
+          </ResponsiveContainer>
         </div>
-        <div className='container-repot-ganancia'>
-          <div className="graph2">
+      </div>
+      <div className='container-repot-ganancia'>
+        <div className="graph2">
           <h1 className='textClientes'>Clientes</h1>
-            <ResponsiveContainer width="100%" height={190}>
-              <BarChart data={newClientsData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="month" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="newClients" fill="#82ca9d" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-          <div className="Ingresos">
-            <img className="enabled" src="/img/enabled.png" />
-            <p className='text1'>{numClientesRecientes}</p>
-            <h1 className='text2H'>Ingresos Del Mes</h1>
-          </div>
+          <ResponsiveContainer width="100%" height={220}>
+            <BarChart data={newClientsData} margin={{ right: 30, left: 20 }}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="month" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="newClients" fill="#82ca9d" />
+            </BarChart>
+          </ResponsiveContainer>
         </div>
+      </div>
+      <div className='container-repot-ganancia'>
+        <div className="Ganancias">
+          <img className="enabled" src="/img/money.png" />
+          <p className='text1'>{gananciaUltimoMes}</p>
+          <h1 className='text2H'>Ganancias Del Mes</h1>
+        </div>
+        <div className="Ingresos">
+          <img className="enabled" src="/img/enabled.png" />
+          <p className='text1'>{numClientesRecientes}</p>
+          <h1 className='text2H'>Ingresos Del Mes</h1>
+        </div>
+
         <div className="Cancelar">
           <img className="disabled" src="/img/disabled.png" />
           <p className='text1'>{numClientesDeshabilitados}</p>
@@ -276,7 +277,8 @@ export default function ReportPage() {
           <p className='text1'>{numClientesRegistrados}</p>
           <h1 className='text2H'>Total de Clientes</h1>
         </div>
-
+      </div>
+      <div className='container-repot-ganancia'>
         <div className='buscador'>
           <TextField
             InputProps={{
@@ -288,7 +290,7 @@ export default function ReportPage() {
             }}
             placeholder="Buscar Nuevos"
             sx={{
-              width: '50%',
+              width: '40%',
               '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
                 borderColor: '#2b8c8c',
               },
@@ -296,7 +298,7 @@ export default function ReportPage() {
               marginRight: '10%',
             }}
             value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
           <TextField
             select
@@ -304,7 +306,7 @@ export default function ReportPage() {
             value={selectedEstado}
             onChange={handleEstadoChange}
             sx={{
-              width: '30%',
+              width: '25%',
               '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
                 borderColor: '#2b8c8c',
               },
@@ -317,7 +319,7 @@ export default function ReportPage() {
           </TextField>
         </div>
       </div>
-      <div className="container-table-report">
+      <div className="tableReport-container">
         <table className="report-table">
           <thead>
             <tr className="fixed-header-row">
@@ -375,6 +377,6 @@ export default function ReportPage() {
         </div>
       </div>
 
-    </BaseLayout>
+    </AdminLayout>
   );
 }

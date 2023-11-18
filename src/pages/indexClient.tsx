@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import BaseLayout from "@/pages/Sidebar/BaseLayout";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
@@ -17,6 +16,7 @@ import * as XLSX from 'xlsx';
 import EditIcon from '@mui/icons-material/Edit';
 import Link from 'next/link';
 import React from "react";
+import AdminLayout from "./AdminLayout/AdminLayout";
 
 export interface TableData {
   id: string;
@@ -123,12 +123,15 @@ export default function ClientPage() {
   };
 
   const openModal = () => {
+    console.log("Opening modal");
     setIsModalOpen(true);
   };
-
+  
   const closeModal = () => {
+    console.log("Closing modal");
     setIsModalOpen(false);
   };
+  
 
   //eliminar cliente
   const deleteClient = async (clientId: string) => {
@@ -352,7 +355,7 @@ export default function ClientPage() {
   };
 
   return (
-    <BaseLayout>
+    <AdminLayout>
       <div className='hClient'>
         <div className='ContaH'>
           <button onClick={openModal} className='btnClient'>
@@ -658,6 +661,6 @@ export default function ClientPage() {
       )}
 
       {isModalOpen && <ModalAddClient onClose={closeModal} />}
-    </BaseLayout>
+    </AdminLayout>
   );
 }

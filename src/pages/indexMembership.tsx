@@ -1,4 +1,3 @@
-import BaseLayout from "@/pages/Sidebar/BaseLayout";
 import { IconButton, InputAdornment, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Search as SearchIcon } from '@mui/icons-material';
@@ -9,6 +8,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { addDoc, collection, deleteDoc, doc, getDocs, getFirestore, onSnapshot, query, updateDoc, where } from "firebase/firestore";
 import firebaseConfig from "@/firebase/config";
 import { initializeApp } from "firebase/app";
+import AdminLayout from "./AdminLayout/AdminLayout";
 
 export interface TableData {
     id: string;
@@ -213,7 +213,7 @@ export default function MembershipPage() {
     };
 
     return (
-        <BaseLayout>
+        <AdminLayout>
             <div className="hClient">
                 <div className="ContaMember">
                     <div className='searchBill1'>
@@ -424,6 +424,6 @@ export default function MembershipPage() {
                 </div>
             )}
 
-        </BaseLayout>
+        </AdminLayout>
     );
 }

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import BaseLayout from "@/pages/Sidebar/BaseLayout";
 import { TextField, InputAdornment, IconButton } from '@mui/material';
 import { Search as SearchIcon } from '@mui/icons-material';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -7,6 +6,7 @@ import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import AdminLayout from './AdminLayout/AdminLayout';
 
 export interface TableData {
     id: number;
@@ -49,7 +49,7 @@ export default function BillPage({ data }: Props) {
     };
 
     return (
-        <BaseLayout>
+        <AdminLayout>
             <div className='hBill'>
                 <div className='ContaBill'>
                     <label className="custom-labelBill">FACTURACIÓN</label>
@@ -234,6 +234,6 @@ export default function BillPage({ data }: Props) {
                     </div>
                 </div>
             )}
-        </BaseLayout>
+        </AdminLayout>
     );
 }

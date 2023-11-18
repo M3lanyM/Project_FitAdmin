@@ -68,7 +68,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 100;
+  z-index: 10000;
   background-color: rgba(0, 0, 0, 0.5);
 }
 
@@ -195,22 +195,6 @@
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 4px 10px 0 rgba(0, 0, 0, 0.1);
 }
 
-.ContaVC {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  position: absolute;
-  margin-top: 2.5%;
-  width: 45%;
-  height: 25%;
-  margin-left: 4.3%;
-  background-color: #FFFFFF;
-  border-radius: 9px;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 4px 10px 0 rgba(0, 0, 0, 0.1);
-}
-
 .button-client {
   background-color: #A1A626;
   color: white;
@@ -236,7 +220,6 @@
   justify-content: center;
   text-align: center;
   position: absolute;
-  margin-top: 3%;
   width: 69%;
   height: 30%;
   margin-left: 4.4%;
@@ -292,9 +275,9 @@
 /*TABLA*/
 
 .tableRoutine-container {
-  width: 69%;
-  height: 55%;
-  margin-left: 3.3%;
+  width: 88%;
+  height: 345px;
+  margin-left: 5.5%;
   margin-top: 18.6%;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 4px 10px 0 rgba(0, 0, 0, 0.1);
   overflow-y: auto;

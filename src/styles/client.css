@@ -2,8 +2,9 @@
 .fixed-header-row {
   position: sticky;
   top: 0;
+  text-align: center;
   background-color: white;
-  z-index: 1;
+  z-index: 10000;
 }
 
 .show-text {
@@ -14,7 +15,7 @@
   position: sticky;
   bottom: 0;
   background-color: white;
-  z-index: 1;
+  z-index: 10000;
   text-align: right;
   padding: 12px;
 
@@ -29,9 +30,9 @@
 }
 
 .tableClient-container {
-  width: 71%;
-  height: 58%;
-  margin-left: 3.3%;
+  width: 90.5%;
+  height: 345px;
+  margin-left: 5.1%;
   margin-top: 16%;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 4px 10px 0 rgba(0, 0, 0, 0.1);
   overflow-y: auto;
@@ -103,7 +104,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 100;
+  z-index: 10000;
   background-color: rgba(0, 0, 0, 0.5);
 }
 
@@ -236,7 +237,7 @@
 /*modal editar cliente.*/
 
 .Habilitados {
-  margin-left: 42%;
+  margin-left: 41.6%;
 }
 
 .Deshabilitados,
@@ -247,7 +248,6 @@
   justify-content: center;
   text-align: center;
   position: absolute;
-  margin-top: 2.5%;
   width: 16%;
   height: 25%;
   background-color: #fff;
@@ -256,7 +256,7 @@
 }
 
 .Deshabilitados {
-  margin-left: 59.4%;
+  margin-left: 59%;
   font-size: 16px;
 }
 
@@ -314,10 +314,9 @@
   justify-content: center;
   text-align: center;
   position: absolute;
-  margin-top: 2.5%;
   width: 36%;
   height: 25%;
-  margin-left: 4.3%;
+  margin-left: 4%;
   background-color: #FFFFFF;
   border-radius: 9px;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 4px 10px 0 rgba(0, 0, 0, 0.1);
@@ -325,4 +324,335 @@
 
 .Descarga {
   display: flex;
+}
+
+/*MODAL AGREGAR CLIENTE*/
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+}
+
+.modalContent {
+  width: 60%;
+  height: 85%;
+  background-color: white;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilos para cada fila del formulario */
+.formRow1,
+.formRow2,
+.formRow3,
+.formRow4 {
+  display: flex;
+  align-items: center;
+  margin-bottom: 3rem;
+
+}
+
+.dateform,
+.statusform,
+.genderform,
+.inputformC {
+  width: 27%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  margin-left: 4.6%;
+  font-family: 'Franklin Gothic', 'Arial Narrow', Arial, sans-serif;
+  border: 1px solid #2b8c8c;
+}
+
+.dateform:focus,
+.statusform:focus,
+.genderform:focus,
+.inputformC:focus {
+  border-color: #A1A626;
+  outline: none;
+}
+
+
+.nextPay,
+.inputformC1 {
+  width: 27%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  margin-left: 4.6%;
+  font-family: 'Franklin Gothic', 'Arial Narrow', Arial, sans-serif;
+  border: 1px solid #A1A626;
+}
+
+.admDate:focus,
+.nextPay:focus,
+.inputformC1:focus {
+  border-color: #2b8c8c;
+  outline: none;
+}
+
+.formRow1 {
+  margin-top: 5%;
+}
+
+.formRow4 {
+  margin-top: 5%;
+}
+
+.closeButton {
+  background-color: #737373;
+  color: white;
+  border: none;
+  padding: 0.7rem 1.2rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 16px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+}
+
+.addButton {
+  background-color: #2b8c8c;
+  color: white;
+  border: none;
+  padding: 0.7rem 1.2rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 16px;
+  margin-right: 3%;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
+}
+
+.closeButton:hover,
+.addButton:hover {
+  color: #000;
+  background-color: #ccc;
+}
+
+.addMclient {
+  margin-top: -2%;
+  display: flex;
+  justify-content: right;
+  margin-right: 5%;
+}
+
+/* Label */
+
+.nameClient {
+  position: absolute;
+  margin-top: -60px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 16px;
+  margin-left: 2.6%;
+  color: #737373;
+}
+
+.cedulaClient,
+.telephonoClient {
+  position: absolute;
+  margin-top: -20px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 16px;
+  margin-left: 2.6%;
+  color: #737373;
+}
+
+.lastnameClient,
+.date-bornClient {
+  position: absolute;
+  margin-top: -60px;
+  margin-left: 21%;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 16px;
+  color: #737373;
+}
+
+.secondnameClient,
+.correoClient,
+.precioClient {
+  position: absolute;
+  margin-top: -60px;
+  margin-left: 39.1%;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 16px;
+  color: #737373;
+}
+
+.custom-label {
+  display: block;
+  text-align: center;
+  position: relative;
+  font-size: 17px;
+  margin: 20px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  color: #A1A626;
+}
+
+.custom-label1 {
+  display: block;
+  text-align: center;
+  position: relative;
+  font-size: 17px;
+  margin: 20px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  color: #2b8c8c;
+  margin-top: -1.8%;
+}
+
+.custom-label::before,
+.custom-label::after,
+.custom-label1::before,
+.custom-label1::after {
+  content: "";
+  position: absolute;
+  top: 65%;
+  width: 30%;
+  border-top: 2px solid #737373;
+}
+
+.custom-label::before,
+.custom-label1::before {
+  left: 8%;
+}
+
+.custom-label::after,
+.custom-label1::after {
+  right: 8%;
+}
+
+/*Detalles de pago*/
+.admDate {
+  width: 27%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  margin-left: -0.1%;
+  font-family: 'Franklin Gothic', 'Arial Narrow', Arial, sans-serif;
+  border: 1px solid #A1A626;
+}
+
+.membershipClient {
+  position: absolute;
+  margin-top: -60px;
+  margin-left: 30.2%;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 16px;
+  color: #737373;
+}
+
+.next-payClient {
+  position: absolute;
+  margin-top: -60px;
+  margin-left: 15.1%;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 16px;
+  color: #737373;
+}
+
+.date-admClient {
+  position: absolute;
+  margin-top: -60px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 16px;
+  margin-left: -0.1%;
+  color: #737373;
+}
+
+.precioClient {
+  position: absolute;
+  margin-top: -60px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 16px;
+  margin-left: 45.3%;
+  color: #737373;
+}
+
+/*Detalles de pago*/
+
+/*MODAL AGREGAR CLIENTE*/
+
+/*vista cliente*/
+.ContaVC {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  /* O elimina completamente esta línea si no es necesario */
+  width: 420px;
+  height: 180px;
+  margin-left: 7%;
+  background-color: #FFFFFF;
+  border-radius: 9px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 4px 10px 0 rgba(0, 0, 0, 0.1);
+  line-height: 1.5;
+}
+
+.ContaVC p {
+  /* Ajusta los estilos según sea necesario */
+  margin: 0;
+  /* Elimina cualquier margen predeterminado que pueda afectar el centrado */
+}
+
+.memberVC {
+  /* O elimina completamente esta línea si no es necesario */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 420px;
+  height: 180px;
+  margin-left: 4.3%;
+  background-color: #FFFFFF;
+  border-radius: 9px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 4px 10px 0 rgba(0, 0, 0, 0.1);
+}
+
+.memberVC p {
+  margin: 0;
+}
+
+.TitleCV {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/*vista cliente*/
+/* Tab vista cliente*/
+
+.TAB {
+  width: 87.3%;
+  height: 345px;
+  margin-left: 7%;
+  margin-top: 3%;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 4px 10px 0 rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  background-color: white;
+  border-radius: 10px;
+  position: static;
+
+}
+
+/* Estilos específicos para Tabs y TabPanel */
+.MuiAppBar-root {
+  background-color: #ffffff;
+  /* Color de fondo de la barra de tabs */
+  align-items: start;
+  box-shadow: none;
+  /* Eliminar la sombra de la barra de tabs */
+  border-bottom: 1px solid #ccc;
 }
