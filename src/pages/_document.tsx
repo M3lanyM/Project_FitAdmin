@@ -8,7 +8,7 @@ export default function Document() {
         <link rel="shortcut icon" href="/favicon/favicon.ico" />
       </head>
       <body>
-        <title>MudancaGym</title>
+        <title>Mudança | Gimnasio</title>
         <Main />
         <NextScript />
       </body>
