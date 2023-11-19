@@ -156,7 +156,7 @@ export default function ClientInfoPage() {
       </div>
       <div className='TAB'>
         <Box sx={{ width: '100%' }}>
-        <AppBar position="static" sx={{ background: '#ffffff', boxShadow: 'none', borderBottom: '1px solid #ccc', alignItems: 'start' }}>
+        <AppBar position="sticky" sx={{ background: '#ffffff', boxShadow: 'none', borderBottom: '1px solid #ccc', alignItems: 'start' }}>
             <Tabs value={value} onChange={handleChange} centered>
               {tabOptions.map((option, index) => (
                <Tab
