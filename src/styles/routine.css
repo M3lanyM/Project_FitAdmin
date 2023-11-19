@@ -437,3 +437,70 @@
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   color: #A1A626;
 }
+
+
+/* Calendar.css */
+
+/* Estilos para el contenedor del calendario */
+.Conteiner-Cale {
+  width: 100%;
+  padding: 20px;
+  margin-left: 1.5%;
+  margin-right: 4%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-family: Arial, sans-serif;
+}
+
+/* Estilos para el encabezado del calendario */
+.text-Cale {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Estilos para la cuadrícula del calendario */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+/* Estilos para los días de la semana */
+.day-of-week {
+  text-align: center;
+  font-weight: bold;
+  padding: 5px;
+}
+
+/* Estilos para los días del mes */
+.day {
+  text-align: center;
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+
+/* Estilos para los días vacíos al inicio del mes */
+.empty-day {
+  visibility: hidden;
+}
+
+.btnRoutine-Client{
+  width: 30%;
+  height: 44px;
+  justify-content:center;
+  color: #fff;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  border-radius: 10px;
+  background-color: #A1A626;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.6);
+  font-size: 16px;
+  margin-bottom: 3%;
+  margin-left: 1.5%;
+}
+
+.container-calendario{
+  display:flex;
+  
+}
