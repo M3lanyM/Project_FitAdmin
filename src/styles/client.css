@@ -647,11 +647,3 @@
 }
 
 /* Estilos específicos para Tabs y TabPanel */
-.MuiAppBar-root {
-  background-color: #ffffff;
-  /* Color de fondo de la barra de tabs */
-  align-items: start;
-  box-shadow: none;
-  /* Eliminar la sombra de la barra de tabs */
-  border-bottom: 1px solid #ccc;
-}

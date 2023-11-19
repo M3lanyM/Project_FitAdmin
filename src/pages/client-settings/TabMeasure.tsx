@@ -1,4 +1,8 @@
 import React, { useState } from 'react';
+import { addDoc, collection, doc, getFirestore, serverTimestamp } from 'firebase/firestore';
+import { FirebaseApp, initializeApp } from 'firebase/app';
+import firebaseConfig from '@/firebase/config';
+import router from 'next/router';
 
 export default function TabMeasure() {
   const [estatura, setEstatura] = useState<number>(0);
@@ -23,8 +27,9 @@ export default function TabMeasure() {
   const [gemeI, setGemeI] = useState<number>(0);
   const [tricepD, setTricepD] = useState<number>(0);
   const [tricepI, setTricepI] = useState<number>(0);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString());
+  const { id } = router.query; // Obtenemos el ID del cliente de los parámetros de la URL
 
   const handleOpen = () => {
     setIsModalOpen(true);
@@ -33,12 +38,58 @@ export default function TabMeasure() {
   const handleClose = () => {
     setIsModalOpen(false);
   };
+  // ...
+    // Obtener la referencia al documento del cliente
+    const clienteRef = id ? doc(getFirestore(), 'cliente', id as string) : null;
 
-  const handleSave = () => {
-    // Aquí puedes enviar las medidas al servidor o hacer lo que necesites con ellas
-    // Por ahora, simplemente cerraremos el modal
-    handleClose();
-  };
+// Function to save measures to Firestore
+const saveMeasuresToFirestore = async () => {
+  try {
+    if (id) {
+      const app: FirebaseApp = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      const medidasCollection = collection(db, 'clienteMedidas');
+
+      // Create a document with measures data
+      const medidasDocRef = await addDoc(medidasCollection, {
+        clienteId: clienteRef,
+        fecha: selectedDate,
+        estatura,
+        peso,
+        cintura,
+        cadera,
+        pecho,
+        abdomen,
+        hombroD,
+        hombroI,
+        bicepD,
+        bicepI,
+        bicepDC,
+        bicepIC,
+        antebrD,
+        antebrI,
+        munecaD,
+        munecaI,
+        musloD,
+        musloI,
+        gemeD,
+        gemeI,
+        tricepD,
+        tricepI,
+      });
+
+      console.log('Medidas guardadas correctamente:', medidasDocRef.id);
+    }
+  } catch (error) {
+    console.error('Error al guardar las medidas:', error);
+  }
+};
+
+const handleSave = () => {
+  saveMeasuresToFirestore();
+  handleClose();
+};
 
   return (
     <>
@@ -56,6 +107,8 @@ export default function TabMeasure() {
                 className="measureDate"
                 type="date"
                 placeholder="Fecha"
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e.target.value)}
               />
             </div>
             <div className="inputMed-row">
@@ -133,7 +186,7 @@ export default function TabMeasure() {
                   step="0.01"
                   value={hombroD}
                   onChange={(e) => setHombroD(parseFloat(e.target.value))}
-                />
+                /> 
               </div>
               <div className="inputMed-container">
                 <label>Hombro Izq</label>
