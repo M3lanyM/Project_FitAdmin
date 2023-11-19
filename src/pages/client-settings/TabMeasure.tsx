@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { addDoc, collection, doc, getFirestore, serverTimestamp } from 'firebase/firestore';
 import { FirebaseApp, initializeApp } from 'firebase/app';
 import firebaseConfig from '@/firebase/config';
-import router from 'next/router';
+import { useRouter } from 'next/router';
 
 export default function TabMeasure() {
   const [estatura, setEstatura] = useState<number>(0);
@@ -29,6 +29,7 @@ export default function TabMeasure() {
   const [tricepI, setTricepI] = useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString());
+  const router = useRouter();
   const { id } = router.query; // Obtenemos el ID del cliente de los parámetros de la URL
 
   const handleOpen = () => {
