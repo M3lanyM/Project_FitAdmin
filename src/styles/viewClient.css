@@ -1,0 +1,106 @@
+.inputMed {
+    width: 66px;
+    height: 35px;
+    margin-left: 36.3%;
+    border: 1px solid #2b8c8c;
+    border-radius: 3px;
+    text-align: center;
+}
+
+.inputMed:focus {
+    border-color: #A1A626;
+    outline: none;
+}
+
+.inputMed::-webkit-inner-spin-button,
+.inputMed::-webkit-outer-spin-button {
+    height: 35px;
+}
+
+.modalMeasure {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modalMeasure-content {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    max-width: 35%;
+    max-height: 85%;
+    width: 100%;
+    overflow-y: auto;
+}
+
+.measureHader {
+    display: flex;
+    position: sticky;
+    top: 0;
+    background-color: rgb(175, 164, 164);
+    padding: 10px;
+    z-index: 1;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    align-content: center;
+}
+
+.measureDate {
+    width: 145px;
+    height: 35px;
+    margin-left: 3%;
+    border: 1px solid #2b8c8c;
+    border-radius: 3px;
+    text-align: center;
+    font-size: 16px;
+}
+
+.inputMed-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    align-content: center;
+    align-items: center;
+}
+
+.inputMed-container {
+    width: calc(100% - 0px);
+    /* 50% del ancho menos un pequeño espacio */
+    margin-right: 5px;
+    /* Espacio entre las columnas */
+}
+
+.inputMed-container label {
+    display: block;
+    text-align: center;
+    margin-bottom: 1px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 17px;
+    color: #737373;
+}
+
+/* Estilo del scroll */
+.modalMeasure-content::-webkit-scrollbar {
+    width: 10px;
+    background-color: #f2f2f2;
+    border-radius: 5px;
+
+}
+
+.modalMeasure-content::-webkit-scrollbar-thumb {
+    background-color: #a7a5a5;
+    border-radius: 0 5px 5px 0;
+    /* Establece el borde derecho redondeado */
+
+}
+
+/* Estilo del scroll */

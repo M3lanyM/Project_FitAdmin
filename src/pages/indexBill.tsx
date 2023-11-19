@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { TextField, InputAdornment, IconButton } from '@mui/material';
 import { Search as SearchIcon } from '@mui/icons-material';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -7,6 +7,9 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AdminLayout from './AdminLayout/AdminLayout';
+import { getFirestore, collection, query, onSnapshot, where, getDoc, getDocs, doc } from 'firebase/firestore';
+import { initializeApp } from "firebase/app";
+import firebaseConfig from "@/firebase/config";
 
 export interface TableData {
     id: number;
@@ -18,18 +21,27 @@ export interface TableData {
 interface Props {
     data?: TableData[];
 }
-
+// Definir una interfaz que represente la estructura de los documentos de membresía
+interface Membresia {
+    tipo: string;
+    precio: string;
+    // Otros campos si los hay
+}
 export const initialData: TableData[] = [
     { id: 1, client: 'John Doe', total: 100, date: '2023-08-29' },
     // ... other data
 ];
 
 export default function BillPage({ data }: Props) {
-    const [startDate, setStartDate] = useState(null);
-    const [endDate, setEndDate] = useState(null);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [isModalBill, setIsModalBill] = useState(false);
+    const [cedula, setCedula] = useState('');
+    const [nombre, setNombre] = useState('');
+    const [apellidos, setApellidos] = useState('');
+    const app = initializeApp(firebaseConfig);
+    const [descripcion, setDescripcion] = useState('');
+    const [total, setTotal] = useState('');
 
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
@@ -46,6 +58,38 @@ export default function BillPage({ data }: Props) {
 
     const closeModalBill = () => {
         setIsModalBill(false);
+    };
+    
+    const handleCedulaChange = async (e: ChangeEvent<HTMLInputElement>) => {
+        const cedulaValue = e.target.value;
+        setCedula(cedulaValue);
+
+        // Configura la referencia a la colección "cliente"
+        const db = getFirestore(app);
+        const clienteRef = collection(db, 'cliente');
+
+        // Crea la consulta para buscar el cliente por cédula
+        const q = query(clienteRef, where('cedula', '==', cedulaValue));
+
+        try {
+            // Realiza la consulta a la base de datos
+            const querySnapshot = await getDocs(q);
+
+            if (!querySnapshot.empty) {
+                // Si se encuentra un cliente con la cédula proporcionada, llenar los campos de nombre y apellidos
+                const clienteData = querySnapshot.docs[0].data();
+                setNombre(clienteData.nombre);
+                setApellidos(clienteData.primerApellido);
+            } else {
+                // Si no se encuentra un cliente, limpiar los campos de nombre y apellidos
+                setNombre('');
+                setApellidos('');
+            }
+        } catch (error) {
+            // Manejo de errores: Imprime el error en la consola
+            console.error('Error al buscar cliente:', error);
+            // Puedes manejar el error de otras maneras aquí, como establecer un estado de error para mostrar al usuario.
+        }
     };
 
     return (
@@ -182,6 +226,8 @@ export default function BillPage({ data }: Props) {
                                     className="personalInfo"
                                     type="text"
                                     placeholder="Cédula del cliente"
+                                    value={cedula}
+                                    onChange={handleCedulaChange}
                                 />
                             </div>
                             <div className="form-row">
@@ -190,6 +236,9 @@ export default function BillPage({ data }: Props) {
                                     className="personalInfo"
                                     type="text"
                                     placeholder="Nombre del cliente"
+                                    value={nombre}
+                                    onChange={handleCedulaChange}
+
                                 />
                             </div>
                             <div className="form-row">
@@ -198,6 +247,9 @@ export default function BillPage({ data }: Props) {
                                     className="personalInfo"
                                     type="text"
                                     placeholder="Apellidos del cliente"
+                                    value={apellidos}
+                                    onChange={handleCedulaChange}
+
                                 />
                             </div>
                             <div className="form-row">
@@ -209,19 +261,23 @@ export default function BillPage({ data }: Props) {
                                 />
                             </div>
                             <div className="form-row">
-                                <label >Descripción:</label>
-                                <textarea name="descrption"
+                                <label>Descripción:</label>
+                                <textarea
+                                    name="descripcion"
                                     className="personalInfo"
                                     placeholder="Descripción"
-                                >
-                                </textarea>
+                                    value={descripcion}
+                                    onChange={(e) => setDescripcion(e.target.value)}
+                                />
                             </div>
                             <div className="form-row">
-                                <label >Total:</label>
+                                <label>Total:</label>
                                 <input
                                     className="personalInfo"
                                     type="text"
                                     placeholder="Total"
+                                    value={total}
+                                    onChange={(e) => setTotal(e.target.value)}
                                 />
                             </div>
                             <button className="save-button" >

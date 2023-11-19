@@ -9,6 +9,8 @@ import '../styles/prueba.scss'
 import '@/styles/dashboard.css'
 import '@/styles/globals.css'
 import '@/styles/client.css'
+import '@/styles/viewClient.css'
+
 import ProgressBar from '@/components/ProgressBar'
 
 import type { AppProps } from 'next/app'

@@ -8,6 +8,7 @@ body {
   background-color: #F2F2F2;
   font-family: "Roboto", sans-serif;
 }
+
 td {
   padding: 10px;
   text-align: center;
@@ -27,7 +28,8 @@ td {
   align-items: center;
   z-index: 10000;
 }
-.custom-modal-delete{
+
+.custom-modal-delete {
   width: 20%;
   height: 24%;
   background-color: white;
@@ -37,14 +39,14 @@ td {
 }
 
 
-.text-delete{
+.text-delete {
   font-size: 16px;
   margin-top: 1%;
   font-weight: bold;
   text-align: center;
 }
 
-.confirmDelete{
+.confirmDelete {
   background-color: #2b8c8c;
   color: #fff;
   border: none;
@@ -56,7 +58,7 @@ td {
   margin-left: 22%;
 }
 
-.cancelDelete{
+.cancelDelete {
   background-color: #ff5252;
   color: #fff;
   border: none;
@@ -68,14 +70,17 @@ td {
   margin-left: 5%;
 }
 
-.confirmDelete:hover,.cancelDelete:hover {
+.confirmDelete:hover,
+.cancelDelete:hover {
   opacity: 0.8;
 }
+
 /*MODAL VALIDACION ELIMINAR*/
 
 /* Estilos para la barra de progreso */
 .custom-progress-bar {
-  height: 2.3px; /* Altura de la barra de progreso */
+  height: 2.3px;
+  /* Altura de la barra de progreso */
 }
 
 /*
@@ -83,5 +88,4 @@ td {
   background-color: #2b8c8c; Color de la barra de progreso 
 }
 */
-
 
