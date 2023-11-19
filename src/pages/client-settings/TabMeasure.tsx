@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { addDoc, collection, doc, getFirestore, serverTimestamp } from 'firebase/firestore';
+import React, { useEffect, useState } from 'react';
+import { addDoc, collection, doc, getFirestore, onSnapshot, query, serverTimestamp, where } from 'firebase/firestore';
 import { FirebaseApp, initializeApp } from 'firebase/app';
 import firebaseConfig from '@/firebase/config';
 import { useRouter } from 'next/router';
@@ -31,6 +31,44 @@ export default function TabMeasure() {
   const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString());
   const router = useRouter();
   const { id } = router.query; // Obtenemos el ID del cliente de los parámetros de la URL
+  const clienteRef = id ? doc(getFirestore(), 'cliente', id as string) : null; // Obtener la referencia al documento del cliente
+  const [measures, setMeasures] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchMeasures = async () => {
+      try {
+        const app: FirebaseApp = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Obtener la referencia al documento del cliente
+        const clienteRef = id ? doc(db, 'cliente', id as string) : null;
+
+        // Consulta para obtener las medidas del cliente
+        const measuresQuery = query(
+          collection(db, 'clienteMedidas'),
+          where('clienteId', '==', clienteRef)
+        );
+
+        // Obtener los documentos de medidas y sus cambios en tiempo real
+        const unsubscribe = onSnapshot(measuresQuery, (snapshot) => {
+          const measuresData: any[] = [];
+          snapshot.forEach((doc) => {
+            measuresData.push({ id: doc.id, ...doc.data() });
+          });
+          setMeasures(measuresData);
+        });
+
+        return () => {
+          // Limpiar el listener cuando el componente se desmonte
+          unsubscribe();
+        };
+      } catch (error) {
+        console.error('Error al obtener las medidas:', error);
+      }
+    };
+
+    fetchMeasures();
+  }, [id]);
 
   const handleOpen = () => {
     setIsModalOpen(true);
@@ -39,59 +77,83 @@ export default function TabMeasure() {
   const handleClose = () => {
     setIsModalOpen(false);
   };
-  // ...
-    // Obtener la referencia al documento del cliente
-    const clienteRef = id ? doc(getFirestore(), 'cliente', id as string) : null;
+  
+  // Guardar medidas
+  const saveMeasures = async () => {
+    try {
+      if (id) {
+        const app: FirebaseApp = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
 
-// Function to save measures to Firestore
-const saveMeasuresToFirestore = async () => {
-  try {
-    if (id) {
-      const app: FirebaseApp = initializeApp(firebaseConfig);
-      const db = getFirestore(app);
+        const medidasCollection = collection(db, 'clienteMedidas');
+        const medidasDocRef = await addDoc(medidasCollection, {
+          clienteId: clienteRef,
+          fecha: selectedDate,
+          estatura,
+          peso,
+          cintura,
+          cadera,
+          pecho,
+          abdomen,
+          hombroD,
+          hombroI,
+          bicepD,
+          bicepI,
+          bicepDC,
+          bicepIC,
+          antebrD,
+          antebrI,
+          munecaD,
+          munecaI,
+          musloD,
+          musloI,
+          gemeD,
+          gemeI,
+          tricepD,
+          tricepI,
+        });
 
-      const medidasCollection = collection(db, 'clienteMedidas');
-
-      // Create a document with measures data
-      const medidasDocRef = await addDoc(medidasCollection, {
-        clienteId: clienteRef,
-        fecha: selectedDate,
-        estatura,
-        peso,
-        cintura,
-        cadera,
-        pecho,
-        abdomen,
-        hombroD,
-        hombroI,
-        bicepD,
-        bicepI,
-        bicepDC,
-        bicepIC,
-        antebrD,
-        antebrI,
-        munecaD,
-        munecaI,
-        musloD,
-        musloI,
-        gemeD,
-        gemeI,
-        tricepD,
-        tricepI,
-      });
-
-      console.log('Medidas guardadas correctamente:', medidasDocRef.id);
+        console.log('Medidas guardadas correctamente:', medidasDocRef.id);
+      }
+    } catch (error) {
+      console.error('Error al guardar las medidas:', error);
     }
-  } catch (error) {
-    console.error('Error al guardar las medidas:', error);
-  }
-};
+  };
 
-const handleSave = () => {
-  saveMeasuresToFirestore();
-  handleClose();
-};
+  const handleSave = () => {
+    saveMeasures();
+    handleClose();
+  };
 
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString();
+  };
+  const columns = [
+    { title: 'Fecha', key: 'fecha' },
+    { title: 'Estatura', key: 'estatura' },
+    { title: 'Peso', key: 'peso' },
+    { title: 'Cintura', key: 'cintura' },
+    { title: 'Cadera', key: 'cadera' },
+    { title: 'Pecho', key: 'pecho' },
+    { title: 'Abdomen', key: 'abdomen' },
+    { title: 'Hombro Der', key: 'hombroD' },
+    { title: 'Hombro Izq', key: 'hombroI' },
+    { title: 'Bicep Der Relajado', key: 'bicepD' },
+    { title: 'Bicep Izq Relajado', key: 'bicepI' },
+    { title: 'Bicep Der Contraído', key: 'bicepDC' },
+    { title: 'Bicep Izq Contraído', key: 'bicepIC' },
+    { title: 'Antebrazo Der', key: 'antebrD' },
+    { title: 'Antebrazo Izq', key: 'antebrI' },
+    { title: 'Muñeca Der', key: 'munecaD' },
+    { title: 'Muñeca Izq', key: 'munecaI' },
+    { title: 'Muslo Der', key: 'musloD' },
+    { title: 'Muslo Izq', key: 'musloI' },
+    { title: 'Gemelos Der', key: 'gemeD' },
+    { title: 'Gemelos Izq', key: 'gemeI' },
+    { title: 'Tricep Der', key: 'tricepD' },
+    { title: 'Tricep Izq', key: 'tricepI' },
+  ];
   return (
     <>
       <div>
@@ -187,7 +249,7 @@ const handleSave = () => {
                   step="0.01"
                   value={hombroD}
                   onChange={(e) => setHombroD(parseFloat(e.target.value))}
-                /> 
+                />
               </div>
               <div className="inputMed-container">
                 <label>Hombro Izq</label>
@@ -361,6 +423,25 @@ const handleSave = () => {
           </div>
         </div>
       )}
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {columns.map((column) => (
+            <tr key={column.key}>
+              <td>{column.title}</td>
+              {measures.map((measure) => (
+                <td key={measure.id}>
+                  {column.key === 'fecha' ? formatDate(measure[column.key]) : measure[column.key]}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </>
   );
 }
