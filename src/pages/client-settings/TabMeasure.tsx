@@ -46,22 +46,18 @@ export default function TabMeasure() {
         <button className='btnClient' onClick={handleOpen}>
           + Agregar medidas
         </button>
-        <h2>Contenido de la Vista Uno</h2>
-        <p>Este es el contenido que se mostrará en la pestaña de MEDIDAS</p>
       </div>
       {isModalOpen && (
         <div className="modalMeasure">
           <div className="modalMeasure-content">
             <div className="measureHader">
-           <h2>Agregar Medidas</h2> 
-           <input
-                  className="measureDate"
-                  type="date"
-                  placeholder="Fecha"
-                />
-              
+              <h2>Agregar Medidas</h2>
+              <input
+                className="measureDate"
+                type="date"
+                placeholder="Fecha"
+              />
             </div>
-
             <div className="inputMed-row">
               <div className="inputMed-container">
                 <label>Estatura</label>
