@@ -6,6 +6,9 @@ import { DocumentSnapshot, addDoc, collection, doc, getDoc, getDocs, getFirestor
 import { TextField } from "@mui/material";
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { Document, Packer, Paragraph, TextRun } from "docx";
+import { DocumentData } from "firebase/firestore";
+
 
 interface Notes {
   [day: number]: string;
@@ -23,6 +26,10 @@ const monthNames = [
   'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
   'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
 ];
+
+interface CustomDocumentType extends Document {
+  addParagraph(paragraph: Paragraph): void;
+}
 
 export default function TabRoutine() {
 
@@ -250,17 +257,81 @@ export default function TabRoutine() {
 
       setNotes(prevNotes => ({
         ...prevNotes,
-        [selectedDay]: `     ${titleInput}`
+        [startDate ? startDate.toISOString().split('T')[0] : '']: `     ${titleInput}`
       }));
       setIsAssignRoutineModalOpen(false);
       setTitleInput('');
       setObjectiveInput('');
+      SetCategory('');
       setSelectedRoutine('');
 
     } catch (error) {
       console.error('Error al guardar el objetivo:', error);
     }
   };
+  const generateWordDocument = async () => {
+    try {
+      const clientRoutinesCollection = collection(db, 'clienteRutina');
+        const querySnapshot = await getDocs(query(clientRoutinesCollection,
+          where('clienteId', '==', clienteRef),
+        ));
+
+        const data: Record<number, string> = {};
+
+        querySnapshot.forEach(async (doc) => {
+          const { tituloRutina, fechaInicio, fechaFinal } = doc.data();
+          const startDate = fechaInicio;
+          const endDate = fechaFinal;
+          const tittleDocument = tituloRutina;
+
+            const selectedRoutineid = routines.find(routine => routine.id === selectedRoutine);
+  
+              // Aquí puedes acceder a la información de la rutina seleccionada
+              const routineName = selectedRoutineid?.name; // Nombre de la rutina seleccionada
+
+
+
+          // Crear un nuevo documento Word con opciones por defecto
+      const docc = new Document({
+        sections: [
+          {
+            children: [
+              new Paragraph(`Fecha de Inicio: ${startDate}`),
+              new Paragraph(`Fecha Final: ${endDate}`),
+              new Paragraph(`Nombre de la Rutina: ${tittleDocument}`),
+              new Paragraph(`Nombre de la Rutina: ${routineName}`),
+              // Agregar más información según sea necesario...
+            ],
+          },
+        ],
+      });
+  
+      // Generar un archivo Word
+      const buffer = await Packer.toBuffer(docc);
+  
+      // Descargar el archivo Word
+      const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = 'Historial.docx';
+      a.click();
+      URL.revokeObjectURL(url);
+        });
+      
+    } catch (error) {
+      console.error('Error al generar el documento Word:', error);
+    }
+  };
+const handleSaveDocument = async (e: React.FormEvent) => {
+  e.preventDefault();
+      // ... tu código existente ...
+
+      // Llamar a la función para generar el documento Word al presionar el botón
+      await generateWordDocument();
+}
+
+
 
   return (
     <>
@@ -275,6 +346,7 @@ export default function TabRoutine() {
               {renderCalendar()}
             </div>
           </div>
+          <button onClick={handleSaveDocument}>Guardar Información en Word</button>
         </div>
 
       </div>
