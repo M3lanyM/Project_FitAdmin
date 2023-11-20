@@ -32,8 +32,8 @@ export default function Sidebar(props: { isShow: boolean; isShowMd: boolean }) {
 
       {/* Logo de la barra lateral */}
       <div className="sidebar-brand d-flex align-items-center justify-content-center mb-3 border-bottom ">
-        <img src="/img/logo.png" alt="FitAdmin Logo" style={{ width: '40px', marginRight: '5px' }} />
-        {isNarrow ? null : <span style={{ fontSize: '1.5em', fontWeight: 'bold' }}>FITADMIN</span>}
+        <img src="/img/logo.png" alt="FitAdmin Logo" style={{ width: '55px' }} />
+        {isNarrow ? null : <span style={{ fontSize: '1.5em', fontWeight: 'bold', color: "#202020", marginTop: '5px' }}>FITADMIN</span>}
       </div>
 
       <div className="sidebar-nav flex-fill">
