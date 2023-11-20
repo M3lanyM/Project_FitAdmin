@@ -5,9 +5,8 @@ import { HiOutlineLocationMarker } from "react-icons/hi";
 import { LuMail } from "react-icons/lu";
 import { PiPhoneCall } from "react-icons/pi";
 import { LiaFacebookSquare } from "react-icons/lia";
-import { FiInstagram } from "react-icons/Fi";
+import { FiInstagram } from "react-icons/fi";
 import { BiWorld } from "react-icons/bi";
-import { FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
 import { FaSquareCaretLeft, FaSquareCaretRight } from "react-icons/fa6";
 
 const IndexMudanca = () => {
