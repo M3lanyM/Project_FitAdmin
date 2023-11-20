@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { addDoc, collection, doc, getFirestore, onSnapshot, query, serverTimestamp, where } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getFirestore, onSnapshot, query, where } from 'firebase/firestore';
 import { FirebaseApp, initializeApp } from 'firebase/app';
 import firebaseConfig from '@/firebase/config';
 import { useRouter } from 'next/router';
+import { Menu, MenuItem, IconButton } from '@mui/material';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { MdOutlineDeleteOutline } from 'react-icons/md';
+import { MdAddCircle } from "react-icons/md";
 
 export default function TabMeasure() {
   const [estatura, setEstatura] = useState<number>(0);
@@ -33,6 +37,15 @@ export default function TabMeasure() {
   const { id } = router.query; // Obtenemos el ID del cliente de los parámetros de la URL
   const clienteRef = id ? doc(getFirestore(), 'cliente', id as string) : null; // Obtener la referencia al documento del cliente
   const [measures, setMeasures] = useState<any[]>([]);
+  const [anchorEl, setAnchorEl] = useState<{ [key: string]: HTMLElement | null }>({});
+
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>, measureId: string) => {
+    setAnchorEl((prev) => ({ ...prev, [measureId]: event.currentTarget }));
+  };
+
+  const handleMenuClose = (measureId: string) => {
+    setAnchorEl((prev) => ({ ...prev, [measureId]: null }));
+  };
 
   useEffect(() => {
     const fetchMeasures = async () => {
@@ -77,7 +90,7 @@ export default function TabMeasure() {
   const handleClose = () => {
     setIsModalOpen(false);
   };
-  
+
   // Guardar medidas
   const saveMeasures = async () => {
     try {
@@ -125,10 +138,26 @@ export default function TabMeasure() {
     handleClose();
   };
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString();
+  //eliminar medida
+  const handleDeleteMeasure = async (measureId: string) => {
+    try {
+      const app: FirebaseApp = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      const measureDocRef = doc(db, 'clienteMedidas', measureId);
+      await deleteDoc(measureDocRef);
+
+      console.log('Medida eliminada correctamente:', measureId);
+    } catch (error) {
+      console.error('Error al eliminar la medida:', error);
+    }
   };
+
+  const formatDate = (dateString: string, measureId: string) => {
+    const date = new Date(dateString);
+    return { date: date.toLocaleDateString(), id: measureId };
+  };
+
   const columns = [
     { title: 'Fecha', key: 'fecha' },
     { title: 'Estatura', key: 'estatura' },
@@ -157,9 +186,49 @@ export default function TabMeasure() {
   return (
     <>
       <div>
-        <button className='btnClient' onClick={handleOpen}>
-          + Agregar medidas
+        <button className='btnMeasure' onClick={handleOpen}>
+          <MdAddCircle style={{ fontSize: '22px', marginTop: '-1px', marginRight: '5px' }} />
+          Agregar medidas
         </button>
+      </div>
+      <div className="tableMeasure">
+        <table className="custom-tableMe">
+          <tbody>
+            {columns.map((column) => (
+              <tr key={column.key}>
+                <td>{column.title}</td>
+                {measures.map((measure) => (
+                  <td key={measure.id}>
+                    {column.key === 'fecha' ? (
+                      <>
+                        <span>{formatDate(measure[column.key], measure.id).date}</span>
+                        <IconButton onClick={(event) => handleMenuOpen(event, measure.id)}
+                          className="more-options-icon"
+
+                        >
+                          <MoreVertIcon />
+                        </IconButton>
+                        <Menu
+                          anchorEl={anchorEl[measure.id]}
+                          open={Boolean(anchorEl[measure.id])}
+                          onClose={() => handleMenuClose(measure.id)}
+                        >
+                          <MenuItem
+                            onClick={() => handleDeleteMeasure(measure.id)}
+                            sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}
+                          >
+                            <MdOutlineDeleteOutline style={{ fontSize: '18px', marginRight: '2px', marginTop: '-2px' }} /> Borrar
+                          </MenuItem>
+                        </Menu>
+                      </>
+                    ) : (measure[column.key])}
+                  </td>
+                ))}
+              </tr>
+            ))}
+
+          </tbody>
+        </table>
       </div>
       {isModalOpen && (
         <div className="modalMeasure">
@@ -423,25 +492,6 @@ export default function TabMeasure() {
           </div>
         </div>
       )}
-      <table>
-        <thead>
-          <tr>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {columns.map((column) => (
-            <tr key={column.key}>
-              <td>{column.title}</td>
-              {measures.map((measure) => (
-                <td key={measure.id}>
-                  {column.key === 'fecha' ? formatDate(measure[column.key]) : measure[column.key]}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
     </>
   );
 }

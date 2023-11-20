@@ -99,8 +99,71 @@
 .modalMeasure-content::-webkit-scrollbar-thumb {
     background-color: #a7a5a5;
     border-radius: 0 5px 5px 0;
-    /* Establece el borde derecho redondeado */
-
 }
 
 /* Estilo del scroll */
+
+.tableMeasure {
+    width: 90%;
+    overflow-x: auto;
+    margin-left: 5%;
+    margin-top: 26px;
+    margin-bottom: 26px;
+}
+
+.tableMeasure::-webkit-scrollbar-thumb {
+    background-color: #919090;
+}
+
+.custom-tableMe {
+    width: 100%;
+    border-collapse: collapse;
+
+}
+
+.custom-tableMe th,
+.custom-tableMe td {
+    border: 1px solid #919090;
+    padding: 8px;
+    text-align: center;
+    min-width: 105px;
+}
+
+.custom-tableMe td:first-child {
+    text-align: left;
+    background-color: #f2f2f277;
+    color: #A1A626;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 17px;
+}
+
+.custom-tableMe td {
+    white-space: nowrap;
+}
+
+.custom-tableMe .more-options-icon {
+    position: relative;
+    top: -1px;
+    color: #A1A626;
+}
+
+.btnMeasure {
+    width: 21%;
+    margin-top: 4px;
+    background-color: #2b8c8c;
+    color: white;
+    border: none;
+    padding: 0.7rem 1.2rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 16px;
+    margin-right: 3%;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
+    margin-left: 74%;
+}
+
+.btnMeasure:hover {
+    color: #000;
+    background-color: #f2f2f277;
+}
