@@ -4,9 +4,8 @@ import firebaseConfig from "@/firebase/config";
 import { initializeApp } from "firebase/app";
 import { DocumentSnapshot, addDoc, collection, doc, getDoc, getDocs, getFirestore, onSnapshot, query, where } from 'firebase/firestore';
 import { TextField } from "@mui/material";
-
-
-
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 interface Notes {
   [day: number]: string;
@@ -18,18 +17,6 @@ interface Routine {
   description: string;
   series: string;
   repetitions: string;
-}
-
-interface Client {
-  nombre: string;
-  cedula: string;
-  primerApellido: string;
-  correo: string;
-  estado: string;
-  admDate: "",
-  nextPay: "",
-  precio: "",
-  membership: "",
 }
 
 const monthNames = [
@@ -60,10 +47,13 @@ export default function TabRoutine() {
   const [selectedMonth, setSelectedMonth] = useState<number>(new Date().getMonth() + 1);
 
 
-
+  // Obtener la referencia al documento del cliente
+  const clienteRef = id ? doc(getFirestore(), 'cliente', id as string) : null;
+  const routineCollection = collection(db, 'rutina');
+  const clienteRutinaCollection = collection(db, 'clienteRutina');
 
   useEffect(() => {
-    const routineCollection = collection(db, 'rutina');
+
     const q = query(routineCollection);
 
     // Crea un oyente en tiempo real para la colección de clientes
@@ -86,26 +76,45 @@ export default function TabRoutine() {
       try {
         const clientRoutinesCollection = collection(db, 'clienteRutina');
         const querySnapshot = await getDocs(query(clientRoutinesCollection,
-          where('mes', '==', currentMonth + 1) // Filtrar por mes
-         // where('anio', '==', currentYear) // Filtrar por año
+          where('clienteId', '==', clienteRef),
         ));
-  
+
         const data: Record<number, string> = {};
-  
+
         querySnapshot.forEach((doc) => {
-          const { dia, tituloRutina } = doc.data();
-          data[dia] =    tituloRutina; // Almacenar el título de la rutina por día
+          const { tituloRutina, fechaInicio, fechaFinal } = doc.data();
+          const startDate = new Date(fechaInicio);
+          const endDate = new Date(fechaFinal);
+
+          const startDayOfWeek = startDate.getDay(); // Día de la semana de la fecha inicial
+
+          // Encontrar el siguiente día de la semana igual al de la fecha inicial
+          while (startDate <= endDate) {
+            const dayOfMonth = startDate.getDate() + 1;
+            const currentDayOfWeek = startDate.getDay();
+
+            // Verificar si estamos en el mes y año correctos
+            if (
+              startDate.getMonth() === currentMonth &&
+              startDate.getFullYear() === currentYear &&
+              currentDayOfWeek === startDayOfWeek
+            ) {
+              data[dayOfMonth] = tituloRutina; // Asignar el título al día correspondiente
+            }
+
+            startDate.setDate(startDate.getDate() + 1); // Avanzar un día
+          }
         });
-  
+
         setNotes(data); // Establecer los títulos de las rutinas en los días correspondientes
       } catch (error) {
         console.error('Error al cargar las rutinas de los clientes:', error);
       }
     };
-  
+
     loadClientRoutines();
 
-    
+
     // Limpiar el oyente cuando el componente se desmonta   
     return () => {
       unsubscribe();
@@ -126,8 +135,24 @@ export default function TabRoutine() {
     const startingDay = getStartingDayOfMonth(currentYear, currentMonth);
 
 
-    const handleClick = (day: number) => {
-      handlerAssignRoutine(day); // Por defecto, se establece el objetivo como una cadena vacía al seleccionar el día
+    const handleClick = async (day: number) => {
+      setSelectedDay(day);
+
+      try {
+        const clientRoutinesCollection = collection(db, 'clienteRutina');
+
+        const querySnapshot = await getDocs(
+          query(
+            clientRoutinesCollection
+          )
+        );
+
+        querySnapshot.forEach((doc) => {
+          setIsAssignRoutineModalOpen(true);
+        });
+      } catch (error) {
+        console.error('Error al cargar la información de la rutina:', error);
+      }
     };
 
     for (let i = 0; i < startingDay; i++) {
@@ -164,8 +189,25 @@ export default function TabRoutine() {
     setSelectedDay(day); // Actualizar el día seleccionado
     setSelectedMonth(new Date().getMonth() + 1); // Actualizar el mes seleccionado
     setIsAssignRoutineModalOpen(true);
+
+    // Verificar si hay información para el día seleccionado en notes
+    const selectedDayInfo = notes[day];
+    if (selectedDayInfo) {
+      // Llenar el modal con la información correspondiente al día seleccionado
+      const selectedRoutine = routines.find(routine => routine.id === selectedDayInfo);
+      if (selectedRoutine) {
+        setTitleInput(selectedRoutine.name || '');
+        // Llenar otros campos del modal según sea necesario
+      }
+    } else {
+      // Si no hay información, limpiar el contenido del modal
+      setTitleInput('');
+      setSelectedRoutine('');
+
+      // Limpiar otros campos del modal según sea necesario
+    }
   };
-  
+
 
   const CloseAssignRoutine = () => {
     setIsAssignRoutineModalOpen(false);
@@ -173,12 +215,6 @@ export default function TabRoutine() {
 
   const handleRoutineChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedRoutine(event.target.value);
-  };
-
-
-  const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedDate(event.target.valueAsDate);
-    // Aquí podrías cargar los datos correspondientes al mes seleccionado si es necesario
   };
 
   const handleNextMonth = () => {
@@ -198,17 +234,16 @@ export default function TabRoutine() {
   const handleSaveObjective = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const clienteRutinaCollection = collection(db, 'clienteRutina');
+
+      const selectedRoutineDocRef = doc(db, 'rutina', selectedRoutine);
       const objetivoData = {
-        clienteId: id as string,
-        dia: selectedDay,
-        mes: selectedMonth,
+        clienteId: clienteRef,
         tituloRutina: titleInput,
         fechaInicio: startDate ? startDate.toISOString().split('T')[0] : '', // Guardar la fecha de inicio
         fechaFinal: endDate ? endDate.toISOString().split('T')[0] : '', // Guardar la fecha final
         objetivo: objectiveInput,
         categoria: category,
-        rutinaSeleccionada: selectedRoutine // Asegúrate de obtener la rutina seleccionada
+        rutinaSeleccionada: selectedRoutineDocRef // Asegúrate de obtener la rutina seleccionada
       };
 
       await addDoc(clienteRutinaCollection, objetivoData);
@@ -219,6 +254,9 @@ export default function TabRoutine() {
       }));
       setIsAssignRoutineModalOpen(false);
       setTitleInput('');
+      setObjectiveInput('');
+      setSelectedRoutine('');
+
     } catch (error) {
       console.error('Error al guardar el objetivo:', error);
     }
@@ -228,10 +266,10 @@ export default function TabRoutine() {
     <>
       <div className='container-calendario'>
         <div className='Conteiner-Cale'>
-          <h2 className='text-Cale'>{currentMonthName}</h2>
           <div>
-            <button onClick={handlePreviousMonth}>Mes Anterior</button>
-            <button onClick={handleNextMonth}>Mes Siguiente</button>
+            <h2 className='text-Cale'>{currentMonthName}</h2>
+            <ArrowBackIosIcon onClick={handlePreviousMonth} />
+            <ArrowForwardIosIcon onClick={handleNextMonth} />
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)' }}>
               {renderDaysOfWeek()}
               {renderCalendar()}
