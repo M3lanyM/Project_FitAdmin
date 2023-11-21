@@ -127,7 +127,7 @@ export default function TabRoutine() {
     return () => {
       unsubscribe();
     };
-  }, [app, currentMonth, currentYear]);
+  }, [db, app, currentMonth, currentYear]);
 
   const daysInMonth = (year: number, month: number): number => {
     return new Date(year, month + 1, 0).getDate();

@@ -10,6 +10,8 @@ import AdminLayout from './AdminLayout/AdminLayout';
 import { getFirestore, collection, query, onSnapshot, where, getDoc, getDocs, doc } from 'firebase/firestore';
 import { initializeApp } from "firebase/app";
 import firebaseConfig from "@/firebase/config";
+import { DocumentReference } from 'firebase/firestore';
+
 
 export interface TableData {
     id: number;
@@ -25,7 +27,6 @@ interface Props {
 interface Membresia {
     tipo: string;
     precio: string;
-    // Otros campos si los hay
 }
 export const initialData: TableData[] = [
     { id: 1, client: 'John Doe', total: 100, date: '2023-08-29' },
@@ -59,7 +60,7 @@ export default function BillPage({ data }: Props) {
     const closeModalBill = () => {
         setIsModalBill(false);
     };
-    
+
     const handleCedulaChange = async (e: ChangeEvent<HTMLInputElement>) => {
         const cedulaValue = e.target.value;
         setCedula(cedulaValue);
@@ -80,6 +81,11 @@ export default function BillPage({ data }: Props) {
                 const clienteData = querySnapshot.docs[0].data();
                 setNombre(clienteData.nombre);
                 setApellidos(clienteData.primerApellido);
+                // Accede al primer documento de la consulta
+                const clienteDoc = querySnapshot.docs[0];
+                const clientId = clienteDoc.id;
+                const clienteRef = doc(collection(db, 'cliente'), clientId);
+                await findClientMembresia(clienteRef);
             } else {
                 // Si no se encuentra un cliente, limpiar los campos de nombre y apellidos
                 setNombre('');
@@ -91,6 +97,39 @@ export default function BillPage({ data }: Props) {
             // Puedes manejar el error de otras maneras aquí, como establecer un estado de error para mostrar al usuario.
         }
     };
+    const findClientMembresia = async (clienteIdRef: DocumentReference) => {
+        const db = getFirestore(app);
+    
+        try {
+            // Realiza la consulta a la base de datos para obtener la membresía del cliente
+            const querySnapshot = await getDocs(query(collection(db, 'clienteMembresia'), where('clienteId', '==', clienteIdRef)));
+    
+            if (!querySnapshot.empty) {
+                const membresiaRef = querySnapshot.docs[0].data().membershipId;
+    
+                // Obtén los datos de la membresía utilizando la referencia
+                const membresiaDoc = await getDoc(membresiaRef);
+    
+                if (membresiaDoc.exists()) {
+                    // Si se encuentra la membresía en la colección 'membresia'
+                    const membresiaData = membresiaDoc.data() as { precio: string, tipo: string };
+                    setTotal(membresiaData.precio);
+                    setDescripcion(membresiaData.tipo);
+                } else {
+                    console.log('No se encontró la membresía en la colección "membresia"');
+                }
+            } else {
+                console.log('No se encontró ninguna membresía para la referencia de cliente');
+            }
+        } catch (error) {
+            console.error('Error al buscar membresía del cliente:', error);
+        }
+    };
+    
+    
+
+    
+
 
     return (
         <AdminLayout>
