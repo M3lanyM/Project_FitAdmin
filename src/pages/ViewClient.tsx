@@ -5,7 +5,7 @@ import { initializeApp, FirebaseApp } from 'firebase/app';
 import firebaseConfig from '@/firebase/config';
 import { differenceInDays, parseISO } from 'date-fns'; // Importa las funciones para cálculos de fechas
 import React from 'react';
-import { FaPencilRuler} from "react-icons/fa";
+import { FaPencilRuler } from "react-icons/fa";
 import TodayIcon from '@mui/icons-material/Today';
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import { AppBar, ListItemIcon, Tab, Tabs, Typography } from '@mui/material';
@@ -35,6 +35,8 @@ export default function ClientInfoPage() {
   const [fechaIngreso, setFechaIngreso] = useState<string | null>(null);
   const [diasRestantesParaPago, setDiasRestantesParaPago] = useState<number | null>(null); // Nuevo estado para los días restantes
   const [value, setValue] = React.useState(0);
+  const [precio, setprecio] = useState('');
+  const [tipo, setTipo] = useState('');
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -77,6 +79,20 @@ export default function ClientInfoPage() {
               const fechaProximoPago = parseISO(membresiaData.proximoPago);
               const diferenciaDias = differenceInDays(fechaProximoPago, new Date());
               setDiasRestantesParaPago(diferenciaDias);
+
+              const memberId = membresiaData.membershipId;
+              const membresiaRef = doc(db, 'membresia', memberId.id);
+              // Obtén los datos de la membresía utilizando la referencia
+              const membresiaDocc = await getDoc(membresiaRef);
+
+              if (membresiaDocc.exists()) {
+                // Si se encuentra la membresía en la colección 'membresia'
+                const membresiaDatas = membresiaDocc.data() as { precio: string, tipo: string };
+                setprecio(membresiaDatas.precio);
+                setTipo(membresiaDatas.tipo);
+              } else {
+                console.log('No se encontró la membresía en la colección "membresia"');
+              }
             } else {
               console.error('El documento de clienteMembresia no existe.');
             }
@@ -149,30 +165,31 @@ export default function ClientInfoPage() {
             ) : (
               <p>Fecha de próximo pago no disponible</p>
             )}
-            <p>FPrecio: /mensual</p>
+            <p>Precio: {precio}</p>
+            <p>Tipo: {tipo}</p>
 
           </div>
         </div>
       </div>
       <div className='TAB'>
         <Box sx={{ width: '100%' }}>
-        <AppBar position="sticky" sx={{ background: '#ffffff', boxShadow: 'none', borderBottom: '1px solid #ccc', alignItems: 'start' }}>
+          <AppBar position="sticky" sx={{ background: '#ffffff', boxShadow: 'none', borderBottom: '1px solid #ccc', alignItems: 'start' }}>
             <Tabs value={value} onChange={handleChange} centered>
               {tabOptions.map((option, index) => (
-               <Tab
-               key={index}
-               label={
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <ListItemIcon sx={{ marginRight: '-28px' }}>
-                     {index === 0 && <ContentPasteIcon sx={{ fontSize: 21 }} />}  {/* Icono para la primera pestaña */}
-                     {index === 1 && <TodayIcon sx={{ fontSize: 23 }} />}  {/* Icono para la segunda pestaña */}
-                     {index === 2 && <FaPencilRuler  size={16}  />}  {/* Icono para la tercera pestaña */}
-                   </ListItemIcon>
-                   <Typography style={{ color: '#6B6B6B', fontSize: '17px' }}>{option.label}</Typography>
-                 </Box>
-               }
-             />
-           ))}
+                <Tab
+                  key={index}
+                  label={
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                      <ListItemIcon sx={{ marginRight: '-28px' }}>
+                        {index === 0 && <ContentPasteIcon sx={{ fontSize: 21 }} />}  {/* Icono para la primera pestaña */}
+                        {index === 1 && <TodayIcon sx={{ fontSize: 23 }} />}  {/* Icono para la segunda pestaña */}
+                        {index === 2 && <FaPencilRuler size={16} />}  {/* Icono para la tercera pestaña */}
+                      </ListItemIcon>
+                      <Typography style={{ color: '#6B6B6B', fontSize: '17px' }}>{option.label}</Typography>
+                    </Box>
+                  }
+                />
+              ))}
             </Tabs>
           </AppBar>
           {tabOptions.map((option, index) => (
