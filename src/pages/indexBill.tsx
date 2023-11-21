@@ -15,7 +15,6 @@ import { DocumentReference } from 'firebase/firestore';
 
 export interface TableData {
     id: number;
-    client: string;
     date: string;
     total: number;
 }
@@ -25,7 +24,7 @@ interface Props {
 }
 
 export const initialData: TableData[] = [
-    { id: 1, client: 'John Doe', total: 100, date: '2023-08-29' },
+    { id: 1, date: '2023-08-29', total: 100 },
     // ... other data
 ];
 
@@ -260,7 +259,6 @@ export default function BillPage({ data }: Props) {
                     <thead>
                         <tr className="fixed-header-row">
                             <th className="th-tableBill">N° factura</th>
-                            <th className="th-tableBill">Cliente</th>
                             <th className="th-tableBill">Fecha</th>
                             <th className="th-tableBill">Total</th>
                             <th className="th-tableBill">Acción</th>
@@ -271,7 +269,6 @@ export default function BillPage({ data }: Props) {
                             .map((row) => (
                                 <tr key={row.id} className="tableRoutine-row">
                                     <td>{row.id}</td>
-                                    <td>{row.client}</td>
                                     <td>{row.date}</td>
                                     <td>{row.total}</td>
                                     <td>
