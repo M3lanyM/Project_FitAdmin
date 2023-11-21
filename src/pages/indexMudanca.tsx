@@ -8,6 +8,7 @@ import { LiaFacebookSquare } from "react-icons/lia";
 import { FiInstagram } from "react-icons/fi";
 import { BiWorld } from "react-icons/bi";
 import { FaSquareCaretLeft, FaSquareCaretRight } from "react-icons/fa6";
+import HomePage from "./page";
 
 const IndexMudanca = () => {
   const [isEditarPerfil, setIsEditarPerfil] = useState(false);
@@ -168,6 +169,7 @@ const IndexMudanca = () => {
             <FaSquareCaretRight style={{ fontSize: '1.7em', color: "#02afaf", marginLeft: '5px' }} />
           </button>
         </div>
+        <HomePage></HomePage>
       </AdminLayout>
     </>
   );

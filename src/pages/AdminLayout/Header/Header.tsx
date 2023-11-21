@@ -1,4 +1,5 @@
 import { RiArrowDropLeftLine } from "react-icons/ri";
+import HeaderNav from "./headerNav";
 
 
 type HeaderProps = {
@@ -26,6 +27,9 @@ export default function Header(props: HeaderProps) {
         >
           <RiArrowDropLeftLine style={{ fontSize: '2rem' }} />
         </button>
+        <div className="header-nav d-none d-md-flex">
+          <HeaderNav />
+        </div>
       </div>
     </header>
   )

@@ -380,10 +380,6 @@ export default function TabRoutine() {
     }
   };
 
-
-
-
-
   return (
     <>
       <div className='container-calendario'>
