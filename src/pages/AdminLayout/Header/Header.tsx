@@ -1,5 +1,7 @@
 import { RiArrowDropLeftLine } from "react-icons/ri";
 import HeaderNav from "./headerNav";
+import NotificationsPage from '@/pages/AdminLayout/Header/Notification';
+
 
 
 type HeaderProps = {
@@ -27,8 +29,12 @@ export default function Header(props: HeaderProps) {
         >
           <RiArrowDropLeftLine style={{ fontSize: '2rem' }} />
         </button>
+
         <div className="header-nav d-none d-md-flex">
           <HeaderNav />
+        </div>
+        <div className="">
+          <NotificationsPage/>
         </div>
       </div>
     </header>
