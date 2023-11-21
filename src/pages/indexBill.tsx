@@ -14,21 +14,21 @@ import { DocumentReference } from 'firebase/firestore';
 
 
 export interface TableData {
-    id: number;
+    id: string;
+    cliente: string;
     date: string;
-    total: number;
+    total: string;
 }
 
 interface Props {
     data?: TableData[];
 }
 
-export const initialData: TableData[] = [
-    { id: 1, date: '2023-08-29', total: 100 },
-    // ... other data
-];
 
 export default function BillPage({ data }: Props) {
+    const [tableData, setTableData] = useState<TableData[]>([]);
+    const [loading, setLoading] = useState(true);
+
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [isModalBill, setIsModalBill] = useState(false);
@@ -38,7 +38,6 @@ export default function BillPage({ data }: Props) {
     const app = initializeApp(firebaseConfig);
     const [descripcion, setDescripcion] = useState('');
     const [total, setTotal] = useState('');
-    const tableData = data || initialData;
     const [invoiceCount, setInvoiceCount] = useState(0);
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
@@ -53,21 +52,58 @@ export default function BillPage({ data }: Props) {
     const [clienteId, setClienteId] = useState<DocumentReference | null>(null);
 
     useEffect(() => {
+        const db = getFirestore(app);
+        const facturaRef = collection(db, 'factura');
+
+        // Escuchar cambios en la colección "factura" y actualizar el estado de las facturas
+        const unsubscribe = onSnapshot(facturaRef, async (querySnapshot) => {
+            const tableData: TableData[] = [];
+
+            for (const doc of querySnapshot.docs) {
+                const { id, fecha, totalPagar, clienteId } = doc.data();
+
+                // Obtener datos del cliente utilizando la referencia almacenada en clienteId
+                const clienteDoc = await getDoc(clienteId);
+
+                // Verificar si clienteDoc.data() es realmente un objeto con las propiedades esperadas
+                if (clienteDoc.exists() && typeof clienteDoc.data() === 'object') {
+                    const { nombre, primerApellido } = clienteDoc.data() as {
+                        nombre: string;
+                        primerApellido: string;
+                    };
+
+                    tableData.push({
+                        id,
+                        date: fecha,
+                        total: totalPagar,
+                        cliente: `${nombre} ${primerApellido}`,
+                    });
+                } else {
+                    console.error('Error: Datos del cliente no válidos', clienteDoc.data());
+                }
+            }
+
+            setTableData(tableData);
+            setLoading(false);
+        });
+
+
+
         // Recupera el recuento de facturas actual cuando se monta el componente
         const fetchInvoiceCount = async () => {
-            const db = getFirestore(app);
-            const facturaRef = collection(db, 'factura');
-
             try {
                 const querySnapshot = await getDocs(facturaRef);
-                setInvoiceCount(querySnapshot.size); // Establece el recuento según el número de documentos de la colección
+                setInvoiceCount(querySnapshot.size);
             } catch (error) {
                 console.error('Error fetching invoice count:', error);
             }
         };
 
         fetchInvoiceCount();
-    }, []); // Run this effect only once when the component mounts
+
+        // Devuelve una función de limpieza para detener la escucha cuando el componente se desmonta
+        return () => unsubscribe();
+    }, []);
 
     const generateInvoiceNumber = () => {
         const sequentialNumber = (invoiceCount + 1).toString().padStart(3, '0');
@@ -192,7 +228,7 @@ export default function BillPage({ data }: Props) {
             id: invoiceNumber,
             empleado: nombreEmpleado,
             fecha: fechaFactura,
-            totalPagar: totalPagar.toFixed(2),
+        totalPagar: total, // Usar el total sin descuento
             descuento: descuento,
             clienteId: clienteId, // Utiliza la referencia al documento del cliente
         };
@@ -213,7 +249,7 @@ export default function BillPage({ data }: Props) {
             const clienteMembresiaDocRef = doc(collection(db, 'clienteMembresia'), clienteMembresiaFecha);
             await updateDoc(clienteMembresiaDocRef, { proximoPago: fechaProximoPago }); // Reemplaza 'nuevaFechaDePago' por la nueva fecha a guardar
             console.log('Fecha de pago actualizada en clienteMembresia');
-     
+
         } catch (error) {
             console.error('Error al guardar la factura:', error);
         }
@@ -227,6 +263,7 @@ export default function BillPage({ data }: Props) {
         setApellidos('');
         setDescripcion('');
         setTotal('');
+        setFechaProximoPago('');
         setDescuento(0);
         setTotalDescuento(0);
         setTotalPagar(0);
@@ -278,6 +315,7 @@ export default function BillPage({ data }: Props) {
                     <thead>
                         <tr className="fixed-header-row">
                             <th className="th-tableBill">N° factura</th>
+                            <th className="th-tableBill">Cliente</th>
                             <th className="th-tableBill">Fecha</th>
                             <th className="th-tableBill">Total</th>
                             <th className="th-tableBill">Acción</th>
@@ -288,6 +326,7 @@ export default function BillPage({ data }: Props) {
                             .map((row) => (
                                 <tr key={row.id} className="tableRoutine-row">
                                     <td>{row.id}</td>
+                                    <td>{row.cliente}</td>
                                     <td>{row.date}</td>
                                     <td>{row.total}</td>
                                     <td>
@@ -420,7 +459,7 @@ export default function BillPage({ data }: Props) {
                                 <label>Total:</label>
                                 <input
                                     className="personalInfo"
-                                    type="nunber"
+                                    type="number"
                                     placeholder="0"
                                     value={total}
                                     onChange={(e) => setTotal(e.target.value)}
