@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { TextField, InputAdornment, IconButton } from '@mui/material';
 import { Search as SearchIcon } from '@mui/icons-material';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -7,7 +7,7 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AdminLayout from './AdminLayout/AdminLayout';
-import { getFirestore, collection, query, onSnapshot, where, getDoc, getDocs, doc } from 'firebase/firestore';
+import { getFirestore, collection, query, onSnapshot, where, getDoc, getDocs, doc, addDoc, QueryDocumentSnapshot, DocumentData } from 'firebase/firestore';
 import { initializeApp } from "firebase/app";
 import firebaseConfig from "@/firebase/config";
 import { DocumentReference } from 'firebase/firestore';
@@ -23,11 +23,7 @@ export interface TableData {
 interface Props {
     data?: TableData[];
 }
-// Definir una interfaz que represente la estructura de los documentos de membresía
-interface Membresia {
-    tipo: string;
-    precio: string;
-}
+
 export const initialData: TableData[] = [
     { id: 1, client: 'John Doe', total: 100, date: '2023-08-29' },
     // ... other data
@@ -43,6 +39,52 @@ export default function BillPage({ data }: Props) {
     const app = initializeApp(firebaseConfig);
     const [descripcion, setDescripcion] = useState('');
     const [total, setTotal] = useState('');
+    const tableData = data || initialData;
+    const [invoiceCount, setInvoiceCount] = useState(0);
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth() + 1; // Sumar 1 ya que getMonth() devuelve un índice base cero
+    const [descuento, setDescuento] = useState<number>(0);
+    const [totalDescuento, setTotalDescuento] = useState<number>(0);
+    const [totalPagar, setTotalPagar] = useState<number>(0);
+    const [nombreEmpleado, setNombreEmpleado] = useState('');
+    const [fechaFactura, setFechaFactura] = useState('');
+    const [clienteId, setClienteId] = useState<DocumentReference | null>(null);
+
+    useEffect(() => {
+        // Recupera el recuento de facturas actual cuando se monta el componente
+        const fetchInvoiceCount = async () => {
+            const db = getFirestore(app);
+            const facturaRef = collection(db, 'factura');
+
+            try {
+                const querySnapshot = await getDocs(facturaRef);
+                setInvoiceCount(querySnapshot.size); // Establece el recuento según el número de documentos de la colección
+            } catch (error) {
+                console.error('Error fetching invoice count:', error);
+            }
+        };
+
+        fetchInvoiceCount();
+    }, []); // Run this effect only once when the component mounts
+
+    const generateInvoiceNumber = () => {
+        const sequentialNumber = (invoiceCount + 1).toString().padStart(3, '0');
+        return `V-${currentYear}-${currentMonth.toString().padStart(2, '0')}-${sequentialNumber}`;
+    };
+
+    const handleDescuentoChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const descuentoValue = parseFloat(e.target.value) || 0;
+        setDescuento(descuentoValue);
+
+        // Calcular el total de descuento
+        const descuentoAmount = (descuentoValue / 100) * parseFloat(total);
+        setTotalDescuento(Number(descuentoAmount));
+
+        // Calcular el total a pagar
+        const totalPagarAmount = parseFloat(total) - descuentoAmount;
+        setTotalPagar(Number(totalPagarAmount));
+    };
 
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
@@ -51,7 +93,6 @@ export default function BillPage({ data }: Props) {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
-    const tableData = data || initialData;
 
     const openModalBill = () => {
         setIsModalBill(true);
@@ -59,6 +100,7 @@ export default function BillPage({ data }: Props) {
 
     const closeModalBill = () => {
         setIsModalBill(false);
+        resetForm();
     };
 
     const handleCedulaChange = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -85,31 +127,34 @@ export default function BillPage({ data }: Props) {
                 const clienteDoc = querySnapshot.docs[0];
                 const clientId = clienteDoc.id;
                 const clienteRef = doc(collection(db, 'cliente'), clientId);
+
+                // Actualiza el estado del clienteId con una referencia al documento del cliente
+                setClienteId(doc(collection(db, 'cliente'), clientId));
                 await findClientMembresia(clienteRef);
             } else {
                 // Si no se encuentra un cliente, limpiar los campos de nombre y apellidos
                 setNombre('');
                 setApellidos('');
+                setDescripcion('');
+                setTotal('');
             }
         } catch (error) {
-            // Manejo de errores: Imprime el error en la consola
             console.error('Error al buscar cliente:', error);
-            // Puedes manejar el error de otras maneras aquí, como establecer un estado de error para mostrar al usuario.
         }
     };
+
     const findClientMembresia = async (clienteIdRef: DocumentReference) => {
         const db = getFirestore(app);
-    
         try {
             // Realiza la consulta a la base de datos para obtener la membresía del cliente
             const querySnapshot = await getDocs(query(collection(db, 'clienteMembresia'), where('clienteId', '==', clienteIdRef)));
-    
+
             if (!querySnapshot.empty) {
                 const membresiaRef = querySnapshot.docs[0].data().membershipId;
-    
+
                 // Obtén los datos de la membresía utilizando la referencia
                 const membresiaDoc = await getDoc(membresiaRef);
-    
+
                 if (membresiaDoc.exists()) {
                     // Si se encuentra la membresía en la colección 'membresia'
                     const membresiaData = membresiaDoc.data() as { precio: string, tipo: string };
@@ -125,11 +170,49 @@ export default function BillPage({ data }: Props) {
             console.error('Error al buscar membresía del cliente:', error);
         }
     };
-    
-    
 
-    
+    const handleSaveBill = async (e: React.FormEvent) => {
+        e.preventDefault();
+        const invoiceNumber = generateInvoiceNumber();
+        // Crea un objeto con los datos de la factura
+        const facturaData = {
+            id: invoiceNumber,
+            empleado: nombreEmpleado,
+            fecha: fechaFactura,
+            totalPagar: totalPagar.toFixed(2),
+            descuento: descuento,
+            clienteId: clienteId, // Utiliza la referencia al documento del cliente
+        };
+        const db = getFirestore(app);
+        const facturaRef = collection(db, 'factura');
 
+
+        try {
+            // Agrega el documento a la colección "factura"
+            const docRef = await addDoc(facturaRef, facturaData);
+
+            // Actualizar el número secuencial de factura
+            setInvoiceCount(invoiceCount + 1);
+            resetForm();
+            console.log('Factura guardada con ID:', docRef.id);
+            setIsModalBill(false);
+        } catch (error) {
+            console.error('Error al guardar la factura:', error);
+        }
+    };
+
+    const resetForm = () => {
+        setNombreEmpleado('');
+        setFechaFactura('');
+        setCedula('');
+        setNombre('');
+        setApellidos('');
+        setDescripcion('');
+        setTotal('');
+        setDescuento(0);
+        setTotalDescuento(0);
+        setTotalPagar(0);
+    };
 
     return (
         <AdminLayout>
@@ -241,6 +324,8 @@ export default function BillPage({ data }: Props) {
                                     className="personalInfo"
                                     type="text"
                                     placeholder="Nombre del empleado"
+                                    value={nombreEmpleado}
+                                    onChange={(e) => setNombreEmpleado(e.target.value)}
                                 />
                             </div>
                             <div className="form-row">
@@ -249,6 +334,8 @@ export default function BillPage({ data }: Props) {
                                     className="personalInfo"
                                     type="date"
                                     placeholder="Fecha"
+                                    value={fechaFactura}
+                                    onChange={(e) => setFechaFactura(e.target.value)}
                                 />
                             </div>
                             <div className="form-row">
@@ -257,6 +344,8 @@ export default function BillPage({ data }: Props) {
                                     className="personalInfo"
                                     type="text"
                                     placeholder="factura"
+                                    value={generateInvoiceNumber()}
+                                    readOnly
                                 />
                             </div>
                             <div className="form-row">
@@ -292,16 +381,16 @@ export default function BillPage({ data }: Props) {
                                 />
                             </div>
                             <div className="form-row">
-                                <label >Cantidad:</label>
+                                <label>Próximo Pago:</label>
                                 <input
                                     className="personalInfo"
-                                    type="number"
-                                    placeholder="Cantidad"
+                                    type="date"
+                                    placeholder="Próximo Pago"
                                 />
                             </div>
                             <div className="form-row">
-                                <label>Descripción:</label>
-                                <textarea
+                                <label>Membresía:</label>
+                                <input
                                     name="descripcion"
                                     className="personalInfo"
                                     placeholder="Descripción"
@@ -313,13 +402,43 @@ export default function BillPage({ data }: Props) {
                                 <label>Total:</label>
                                 <input
                                     className="personalInfo"
-                                    type="text"
-                                    placeholder="Total"
+                                    type="nunber"
+                                    placeholder="0"
                                     value={total}
                                     onChange={(e) => setTotal(e.target.value)}
                                 />
                             </div>
-                            <button className="save-button" >
+                            <div className="form-row">
+                                <label >Descuento %:</label>
+                                <input
+                                    className="personalInfo"
+                                    type="text"
+                                    placeholder="0"
+                                    value={descuento}
+                                    onChange={handleDescuentoChange}
+                                />
+                            </div>
+                            <div className="form-row">
+                                <label >Total Descuento:</label>
+                                <input
+                                    className="personalInfo"
+                                    type="number"
+                                    placeholder="0.00"
+                                    value={totalDescuento.toFixed(2)}
+                                    readOnly
+                                />
+                            </div>
+                            <div className="form-row">
+                                <label >Total a pagar:</label>
+                                <input
+                                    className="personalInfo"
+                                    type="number"
+                                    placeholder="0.00"
+                                    value={totalPagar.toFixed(2)}
+                                    readOnly
+                                />
+                            </div>
+                            <button className="save-button" onClick={handleSaveBill}>
                                 Guardar
                             </button>
                             <button className="Cancel-button" onClick={closeModalBill}>
