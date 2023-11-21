@@ -157,7 +157,7 @@ export default function ReportPage() {
       filteredData.forEach((item) => {
         const paymentDate = new Date(item.fecha);
         const monthIndex = paymentDate.getMonth();
-        monthlyGains[monthIndex] += parseFloat(item.total);
+        monthlyGains[monthIndex] += parseFloat(item.totalPagar);
       });
 
       const formattedData = MONTHS.map((month, index) => ({
@@ -165,12 +165,12 @@ export default function ReportPage() {
         ganancia: monthlyGains[index],
       }));
       const data = querySnapshot.docs.map(async (doc) => {
-        const { total, fecha } = doc.data();
+        const { totalPagar, fecha } = doc.data();
 
         const paymentDate = new Date(fecha);
 
         if (paymentDate >= firstDayOfMonth && paymentDate <= currentDate) {
-          return total; // Retornar el monto de la factura para sumarlo luego
+          return totalPagar; // Retornar el monto de la factura para sumarlo luego
         }
         return 0;
       });
@@ -181,7 +181,7 @@ export default function ReportPage() {
       const montosNumeros = resolvedData.map((monto) => parseFloat(monto));
       const montosValidos = montosNumeros.filter((monto) => !isNaN(monto));
       // Sumar los montos de las facturas pagadas del último mes
-      const gananciaUltimoMes = montosValidos.reduce((total, monto) => total + monto, 0);
+      const gananciaUltimoMes = montosValidos.reduce((totalPagar, monto) => totalPagar + monto, 0);
       setGananciaUltimoMes(gananciaUltimoMes);
 
       setGananciaUltimoAnio(formattedData);
