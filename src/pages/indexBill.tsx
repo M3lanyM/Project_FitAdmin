@@ -11,7 +11,7 @@ import { getFirestore, collection, query, onSnapshot, where, getDoc, getDocs, do
 import { initializeApp } from "firebase/app";
 import firebaseConfig from "@/firebase/config";
 import { DocumentReference } from 'firebase/firestore';
-
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 export interface TableData {
     id: string;
@@ -50,7 +50,12 @@ export default function BillPage({ data }: Props) {
     const [fechaProximoPago, setFechaProximoPago] = useState('');
     const [clienteMembresiaFecha, setClienteMembresiaFecha] = useState('');
     const [clienteId, setClienteId] = useState<DocumentReference | null>(null);
-
+    const [selectedInvoice, setSelectedInvoice] = useState<TableData | null>(null);
+    const [isModalDetailsOpen, setIsModalDetailsOpen] = useState(false);
+    const closeModalDetails = () => {
+        setIsModalDetailsOpen(false);
+        setSelectedInvoice(null);
+    };
     useEffect(() => {
         const db = getFirestore(app);
         const facturaRef = collection(db, 'factura');
@@ -228,7 +233,7 @@ export default function BillPage({ data }: Props) {
             id: invoiceNumber,
             empleado: nombreEmpleado,
             fecha: fechaFactura,
-        totalPagar: total, // Usar el total sin descuento
+            totalPagar: totalPagar.toFixed(2),
             descuento: descuento,
             clienteId: clienteId, // Utiliza la referencia al documento del cliente
         };
@@ -330,9 +335,11 @@ export default function BillPage({ data }: Props) {
                                     <td>{row.date}</td>
                                     <td>{row.total}</td>
                                     <td>
-                                        <EditIcon className="edit-icon" />
-                                        <DeleteIcon className="delete-icon" />
-                                    </td>
+                                        <VisibilityIcon className="email-icon"
+                                            onClick={() => {
+                                                setSelectedInvoice(row);
+                                                setIsModalDetailsOpen(true);
+                                            }} />                                    </td>
                                 </tr>
                             ))}
                     </tbody>
@@ -505,6 +512,24 @@ export default function BillPage({ data }: Props) {
                     </div>
                 </div>
             )}
+            {isModalDetailsOpen && selectedInvoice && (
+                // Modal para detalles de factura
+                <div className="modal-addMember">
+                    <div className="content-addMember">
+                        <span className="close-bill-details" onClick={closeModalDetails}>
+                            &times;
+                        </span>
+                        <h2 className="bill-details-title">Detalles de la Factura</h2>
+                        <p>N° Factura: {selectedInvoice.id}</p>
+                        <p>Cliente: {selectedInvoice.cliente}</p>
+                        <p>Fecha: {selectedInvoice.date}</p>
+                        <p>Total: {selectedInvoice.total}</p>
+
+                    </div>
+                </div>
+            )}
+
         </AdminLayout>
     );
 }
+

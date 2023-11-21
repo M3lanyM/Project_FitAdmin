@@ -31,7 +31,7 @@
 /* header */
 :root {
   --header-background: #fff;
-  --header-link-color: rgba(44, 56, 74, 0.681);
+  --header-link-color: #2b8c8cd7;
   --header-link-color-hover: rgba(44, 56, 74, 0.95);
   --header-brand-color: #4f5d73;
 }

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400&display=swap');
+
 /*MODAL DEl login*/
 .modalLogin {
     position: fixed;
@@ -17,6 +19,7 @@
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
 }
 
 .closeLogin {
@@ -25,6 +28,7 @@
     font-weight: bold;
     cursor: pointer;
     margin-left: 93%;
+    font-family: 'Outfit', sans-serif;
 }
 
 .closeLogin:hover {
@@ -32,6 +36,7 @@
 }
 
 .text-modalLogin {
+    font-family: 'Outfit', sans-serif;
     font-size: 16px;
     margin-top: 1%;
     font-weight: bold;
@@ -45,7 +50,7 @@
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    font-family: 'Jost', sans-serif;
+    font-family: 'Outfit', sans-serif;
     background-image: url('./fondo.png');
     background-size: 100% 115%;
     background-position: center;
@@ -184,7 +189,7 @@
     color: #fff;
     font-size: 1em;
     font-weight: bold;
-    margin-top: 33px;
+    margin-top: 19px;
     outline: none;
     border: none;
     border-radius: 5px;
@@ -209,7 +214,7 @@
     color: #fff;
     font-size: 1em;
     font-weight: bold;
-    margin-top: 30px;
+    margin-top: 20px;
     outline: none;
     border: none;
     border-radius: 5px;
@@ -358,18 +363,21 @@
     color: #fff;
     background: #7D7875;
 }
-.margin-pass{
+
+.margin-pass {
     margin-top: 7%;
 }
-.forgot-pass{
+
+.forgot-pass {
     margin-left: 27%;
     font-size: 17px;
     font: bold;
     color: #A1A626;
     text-decoration: none;
 
-  }
-  .forgot-pass:hover {
+}
+
+.forgot-pass:hover {
     color: white;
     /*text-transform: uppercase;*/
-  }
+}

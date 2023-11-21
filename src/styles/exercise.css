@@ -5,7 +5,7 @@
   position: relative;
   font-size: 25px;
   margin: 10x;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Outfit', sans-serif;
   color: #2b8c8c;
   right: -50px;
   margin-top: -0.8px;
@@ -82,13 +82,13 @@
   text-align: center;
   font-size: 24px;
   margin: 20px;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Outfit', sans-serif;
   color: #A1A626;
 }
 
 .Exercise-title {
   font-weight: bold;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Outfit', sans-serif;
   font-size: 18px;
   color: #737373;
   margin-bottom: 5px;
@@ -100,7 +100,7 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 14px;
-  font-family: 'Franklin Gothic', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Outfit', sans-serif;
   border: 1px solid #2b8c8c;
 }
 
@@ -115,7 +115,7 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 14px;
-  font-family: 'Franklin Gothic', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Outfit', sans-serif;
   border: 1px solid #2b8c8c;
 }
 
@@ -134,7 +134,7 @@
   padding: 0.7rem 1.2rem;
   border-radius: 4px;
   cursor: pointer;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Outfit', sans-serif;
   font-size: 16px;
   margin-right: 3%;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
@@ -151,7 +151,7 @@
   padding: 0.7rem 1.2rem;
   border-radius: 4px;
   cursor: pointer;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Outfit', sans-serif;
   font-size: 16px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
 }

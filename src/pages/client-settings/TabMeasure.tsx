@@ -485,9 +485,9 @@ export default function TabMeasure() {
                 />
               </div>
             </div>
-            <div className="modal-buttons">
-              <button onClick={handleSave}>Guardar</button>
-              <button onClick={handleClose}>Cancelar</button>
+            <div className="buttonMeasure">
+              <button className='MeasureSave' onClick={handleSave}>Guardar</button>
+              <button className='MeasureCancel' onClick={handleClose}>Cancelar</button>
             </div>
           </div>
         </div>

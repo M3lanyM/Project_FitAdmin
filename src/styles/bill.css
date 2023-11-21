@@ -48,7 +48,7 @@
 }
 
 .labelBill {
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Outfit', sans-serif;
   font-size: 16px;
   color: #737373;
   font-weight: bold;
@@ -63,7 +63,7 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 14px;
-  font-family: 'Franklin Gothic', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Outfit', sans-serif;
   border: 2px solid #2b8c8c;
   text-align: center;
 }
@@ -75,7 +75,7 @@
   position: relative;
   font-size: 18px;
   margin: 10x;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Outfit', sans-serif;
   color: #2b8c8c;
   margin-top: -1%;
 }
@@ -90,11 +90,11 @@
 }
 
 .custom-labelBill::before {
-  left: -200%;
+  left: -190%;
 }
 
 .custom-labelBill::after {
-  right: -200%;
+  right: -190%;
 }
 
 /*Label factura*/

@@ -47,7 +47,6 @@ export default function ClientInfoPage() {
   const [routine, setRoutine] = useState(false);
 
   const tabOptions = [
-    { label: 'Membresía', component: <TabMembership /> },
     { label: 'Rutina', component: <TabRoutine /> },
     { label: 'Medidas', component: <TabMeasure /> },
   ];
@@ -173,7 +172,7 @@ export default function ClientInfoPage() {
       </div>
       <div className='TAB'>
         <Box sx={{ width: '100%' }}>
-          <AppBar position="sticky" sx={{ background: '#ffffff', boxShadow: 'none', borderBottom: '1px solid #ccc', alignItems: 'start' }}>
+          <AppBar position="sticky" sx={{ background: '#ffffff', boxShadow: 'none', borderBottom: '1px solid #ccc', alignItems: 'start'}}>
             <Tabs value={value} onChange={handleChange} centered>
               {tabOptions.map((option, index) => (
                 <Tab
@@ -181,9 +180,8 @@ export default function ClientInfoPage() {
                   label={
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                       <ListItemIcon sx={{ marginRight: '-28px' }}>
-                        {index === 0 && <ContentPasteIcon sx={{ fontSize: 21 }} />}  {/* Icono para la primera pestaña */}
-                        {index === 1 && <TodayIcon sx={{ fontSize: 23 }} />}  {/* Icono para la segunda pestaña */}
-                        {index === 2 && <FaPencilRuler size={16} />}  {/* Icono para la tercera pestaña */}
+                        {index === 0 && <TodayIcon sx={{ fontSize: 23 }} />}  {/* Icono para la segunda pestaña */}
+                        {index === 1 && <FaPencilRuler size={16} />}  {/* Icono para la tercera pestaña */}
                       </ListItemIcon>
                       <Typography style={{ color: '#6B6B6B', fontSize: '17px' }}>{option.label}</Typography>
                     </Box>

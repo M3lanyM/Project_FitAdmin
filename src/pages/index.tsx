@@ -171,7 +171,7 @@ export default function Home() {
 
               <div className='prueba1'>
                 <FormControl className='passwordForm' sx={{
-                  width: '25.5ch',
+                  width: '21.4ch',
                 }} variant="standard">
                   <InputLabel htmlFor="password" style={{ color: 'white' }}>
                     Contraseña

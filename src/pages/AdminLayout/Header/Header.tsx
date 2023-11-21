@@ -1,7 +1,6 @@
 import { RiArrowDropLeftLine } from "react-icons/ri";
 import HeaderNav from "./headerNav";
-
-
+import { BiHomeAlt2 } from "react-icons/bi";
 
 type HeaderProps = {
   toggleSidebar: () => void;
@@ -29,10 +28,11 @@ export default function Header(props: HeaderProps) {
           <RiArrowDropLeftLine style={{ fontSize: '2rem' }} />
         </button>
 
+        <BiHomeAlt2 style={{ fontSize: '1.3rem', marginBottom: '1px', color: '#2b8c8cd7' }} />
         <div className="header-nav d-none d-md-flex">
           <HeaderNav />
         </div>
-       
+
       </div>
     </header>
   )

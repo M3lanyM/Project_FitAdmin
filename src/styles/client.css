@@ -150,7 +150,7 @@
 
 .form-row label {
   font-weight: bold;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Outfit', sans-serif;
   font-size: 16px;
   color: #737373;
   margin-bottom: 5px;
@@ -160,13 +160,13 @@
   text-align: center;
   font-size: 20px;
   margin: 20px;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Outfit', sans-serif;
   color: #A1A626;
 }
 
 .personalInfoPayment-title {
   font-size: 20px;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Outfit', sans-serif;
   color: #2b8c8c;
   margin-top: 10px;
 }
@@ -187,7 +187,7 @@
   padding: 0.5rem;
   border-radius: 4px;
   font-size: 14px;
-  font-family: 'Franklin Gothic', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Outfit', sans-serif;
   border: 1px solid #2b8c8c;
 }
 
@@ -204,7 +204,7 @@
   padding: 0.7rem 1.2rem;
   border-radius: 4px;
   cursor: pointer;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Outfit', sans-serif;
   font-size: 16px;
   margin-right: 3%;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
@@ -222,7 +222,7 @@
   width: 60%;
   border-radius: 4px;
   cursor: pointer;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Outfit', sans-serif;
   font-size: 16px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
 }
@@ -369,7 +369,7 @@
   border-radius: 4px;
   font-size: 14px;
   margin-left: 4.6%;
-  font-family: 'Franklin Gothic', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Outfit', sans-serif;
   border: 1px solid #2b8c8c;
 }
 
@@ -390,7 +390,7 @@
   border-radius: 4px;
   font-size: 14px;
   margin-left: 4.6%;
-  font-family: 'Franklin Gothic', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Outfit', sans-serif;
   border: 1px solid #A1A626;
 }
 
@@ -410,25 +410,27 @@
 }
 
 .closeButton {
+  width: 12%;
+  padding: 1%;
   background-color: #737373;
   color: white;
   border: none;
-  padding: 0.7rem 1.2rem;
   border-radius: 4px;
   cursor: pointer;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Outfit', sans-serif;
   font-size: 16px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
 }
 
 .addButton {
+  width: 12%;  
+  padding: 1%;
   background-color: #2b8c8c;
   color: white;
   border: none;
-  padding: 0.7rem 1.2rem;
   border-radius: 4px;
   cursor: pointer;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Outfit', sans-serif;
   font-size: 16px;
   margin-right: 3%;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
@@ -441,7 +443,7 @@
 }
 
 .addMclient {
-  margin-top: -2%;
+  margin-top: -4.5%;
   display: flex;
   justify-content: right;
   margin-right: 5%;
@@ -452,7 +454,7 @@
 .nameClient {
   position: absolute;
   margin-top: -60px;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Outfit', sans-serif;
   font-size: 16px;
   margin-left: 2.6%;
   color: #737373;
@@ -462,7 +464,7 @@
 .telephonoClient {
   position: absolute;
   margin-top: -20px;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Outfit', sans-serif;
   font-size: 16px;
   margin-left: 2.6%;
   color: #737373;
@@ -473,7 +475,7 @@
   position: absolute;
   margin-top: -60px;
   margin-left: 21%;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Outfit', sans-serif;
   font-size: 16px;
   color: #737373;
 }
@@ -484,7 +486,7 @@
   position: absolute;
   margin-top: -60px;
   margin-left: 39.1%;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Outfit', sans-serif;
   font-size: 16px;
   color: #737373;
 }
@@ -495,7 +497,7 @@
   position: relative;
   font-size: 17px;
   margin: 20px;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Outfit', sans-serif;
   color: #A1A626;
 }
 
@@ -505,7 +507,7 @@
   position: relative;
   font-size: 17px;
   margin: 20px;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Outfit', sans-serif;
   color: #2b8c8c;
   margin-top: -1.8%;
 }
@@ -539,7 +541,7 @@
   border-radius: 4px;
   font-size: 14px;
   margin-left: -0.1%;
-  font-family: 'Franklin Gothic', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Outfit', sans-serif;
   border: 1px solid #A1A626;
 }
 
@@ -547,7 +549,7 @@
   position: absolute;
   margin-top: -60px;
   margin-left: 30.2%;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Outfit', sans-serif;
   font-size: 16px;
   color: #737373;
 }
@@ -556,7 +558,7 @@
   position: absolute;
   margin-top: -60px;
   margin-left: 15.1%;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Outfit', sans-serif;
   font-size: 16px;
   color: #737373;
 }
@@ -564,7 +566,7 @@
 .date-admClient {
   position: absolute;
   margin-top: -60px;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Outfit', sans-serif;
   font-size: 16px;
   margin-left: -0.1%;
   color: #737373;
@@ -573,7 +575,7 @@
 .precioClient {
   position: absolute;
   margin-top: -60px;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Outfit', sans-serif;
   font-size: 16px;
   margin-left: 45.3%;
   color: #737373;

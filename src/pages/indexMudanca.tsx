@@ -24,10 +24,10 @@ const IndexMudanca = () => {
   const [nuevoPerfil, setNuevoPerfil] = useState({ ...perfil });
   const [currentIMGIndex, setCurrentIMGIndex] = useState(0);
   const images = [
-    "/img/p1.jpg",
+    "/img/p4.jpg",
     "/img/p2.jpg",
     "/img/p3.jpg",
-    "/img/p4.jpg",
+    "/img/p1.jpg",
   ];
 
   const nextIMG = () => {
@@ -169,7 +169,6 @@ const IndexMudanca = () => {
             <FaSquareCaretRight style={{ fontSize: '1.7em', color: "#02afaf", marginLeft: '5px' }} />
           </button>
         </div>
-        <HomePage></HomePage>
       </AdminLayout>
     </>
   );

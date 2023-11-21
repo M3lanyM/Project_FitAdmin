@@ -55,31 +55,31 @@ const ModalAddClient: React.FC<ModalAddClientProps> = ({ onClose }) => {
 
       console.log("Documento escrito con ID: ", docRef.id);
 
-    // Consulta Firestore para obtener la referencia al documento de membresía seleccionado
-    let membershipRef = null;
-    const membershipCollection = collection(db, "membresia");
-    const membershipQuery = query(
-      membershipCollection,
-      where("tipo", "==", formData.membership) // Consulta la membresía con el nombre seleccionado
-    );
-    const membershipSnapshot = await getDocs(membershipQuery);
+      // Consulta Firestore para obtener la referencia al documento de membresía seleccionado
+      let membershipRef = null;
+      const membershipCollection = collection(db, "membresia");
+      const membershipQuery = query(
+        membershipCollection,
+        where("tipo", "==", formData.membership) // Consulta la membresía con el nombre seleccionado
+      );
+      const membershipSnapshot = await getDocs(membershipQuery);
 
-    if (!membershipSnapshot.empty) {
-      membershipSnapshot.forEach((doc) => {
-        membershipRef = doc.ref; // Obtén la referencia al documento de membresía
+      if (!membershipSnapshot.empty) {
+        membershipSnapshot.forEach((doc) => {
+          membershipRef = doc.ref; // Obtén la referencia al documento de membresía
+        });
+      } else {
+        console.error("No se encontró la membresía seleccionada.");
+        return;
+      }
+
+      // Agrega los datos a la colección "clienteMembresia" con la referencia a la membresía
+      await addDoc(collection(db, "clienteMembresia"), {
+        clienteId: doc(db, "cliente", docRef.id),
+        membershipId: membershipRef, // Usar la referencia al documento de membresía
+        fechaIngreso: formData.admDate,
+        proximoPago: formData.nextPay,
       });
-    } else {
-      console.error("No se encontró la membresía seleccionada.");
-      return;
-    }
-
-    // Agrega los datos a la colección "clienteMembresia" con la referencia a la membresía
-    await addDoc(collection(db, "clienteMembresia"), {
-      clienteId: doc(db, "cliente", docRef.id),
-      membershipId: membershipRef, // Usar la referencia al documento de membresía
-      fechaIngreso: formData.admDate,
-      proximoPago: formData.nextPay,
-    });
 
       // Limpia el formulario después de la presentación exitosa
       setFormData({

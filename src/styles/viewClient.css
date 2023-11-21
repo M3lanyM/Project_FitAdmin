@@ -19,6 +19,41 @@
     height: 35px;
 }
 
+.buttonMeasure {
+    display: flex;
+}
+
+.MeasureSave {
+    margin-bottom: 3%;
+    margin-left: 50%;
+    width: 17%;
+    padding: 1%;
+    background-color: #2b8c8c;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+    font-size: 16px;
+    margin-right: 3%;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
+}
+
+.MeasureCancel {
+    margin-bottom: 3%;
+    width: 17%;
+    padding: 1%;
+    background-color: #737373;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+    font-size: 16px;
+    margin-right: 3%;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
+}
+
 .modalMeasure {
     display: flex;
     align-items: center;
@@ -46,7 +81,8 @@
     display: flex;
     position: sticky;
     top: 0;
-    background-color: rgb(175, 164, 164);
+    background-color: rgb(236, 232, 232);
+    color: #2b8c8c;
     padding: 10px;
     z-index: 1;
     text-align: center;
@@ -85,7 +121,7 @@
     display: block;
     text-align: center;
     margin-bottom: 1px;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-family: 'Outfit', sans-serif;
     font-size: 17px;
     color: #737373;
 }
@@ -135,7 +171,7 @@
     text-align: left;
     background-color: #f2f2f277;
     color: #A1A626;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-family: 'Outfit', sans-serif;
     font-size: 17px;
 }
 
@@ -158,7 +194,7 @@
     padding: 0.7rem 1.2rem;
     border-radius: 4px;
     cursor: pointer;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-family: 'Outfit', sans-serif;
     font-size: 16px;
     margin-right: 3%;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
