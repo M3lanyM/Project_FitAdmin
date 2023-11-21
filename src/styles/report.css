@@ -153,11 +153,8 @@
   background-color: white;
   border-radius: 10px;
   position: relative;
-  z-index: 1; /* Puedes ajustar este valor según sea necesario */
-
+  z-index: 1; 
 }
-
-
 
 .report-table {
   width: 100%;
