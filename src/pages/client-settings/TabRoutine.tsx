@@ -8,7 +8,7 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { Document, Packer, Paragraph, TextRun } from "docx";
 import { DocumentData } from "firebase/firestore";
-
+import { DocumentReference } from 'firebase/firestore';
 
 interface Notes {
   [day: number]: string;
@@ -62,6 +62,7 @@ export default function TabRoutine() {
   useEffect(() => {
 
     const q = query(routineCollection);
+
 
     // Crea un oyente en tiempo real para la colección de clientes
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -272,64 +273,114 @@ export default function TabRoutine() {
   const generateWordDocument = async () => {
     try {
       const clientRoutinesCollection = collection(db, 'clienteRutina');
-        const querySnapshot = await getDocs(query(clientRoutinesCollection,
-          where('clienteId', '==', clienteRef),
-        ));
+      const querySnapshot = await getDocs(query(clientRoutinesCollection,
+        where('clienteId', '==', clienteRef),
+      ));
 
-        const data: Record<number, string> = {};
+      const data: Record<number, string> = {};
 
-        querySnapshot.forEach(async (doc) => {
-          const { tituloRutina, fechaInicio, fechaFinal } = doc.data();
-          const startDate = fechaInicio;
-          const endDate = fechaFinal;
-          const tittleDocument = tituloRutina;
+      await Promise.all(querySnapshot.docs.map(async (doc) => {
+        const { objetivo, fechaInicio, fechaFinal, rutinaSeleccionada, categoria } = doc.data();
+        const startDate = fechaInicio;
+        const endDate = fechaFinal;
+        const idRutina = rutinaSeleccionada; // Reemplaza con el ID de la rutina real
 
-            const selectedRoutineid = routines.find(routine => routine.id === selectedRoutine);
-  
-              // Aquí puedes acceder a la información de la rutina seleccionada
-              const routineName = selectedRoutineid?.name; // Nombre de la rutina seleccionada
+        // Usamos await aquí para esperar la resolución de obtenerNombreRutina
+        const nombreRutina = await obtenerNombreRutina(idRutina);
+        if (rutinaSeleccionada) {
+          const rutinaRef = rutinaSeleccionada as DocumentReference<DocumentData>;
+          const rutinaDoc = await getDoc(rutinaRef);
 
+          if (rutinaDoc.exists()) {
+            const rutinaData = rutinaDoc.data();
+            const nombreRutina = rutinaData.nombre;
+            const descripcionRutina = rutinaData.descripcion;
+            const repeticionesRutina = rutinaData.repeticion;
+            const seriesRutina = rutinaData.serie;
 
+            if (clienteRef) {
+              const clienteDoc = await getDoc(clienteRef);
+              if (clienteDoc.exists()) {
+                const clienteData = clienteDoc.data();
+                clienteData.nombre;
+                // Crear un nuevo documento Word
+                const docc = new Document({
+                  sections: [
+                    {
+                      children: [
+                        new Paragraph(`Datos del Cliente:`),
+                        new Paragraph(`Nombre: ${clienteData.nombre}`),
+                        new Paragraph(`Cedula: ${clienteData.cedula}`),
+                        new Paragraph(`Correo: ${clienteData.correo}`),
+                        new Paragraph(`Datos de la Rutina: `),
+                        new Paragraph(`Nombre de la Rutina: ${nombreRutina}`),
+                        new Paragraph(`Descripción: ${descripcionRutina}`),
+                        new Paragraph(`Repeticiones: ${repeticionesRutina}`),
+                        new Paragraph(`Series: ${seriesRutina}`),
+                        new Paragraph(`Fecha de Inicio: ${startDate}`),
+                        new Paragraph(`Fecha Final: ${endDate}`),
+                        new Paragraph(`Objetivo: ${objetivo}`),
+                        new Paragraph(`Peso: ${categoria}`),
+                      ],
+                    },
+                  ],
+                });
 
-          // Crear un nuevo documento Word con opciones por defecto
-      const docc = new Document({
-        sections: [
-          {
-            children: [
-              new Paragraph(`Fecha de Inicio: ${startDate}`),
-              new Paragraph(`Fecha Final: ${endDate}`),
-              new Paragraph(`Nombre de la Rutina: ${tittleDocument}`),
-              new Paragraph(`Nombre de la Rutina: ${routineName}`),
-              // Agregar más información según sea necesario...
-            ],
-          },
-        ],
-      });
-  
-      // Generar un archivo Word
-      const buffer = await Packer.toBuffer(docc);
-  
-      // Descargar el archivo Word
-      const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = 'Historial.docx';
-      a.click();
-      URL.revokeObjectURL(url);
-        });
-      
+                // Generar un archivo Word
+                const buffer = await Packer.toBuffer(docc);
+
+                // Descargar el archivo Word
+                const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = `${clienteData.nombre}_Historial.docx`;
+                a.click();
+                URL.revokeObjectURL(url);
+              } else {
+                console.log('El cliente no existe');
+              }
+            }
+          }
+        }
+      }));
+
     } catch (error) {
       console.error('Error al generar el documento Word:', error);
     }
   };
-const handleSaveDocument = async (e: React.FormEvent) => {
-  e.preventDefault();
-      // ... tu código existente ...
+  const handleSaveDocument = async (e: React.FormEvent) => {
+    e.preventDefault();
+    // Llamar a la función para generar el documento Word al presionar el botón
+    await generateWordDocument();
+  }
 
-      // Llamar a la función para generar el documento Word al presionar el botón
-      await generateWordDocument();
-}
+  const obtenerNombreRutina = async (idRutina: string) => {
+    try {
+      const rutinaDocRef = doc(db, 'rutina', idRutina);
+      const rutinaDoc = await getDoc(rutinaDocRef);
+
+      if (rutinaDoc.exists()) {
+        const { nombre } = rutinaDoc.data(); // Suponiendo que el campo se llama 'nombre'
+        if (nombre) {
+          // Aquí tienes el nombre de la rutina asociada al cliente
+          console.log('Nombre de la rutina asociada:', nombre);
+          return nombre;
+        } else {
+          console.log('La rutina no tiene un nombre asociado.');
+          return null; // O algún valor predeterminado si no hay nombre de rutina
+        }
+      } else {
+        console.log('La rutina no existe.');
+        return null; // O algún valor predeterminado si la rutina no existe
+      }
+    } catch (error) {
+      console.error('Error al obtener el nombre de la rutina:', error);
+      return null;
+    }
+  };
+
+
 
 
 
@@ -346,7 +397,7 @@ const handleSaveDocument = async (e: React.FormEvent) => {
               {renderCalendar()}
             </div>
           </div>
-          <button onClick={handleSaveDocument}>Guardar Información en Word</button>
+          <button className="btnRoutine-Client" onClick={handleSaveDocument}>Guardar Información en Word</button>
         </div>
 
       </div>
@@ -397,10 +448,10 @@ const handleSaveDocument = async (e: React.FormEvent) => {
               </div>
               <div className="form-row">
                 <TextField
-                  label="Categoria"
+                  label="Peso"
                   type="text"
                   value={category}
-                  placeholder="Categoria"
+                  placeholder="Peso"
                   onChange={(e) => SetCategory(e.target.value)}
                 />
               </div>
