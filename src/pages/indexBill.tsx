@@ -7,7 +7,7 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AdminLayout from './AdminLayout/AdminLayout';
-import { getFirestore, collection, query, onSnapshot, where, getDoc, getDocs, doc, addDoc, QueryDocumentSnapshot, DocumentData } from 'firebase/firestore';
+import { getFirestore, collection, query, onSnapshot, where, getDoc, getDocs, doc, addDoc, QueryDocumentSnapshot, DocumentData, updateDoc } from 'firebase/firestore';
 import { initializeApp } from "firebase/app";
 import firebaseConfig from "@/firebase/config";
 import { DocumentReference } from 'firebase/firestore';
@@ -49,6 +49,8 @@ export default function BillPage({ data }: Props) {
     const [totalPagar, setTotalPagar] = useState<number>(0);
     const [nombreEmpleado, setNombreEmpleado] = useState('');
     const [fechaFactura, setFechaFactura] = useState('');
+    const [fechaProximoPago, setFechaProximoPago] = useState('');
+    const [clienteMembresiaFecha, setClienteMembresiaFecha] = useState('');
     const [clienteId, setClienteId] = useState<DocumentReference | null>(null);
 
     useEffect(() => {
@@ -149,8 +151,18 @@ export default function BillPage({ data }: Props) {
             // Realiza la consulta a la base de datos para obtener la membresía del cliente
             const querySnapshot = await getDocs(query(collection(db, 'clienteMembresia'), where('clienteId', '==', clienteIdRef)));
 
+
             if (!querySnapshot.empty) {
+                const clienteMembresiaId = querySnapshot.docs[0].id;
+                setClienteMembresiaFecha(clienteMembresiaId);
+                const clienteMembresiaData = querySnapshot.docs[0].data();
+                const proximoPago = clienteMembresiaData.proximoPago; // Asume que 'proximoPago' es el campo que almacena la fecha
+
+                // Establece la fecha del próximo pago en el estado correspondiente
+                setFechaProximoPago(proximoPago);
+
                 const membresiaRef = querySnapshot.docs[0].data().membershipId;
+
 
                 // Obtén los datos de la membresía utilizando la referencia
                 const membresiaDoc = await getDoc(membresiaRef);
@@ -163,6 +175,8 @@ export default function BillPage({ data }: Props) {
                 } else {
                     console.log('No se encontró la membresía en la colección "membresia"');
                 }
+
+
             } else {
                 console.log('No se encontró ninguna membresía para la referencia de cliente');
             }
@@ -196,6 +210,11 @@ export default function BillPage({ data }: Props) {
             resetForm();
             console.log('Factura guardada con ID:', docRef.id);
             setIsModalBill(false);
+            // Actualizar la fecha de pago en clienteMembresia
+            const clienteMembresiaDocRef = doc(collection(db, 'clienteMembresia'), clienteMembresiaFecha);
+            await updateDoc(clienteMembresiaDocRef, { proximoPago: fechaProximoPago }); // Reemplaza 'nuevaFechaDePago' por la nueva fecha a guardar
+            console.log('Fecha de pago actualizada en clienteMembresia');
+     
         } catch (error) {
             console.error('Error al guardar la factura:', error);
         }
@@ -386,6 +405,8 @@ export default function BillPage({ data }: Props) {
                                     className="personalInfo"
                                     type="date"
                                     placeholder="Próximo Pago"
+                                    value={fechaProximoPago}
+                                    onChange={(e) => setFechaProximoPago(e.target.value)}
                                 />
                             </div>
                             <div className="form-row">
